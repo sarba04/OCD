@@ -42,9 +42,12 @@ export function StepBusiness({
         </p>
 
         {/* Aperçu compact (mobile) */}
-        <div className="mt-6 lg:hidden">
-          <p className="mb-2 text-[13.5px] font-semibold text-ink-2">Ton bandeau à l&apos;écran</p>
-          <div className="relative overflow-hidden bg-[#3a2716] p-3">
+        <div className="sticky-preview sticky top-16 z-20 -mx-4 mt-6 bg-[#2a1d12] px-4 pt-2 pb-3 shadow-[0_10px_24px_-14px_rgb(0_0_0/0.6)] lg:hidden">
+          <p className="mb-1.5 flex items-center gap-2 text-[12.5px] font-semibold text-white/80">
+            <span className="rounded-[3px] bg-live px-1 py-px text-[10px] font-extrabold tracking-wide text-white">LIVE</span>
+            Ton bandeau à l&apos;écran, en direct
+          </p>
+          <div className="relative overflow-hidden">
             {draft.photo && <img src={draft.photo} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
             <LowerThird d={preview} className="relative" />

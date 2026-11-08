@@ -97,7 +97,12 @@ export function StepDone({
           {b.mode === "remote" && c && c.tz !== "Africa/Lome" ? ` (heure de ${c.city})` : ""}. L&apos;équipe OCD vient de recevoir ta fiche.
         </p>
 
-        <div className="mt-8">
+        {/* la fente de l'imprimante à tickets */}
+        <div aria-hidden className="relative z-10 mx-auto mt-8 h-4 w-[min(100%,500px)] rounded-full bg-ink shadow-[0_6px_14px_-6px_rgb(0_0_0/0.5)]">
+          <span className="absolute inset-x-5 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-black" />
+        </div>
+        <div className="-mx-4 -mt-2 overflow-hidden px-4 pb-10">
+          <div className="print-out">
           <PassCard
             stamped
             data={{
@@ -111,6 +116,7 @@ export function StepDone({
               fullName: b.contact.fullName,
             }}
           />
+          </div>
         </div>
         <div className="mx-auto mt-6 grid max-w-[460px] gap-2.5 sm:grid-cols-2">
           <GhostButton onClick={() => download(`ocd-live-${b.ref}.ics`, new Blob([bookingIcs(b)], { type: "text/calendar" }))}>

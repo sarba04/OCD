@@ -62,6 +62,8 @@ export interface Pack {
   minLeadHours?: number;
   /** Afficher le prix à l'heure (pertinent quand le pack est « que du live »). */
   showHourly?: boolean;
+  /** Pack haut de gamme : carte sombre et lumineuse. */
+  premium?: boolean;
 }
 
 export const PACKS: Pack[] = [
@@ -134,6 +136,7 @@ export const PACKS: Pack[] = [
     pattern: "single",
     price: 75000,
     minLeadHours: 72,
+    premium: true,
     includes: [
       `${BRAND.founder} publie ta vidéo sur son compte`,
       "Il annonce ton live à sa communauté",
@@ -149,6 +152,7 @@ export const PACKS: Pack[] = [
     pattern: "weekly",
     price: 120000,
     showHourly: false,
+    premium: true,
     includes: [
       "Le même jour et la même heure chaque semaine",
       `1 annonce par ${BRAND.founder}`,

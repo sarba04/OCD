@@ -23,7 +23,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
       {/* ───── Le plateau : on entre dans le studio ───── */}
       <section className="wall relative">
         <header role="banner" className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 sm:pt-7">
-          <Logo size={26} />
+          <Logo size={26} className="[view-transition-name:ocd-logo]" />
           <a href="#comment" className="inline-flex h-11 items-center text-[14px] font-semibold text-ink-2 underline decoration-ink/20 underline-offset-[6px] hover:decoration-orange">
             Comment ça marche
           </a>
@@ -32,7 +32,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
         <main className="mx-auto grid max-w-6xl px-5 pb-10 sm:px-8 lg:min-h-[calc(min(100dvh,940px)-92px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:items-center lg:gap-6 lg:pb-14">
           {/* Le mur rétroéclairé, avec l'enseigne */}
           <div className="relative mx-auto mt-1 flex h-[clamp(150px,30vh,300px)] justify-center sm:h-[340px] lg:order-2 lg:mt-0 lg:h-auto lg:w-full lg:max-w-[620px]">
-            <StudioWall intensity={hover || selected ? 1.7 : 1} className="h-full lg:h-auto lg:w-full" />
+            <StudioWall tilt onAir intensity={hover || selected ? 1.7 : 1} className="h-full lg:h-auto lg:w-full" />
           </div>
 
           {/* Le message et les deux choix */}
@@ -116,7 +116,11 @@ function SceneCard({
       <button
         id={id}
         type="button"
-        onClick={onClick}
+        onClick={(e) => {
+          // la carte choisie se transforme en « talon de billet » en bas de l'écran
+          e.currentTarget.style.setProperty("view-transition-name", "dock");
+          onClick();
+        }}
         onMouseEnter={() => onHover(true)}
         onMouseLeave={() => onHover(false)}
         onFocus={() => onHover(true)}

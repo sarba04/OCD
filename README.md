@@ -22,6 +22,17 @@ Le site reprend ces trois signatures, sans rien ajouter de générique :
 
 Couleurs mesurées sur le logo : orange `#F16903`, noir chaud `#16120E`, papier `#FBF8F3`. Police : Bricolage Grotesque (une seule, 41 Ko).
 
+## Les moments qui marquent
+
+- **Le mur du studio, en code** : la plaque Afrique rétroéclairée et l'enseigne OCD en relief. Les LED s'allument en vacillant à l'ouverture, puis le voyant « EN DIRECT » du plateau s'allume. Sur ordinateur, la plaque s'incline légèrement vers la souris.
+- **« À l'antenne »** : un live en cours où le bandeau d'un vendeur change toutes les 3 secondes.
+- **Transitions natives** entre les écrans (View Transitions) : la carte choisie devient le « talon de billet » en bas de l'écran, le logo et les titres glissent d'un écran à l'autre.
+- **Packs premium** (Spotlight, Mois OCD) en version sombre et lumineuse.
+- **Le bandeau en direct** reste visible en haut pendant la saisie sur mobile : le vendeur voit son numéro apparaître « à l'antenne ».
+- **Le Pass Live s'imprime** à la confirmation, par à-coups, comme un vrai ticket, puis reçoit son tampon « RÉSERVÉ ».
+
+Tout respecte le réglage « réduire les animations » du téléphone.
+
 ## Le parcours (4 étapes, 2 minutes)
 
 1. **Ta scène** : l'accueil ne pose qu'une question, *au studio ou à distance ?* Les deux choix sont visibles sans défiler, même sur un petit téléphone.

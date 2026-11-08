@@ -75,8 +75,8 @@ export function GhostButton({ children, className, ...props }: React.ButtonHTMLA
 
 export const ChoiceCard = forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & { selected?: boolean; cut?: "sm" | "md" | "lg"; wrapperClassName?: string }
->(function ChoiceCard({ selected, cut = "md", className, wrapperClassName, children, ...props }, ref) {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { selected?: boolean; cut?: "sm" | "md" | "lg"; wrapperClassName?: string; dark?: boolean }
+>(function ChoiceCard({ selected, cut = "md", className, wrapperClassName, dark, children, ...props }, ref) {
   return (
     <div className={cn("transition-[filter] duration-300", selected && "glow", wrapperClassName)}>
       <button
@@ -86,9 +86,13 @@ export const ChoiceCard = forwardRef<
         className={cn(
           "edge relative block w-full text-left transition-transform duration-150 ease-out active:scale-[0.99] disabled:cursor-not-allowed disabled:active:scale-100",
           cut === "sm" ? "chamfer-sm" : cut === "lg" ? "chamfer-lg" : "chamfer",
-          selected
-            ? "[--edge-w:2px] [--edge:var(--color-orange)] [--surface:#fff7f0]"
-            : "[--edge:var(--color-line)] [--surface:var(--color-card)] enabled:hover:[--edge:var(--color-line-2)]",
+          dark
+            ? selected
+              ? "text-night-ink [--edge-w:2px] [--edge:var(--color-orange)] [--surface:#1d1611]"
+              : "text-night-ink [--edge:#3a2f25] [--surface:#15110e] enabled:hover:[--edge:#7a5a3c]"
+            : selected
+              ? "[--edge-w:2px] [--edge:var(--color-orange)] [--surface:#fff7f0]"
+              : "[--edge:var(--color-line)] [--surface:var(--color-card)] enabled:hover:[--edge:var(--color-line-2)]",
           className,
         )}
       >
@@ -223,7 +227,7 @@ export function Toggle({ checked, onChange, label, hint }: { checked: boolean; o
 }
 
 /** Petite étiquette (« Prime time », « Le plus choisi »…). */
-export function Tag({ children, tone = "ink", className }: { children: React.ReactNode; tone?: "ink" | "orange" | "live" | "soft" | "ok"; className?: string }) {
+export function Tag({ children, tone = "ink", className }: { children: React.ReactNode; tone?: "ink" | "orange" | "live" | "soft" | "night" | "ok"; className?: string }) {
   return (
     <span
       className={cn(
@@ -232,6 +236,7 @@ export function Tag({ children, tone = "ink", className }: { children: React.Rea
         tone === "orange" && "bg-orange text-ink",
         tone === "live" && "bg-live text-white",
         tone === "soft" && "bg-paper-2 text-ink-2",
+        tone === "night" && "bg-night-3 text-night-ink",
         tone === "ok" && "bg-ok-soft text-ok",
         className,
       )}
