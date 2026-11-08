@@ -347,7 +347,9 @@ html:has(.sticky-preview) {
 /* Titre : chaque ligne sort de son cadre, comme un générique. */
 .reveal-line {
   display: block;
+  /* on ne coupe que le haut et le bas (la ligne monte de sous le cadre), jamais la fin du titre */
   overflow: hidden;
+  overflow: visible clip;
   padding-bottom: 0.1em;
   margin-bottom: -0.1em;
 }
@@ -448,4 +450,19 @@ html:has(.sticky-preview) {
   .ticker-track { animation: none !important; }
   .js [data-reveal]:not([data-inview]) [data-r],
   .js [data-reveal].r-phone:not([data-inview]) { opacity: 1; }
+}
+
+/* La lumière qui suit la souris sur le mur du studio (ordinateur). */
+.spot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(520px circle at var(--lx, 72%) var(--ly, 38%), rgb(255 190 120 / 0.22), transparent 62%);
+  mix-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+@media (pointer: fine) {
+  .spot:hover::after { opacity: 1; }
 }
