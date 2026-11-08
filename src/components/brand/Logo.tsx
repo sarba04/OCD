@@ -7,9 +7,7 @@ export function Logo({
   tone = "orange",
   live = true,
   size = 28,
-  onDark = false,
 }: {
-  onDark?: boolean;
   className?: string;
   tone?: "orange" | "white" | "ink";
   live?: boolean;
@@ -21,7 +19,7 @@ export function Logo({
       <img src={src} alt="OCD" width={951} height={368} style={{ height: size, width: "auto" }} draggable={false} />
       {live && (
         <span
-          className={cn("display translate-y-[0.06em] text-[0.82em] tracking-[-0.04em]", tone === "white" || onDark ? "text-white" : "text-ink")}
+          className={cn("display translate-y-[0.06em] text-[0.82em] tracking-[-0.04em]", tone === "white" ? "text-white" : "text-ink")}
         >
           Live
         </span>

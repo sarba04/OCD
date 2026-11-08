@@ -9,7 +9,7 @@ import { fcfa } from "@/lib/format";
 import { formatDay, formatTime, offsetFromStudio, toISO, type Interval } from "@/lib/schedule";
 import type { PublicBooking } from "@/lib/types";
 import { cn } from "@/lib/cn";
-import { Timecode } from "@/components/broadcast/Timecode";
+import { ChainProgress } from "./ChainProgress";
 import { EMPTY, FLOW, STEP_LABEL, STEP_PARAM, businessErrors, countryOf, firstIncomplete, stepFromParam, toInput, type Draft, type Step } from "./state";
 import { StepScene } from "./StepScene";
 import { StepWhen } from "./StepWhen";
@@ -220,14 +220,6 @@ export function BookingApp() {
       <StepScene
         avail={avail}
         selected={draft.mode}
-        preset={draft.day && draft.time ? { day: draft.day, time: draft.time } : null}
-        onPreset={(day, time) => {
-          setDraft({ day, time, packId: null });
-          requestAnimationFrame(() => {
-            const el = document.getElementById("choix-studio");
-            el?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
-          });
-        }}
         onPick={(mode) => {
           setDraft((d) => ({
             mode,
@@ -295,10 +287,7 @@ export function BookingApp() {
           </p>
         )}
         <div key={step} className={cn("step-anim", dir > 0 ? "animate-rise" : "animate-rise-back")}>
-          <p className="mono-label flex items-center gap-2 text-orange-ink">
-            <span className="tally tally-on" aria-hidden /> Séquence {String(idx).padStart(2, "0")} / {String(FLOW.length - 1).padStart(2, "0")}
-          </p>
-          <h1 ref={titleRef} tabIndex={-1} className="tv mt-3 text-[54px] outline-none [view-transition-name:step-title] sm:text-[88px]">
+          <h1 ref={titleRef} tabIndex={-1} className="display text-[34px] outline-none [view-transition-name:step-title] sm:text-[48px]">
             {title()}
           </h1>
           <div className="mt-6 sm:mt-8">
@@ -332,16 +321,10 @@ export function BookingApp() {
       </main>
 
       {/* Le « talon de billet » : il se remplit au fil des choix. */}
-      <div className="deck fixed inset-x-0 bottom-0 z-40 border-t border-deck-line shadow-[0_-12px_32px_-18px_rgb(0_0_0/0.5)] [view-transition-name:dock] safe-bottom">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper shadow-[0_-12px_32px_-18px_rgb(22_18_14/0.25)] [view-transition-name:dock] safe-bottom">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-3 sm:gap-6 sm:px-8">
-          <span className="mono-label hidden flex-col gap-1.5 border-r border-deck-line pr-5 text-night-ink-2 sm:flex">
-            <span className="flex items-center gap-2">
-              <span className="tally" style={{ ["--t" as string]: "var(--color-preview)" }} aria-hidden /> PVW
-            </span>
-            <Timecode className="mono text-[11px] text-night-ink" />
-          </span>
           <div className="min-w-0 flex-1" aria-live="polite">
-            <p key={`${draft.day}-${draft.time}-${step === "review"}`} className="tick-in mono truncate text-[14px] leading-tight font-bold tracking-[-0.03em] text-night-ink sm:text-[17px] sm:tracking-normal">
+            <p key={`${draft.day}-${draft.time}-${step === "review"}`} className="tick-in tabular truncate text-[15.5px] leading-tight font-bold text-ink sm:text-[17px]">
               {step === "review" && pack
                 ? `Total ${fcfa(pack.price)}`
                 : draft.day && draft.time
@@ -354,7 +337,7 @@ export function BookingApp() {
                     ? "Studio Lomé"
                     : "À distance"}
             </p>
-            <p key={draft.packId ?? "none"} className="tick-in mt-1 truncate text-[13px] text-night-ink-2">
+            <p key={draft.packId ?? "none"} className="tick-in mt-0.5 truncate text-[13px] text-ink-3">
               {[
                 draft.mode === "studio" ? "Au studio à Lomé" : `À distance${country ? `, depuis ${country.name === "Togo" ? "le Togo" : country.name}` : ""}`,
                 pack ? pack.name : draft.day && draft.time ? "pack à choisir" : "choisis ton créneau",
@@ -374,68 +357,39 @@ export function BookingApp() {
   function title() {
     switch (step) {
       case "when":
-        return "Ta case dans la grille.";
+        return "Choisis ton jour.";
       case "pack":
-        return "Ton format.";
+        return "Choisis ton pack.";
       case "business":
-        return "Ta fiche antenne.";
+        return "Présente ton business.";
       default:
-        return "Dernier contrôle.";
+        return "Vérifie, puis confirme.";
     }
   }
 }
 
 function TopBar({ step, onBack }: { step: Step; onBack: (() => void) | null }) {
   const idx = FLOW.indexOf(step);
-  const steps = FLOW.slice(1);
   return (
-    <header className="deck sticky top-0 z-30 border-b border-deck-line">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-2 sm:h-16 sm:px-6">
+    <header className="sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur-sm">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-2 sm:px-6">
         {onBack ? (
-          <button onClick={onBack} aria-label="Étape précédente" className="grid size-12 place-items-center text-night-ink transition-colors hover:text-night-orange">
+          <button onClick={onBack} aria-label="Étape précédente" className="grid size-12 place-items-center text-ink transition-colors hover:text-orange-ink">
             <ChevronLeft className="size-6" strokeWidth={2.4} />
           </button>
         ) : (
           <span className="w-3" />
         )}
         <a href="/" aria-label="OCD Live, accueil" className={cn("inline-flex", !onBack && "ml-1")}>
-          <Logo size={20} onDark className="[view-transition-name:ocd-logo]" />
+          <Logo size={22} className="[view-transition-name:ocd-logo]" />
         </a>
-        {step !== "done" ? (
-          <ol
-            role="progressbar"
-            aria-valuemin={1}
-            aria-valuemax={steps.length}
-            aria-valuenow={idx}
-            aria-label={`Étape ${idx} sur ${steps.length} : ${STEP_LABEL[step]}`}
-            className="ml-auto flex items-stretch gap-1 pr-2"
-          >
-            {steps.map((s, i) => {
-              const n = i + 1;
-              const state = n < idx ? "done" : n === idx ? "now" : "next";
-              return (
-                <li
-                  key={s}
-                  aria-hidden
-                  className={cn(
-                    "mono-label flex h-8 items-center gap-1.5 px-2 text-[10px] transition-colors duration-300 sm:px-2.5",
-                    state === "now" ? "bg-tally text-white" : state === "done" ? "bg-white/10 text-night-ink" : "text-night-ink-2/70 ring-1 ring-deck-line ring-inset",
-                  )}
-                >
-                  <span>{String(n).padStart(2, "0")}</span>
-                  <span className={cn("hidden md:inline", state === "now" && "inline")}>{STEP_SHORT[s]}</span>
-                </li>
-              );
-            })}
-          </ol>
-        ) : (
-          <span className="mono-label ml-auto flex items-center gap-2 pr-3 text-night-ink">
-            <span className="tally tally-on" aria-hidden /> Programmé
-          </span>
+        {step !== "done" && (
+          <div className="ml-auto flex items-center gap-3 pr-2">
+            <span className="hidden text-[13px] font-medium text-ink-3 sm:block">{STEP_LABEL[step]}</span>
+            <ChainProgress current={idx - 1} total={FLOW.length - 1} label={`Étape ${idx} sur ${FLOW.length - 1} : ${STEP_LABEL[step]}`} />
+          </div>
         )}
       </div>
     </header>
   );
 }
-
-const STEP_SHORT: Partial<Record<Step, string>> = { when: "Case", pack: "Format", business: "Fiche", review: "Contrôle" };
