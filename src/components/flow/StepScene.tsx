@@ -1,6 +1,6 @@
 "use client";
-import { ChevronRight, Globe, MapPin } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChevronRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { StudioWall } from "@/components/brand/StudioWall";
 import { BRAND, PACKS } from "@/lib/config";
@@ -10,8 +10,11 @@ import type { Mode } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
-import { LiveDemo } from "./LiveDemo";
-import { Ticker } from "@/components/motion/Ticker";
+import { Statement } from "@/components/story/Statement";
+import { ScrollStory } from "@/components/story/ScrollStory";
+import { Finale } from "@/components/story/Finale";
+import { FilmSection } from "@/components/story/FilmSection";
+import { CinemaIntro } from "@/components/story/CinemaIntro";
 import { SellAnything } from "./SellAnything";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
@@ -19,11 +22,33 @@ const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
 export function StepScene({ avail, selected, onPick }: { avail: Availability | null; selected: Mode | null; onPick: (m: Mode) => void }) {
   const [hover, setHover] = useState<Mode | null>(null);
   const free = useMemo(() => (avail ? freeSlotCount(avail.busy, new Date(avail.now)) : null), [avail]);
+  const wallRef = useRef<HTMLElement>(null);
+
+  /* Ordinateur : la lumière du studio suit la souris sur le mur, comme un projecteur qu'on oriente. */
+  useEffect(() => {
+    const el = wallRef.current;
+    if (!el || !window.matchMedia("(pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const move = (e: PointerEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--lx", `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
+        el.style.setProperty("--ly", `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+      });
+    };
+    el.addEventListener("pointermove", move, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("pointermove", move);
+    };
+  }, []);
 
   return (
     <div className="relative overflow-x-clip">
+      <CinemaIntro />
       {/* ───── Le plateau : on entre dans le studio ───── */}
-      <section className="wall relative">
+      <section ref={wallRef} className="wall spot relative">
         <header role="banner" className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 sm:pt-7">
           <Logo size={26} className="[view-transition-name:ocd-logo]" />
           <a href="#comment" className="inline-flex h-11 items-center text-[14px] font-semibold text-ink-2 underline decoration-ink/20 underline-offset-[6px] hover:decoration-orange">
@@ -31,7 +56,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
           </a>
         </header>
 
-        <main className="mx-auto grid max-w-6xl px-5 pb-10 sm:px-8 lg:min-h-[calc(min(100dvh,940px)-92px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:items-center lg:gap-6 lg:pb-14">
+        <main className="relative z-10 mx-auto grid max-w-6xl px-5 pb-10 sm:px-8 lg:min-h-[calc(min(100dvh,940px)-92px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:items-center lg:gap-6 lg:pb-14">
           {/* Le mur rétroéclairé, avec l'enseigne */}
           <div className="relative mx-auto mt-1 flex h-[clamp(150px,30vh,300px)] justify-center sm:h-[340px] lg:order-2 lg:mt-0 lg:h-auto lg:w-full lg:max-w-[620px]">
             <StudioWall tilt onAir intensity={hover || selected ? 1.7 : 1} className="h-full lg:h-auto lg:w-full" />
@@ -61,7 +86,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
             <div className="hero-cards mt-3 grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-1">
               <SceneCard
                 id="choix-studio"
-                icon={<MapPin className="size-6" strokeWidth={2.2} />}
+                photo={{ src: "/media/live-seller-480.webp", pos: "50% 22%", alt: "" }}
                 title="Au studio, à Lomé"
                 text="Tu viens avec tes produits, la régie fait le reste."
                 selected={selected === "studio"}
@@ -72,7 +97,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
                 }}
               />
               <SceneCard
-                icon={<Globe className="size-6" strokeWidth={2.2} />}
+                photo={{ src: "/media/animatrice-760.webp", pos: "34% 30%", alt: "" }}
                 title="À distance"
                 text="Depuis ta boutique, avec une animatrice OCD en direct."
                 selected={selected === "remote"}
@@ -95,9 +120,13 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
         </main>
       </section>
 
-      <Ticker />
+      <Statement />
       <SellAnything />
-      <LiveDemo />
+      <div id="comment">
+        <ScrollStory />
+      </div>
+      <FilmSection />
+      <Finale />
       <Footer />
     </div>
   );
@@ -105,7 +134,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
 
 function SceneCard({
   id,
-  icon,
+  photo,
   title,
   text,
   selected,
@@ -113,7 +142,7 @@ function SceneCard({
   onHover,
 }: {
   id?: string;
-  icon: React.ReactNode;
+  photo: { src: string; pos: string; alt: string };
   title: string;
   text: string;
   selected: boolean;
@@ -139,8 +168,19 @@ function SceneCard({
           selected ? "[--edge-w:2px] [--edge:var(--color-orange)] [--surface:#fff7f0]" : "[--edge:rgb(0_0_0/0.07)] [--surface:var(--color-card)] hover:[--edge:var(--color-ink)]",
         )}
       >
-        <span className="chamfer-sm grid size-12 shrink-0 place-items-center bg-orange-soft text-orange-ink transition-colors duration-200 group-hover:bg-orange group-hover:text-ink sm:size-14">
-          {icon}
+        {/* une fenêtre sur la scène : la photo s'éclaire au survol */}
+        <span className="chamfer-sm relative size-[68px] shrink-0 overflow-hidden bg-paper-2 sm:size-[76px]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            width={152}
+            height={152}
+            decoding="async"
+            style={{ objectPosition: photo.pos }}
+            className="h-full w-full scale-[1.02] object-cover saturate-[0.9] transition-[transform,filter] duration-500 ease-out group-hover:scale-110 group-hover:saturate-[1.1]"
+          />
+          <span aria-hidden className={cn("absolute inset-0 ring-2 ring-orange ring-inset transition-opacity duration-200", selected ? "opacity-100" : "opacity-0")} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-[19px] leading-tight font-bold tracking-[-0.01em] text-ink sm:text-[20px]">{title}</span>
