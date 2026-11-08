@@ -38,7 +38,9 @@ export function ScrollStory() {
       <h2 id="story-titre" className="sr-only">
         Comment se passe ton live
       </h2>
-      <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
+      <div className="grain-anim sticky top-0 flex h-dvh items-center overflow-hidden">
+        <span aria-hidden className="letterbox top-0" />
+        <span aria-hidden className="letterbox bottom-0" />
         {/* la lumière du plateau */}
         <div aria-hidden className="absolute top-1/2 left-1/2 size-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(241_105_3/0.28),transparent)] lg:left-[68%]" />
 

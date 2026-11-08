@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" className={bricolage.variable} suppressHydrationWarning>
       <head>
         {/* active les apparitions au défilement seulement si le JavaScript tourne */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js');try{if(sessionStorage.getItem('ocd-intro'))document.documentElement.dataset.introSeen=''}catch(e){}" }} />
       </head>
       <body className="min-h-dvh">{children}</body>
     </html>

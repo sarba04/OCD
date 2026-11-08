@@ -492,3 +492,78 @@ html:has(.sticky-preview) {
   .word { opacity: 1; }
   .story-phone, .story-cam, .zoom-frame { transform: none; }
 }
+
+/* ───────────────────────────── Cinéma ───────────────────────────── */
+/* L'ouverture : trait de lumière, puis les bandes noires s'écartent. */
+.cine-intro { display: none; }
+.js:not([data-intro-seen]) .cine-intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  animation: cine-gone 0s linear 1.9s forwards;
+}
+.cine-bar {
+  position: absolute;
+  inset-inline: 0;
+  height: 50.5%;
+  background: #050403;
+}
+.cine-top { top: 0; animation: cine-top 1.15s cubic-bezier(0.76, 0, 0.24, 1) 0.6s both; }
+.cine-bottom { bottom: 0; animation: cine-bottom 1.15s cubic-bezier(0.76, 0, 0.24, 1) 0.6s both; }
+.cine-beam {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  margin-top: -1px;
+  background: linear-gradient(90deg, transparent, #ffb45c 30%, #fff3e0 50%, #ffb45c 70%, transparent);
+  box-shadow: 0 0 24px 4px rgb(241 105 3 / 0.7);
+  transform-origin: center;
+  animation: cine-beam 1.2s var(--ease-out) both;
+}
+@keyframes cine-top { to { transform: translate3d(0, -101%, 0); } }
+@keyframes cine-bottom { to { transform: translate3d(0, 101%, 0); } }
+@keyframes cine-beam {
+  0% { transform: scaleX(0); opacity: 0; }
+  35% { transform: scaleX(1); opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: scaleX(1) scaleY(30); opacity: 0; }
+}
+@keyframes cine-gone { to { visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) {
+  .js:not([data-intro-seen]) .cine-intro { display: none; }
+}
+
+/* Grain de pellicule, qui bouge à 12 images/s. */
+.grain-anim::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.5s steps(6) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 4%); }
+  40% { transform: translate(5%, -7%); }
+  60% { transform: translate(-3%, 8%); }
+  80% { transform: translate(7%, 2%); }
+  100% { transform: translate(-5%, -4%); }
+}
+@media (prefers-reduced-motion: reduce) { .grain-anim::before { animation: none; } }
+
+/* Dans l'histoire du live : les bandes cinéma entrent avec le récit et repartent à la fin. */
+.letterbox {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 3;
+  height: calc(min(1, var(--p, 0) * 10, (1 - var(--p, 0)) * 10) * 7vh);
+  background: #000;
+  pointer-events: none;
+}

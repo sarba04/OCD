@@ -13,6 +13,8 @@ import type { Availability } from "./BookingApp";
 import { Statement } from "@/components/story/Statement";
 import { ScrollStory } from "@/components/story/ScrollStory";
 import { Finale } from "@/components/story/Finale";
+import { FilmSection } from "@/components/story/FilmSection";
+import { CinemaIntro } from "@/components/story/CinemaIntro";
 import { SellAnything } from "./SellAnything";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
@@ -44,6 +46,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
 
   return (
     <div className="relative overflow-x-clip">
+      <CinemaIntro />
       {/* ───── Le plateau : on entre dans le studio ───── */}
       <section ref={wallRef} className="wall spot relative">
         <header role="banner" className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 sm:pt-7">
@@ -122,6 +125,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
       <div id="comment">
         <ScrollStory />
       </div>
+      <FilmSection />
       <Finale />
       <Footer />
     </div>
