@@ -324,7 +324,7 @@ export function BookingApp() {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper shadow-[0_-12px_32px_-18px_rgb(22_18_14/0.25)] [view-transition-name:dock] safe-bottom">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-3 sm:gap-6 sm:px-8">
           <div className="min-w-0 flex-1" aria-live="polite">
-            <p className="tabular truncate text-[15.5px] leading-tight font-bold text-ink sm:text-[17px]">
+            <p key={`${draft.day}-${draft.time}-${step === "review"}`} className="tick-in tabular truncate text-[15.5px] leading-tight font-bold text-ink sm:text-[17px]">
               {step === "review" && pack
                 ? `Total ${fcfa(pack.price)}`
                 : draft.day && draft.time
@@ -337,7 +337,7 @@ export function BookingApp() {
                     ? "Studio Lomé"
                     : "À distance"}
             </p>
-            <p className="mt-0.5 truncate text-[13px] text-ink-3">
+            <p key={draft.packId ?? "none"} className="tick-in mt-0.5 truncate text-[13px] text-ink-3">
               {[
                 draft.mode === "studio" ? "Au studio à Lomé" : `À distance${country ? `, depuis ${country.name === "Togo" ? "le Togo" : country.name}` : ""}`,
                 pack ? pack.name : draft.day && draft.time ? "pack à choisir" : "choisis ton créneau",

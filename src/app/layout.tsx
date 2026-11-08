@@ -41,7 +41,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={bricolage.variable}>
+    <html lang="fr" className={bricolage.variable} suppressHydrationWarning>
+      <head>
+        {/* active les apparitions au défilement seulement si le JavaScript tourne */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="min-h-dvh">{children}</body>
     </html>
   );

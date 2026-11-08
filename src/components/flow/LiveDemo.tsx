@@ -5,6 +5,7 @@ import { StudioWall } from "@/components/brand/StudioWall";
 import { BRAND } from "@/lib/config";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { LowerThird, type PreviewData } from "./LivePreview";
+import { Reveal } from "@/components/motion/Reveal";
 
 /* Exemples de bandeaux (vendeurs fictifs, numéros masqués) pour montrer ce qui passe à l'écran. */
 const EXAMPLES: PreviewData[] = [
@@ -111,23 +112,23 @@ export function LiveDemo() {
   return (
     <section id="comment" aria-labelledby="antenne-titre" className="relative overflow-hidden bg-night text-night-ink">
       <div className="mx-auto grid max-w-6xl gap-14 px-5 py-20 sm:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-20 lg:py-28">
-        <div className="order-2 lg:order-1">
+        <Reveal className="r-phone order-2 lg:order-1">
           <OnAirPhone />
-        </div>
-        <div className="order-1 lg:order-2">
-          <p className="inline-flex items-center gap-2.5 text-[15px] font-semibold text-night-orange">
+        </Reveal>
+        <Reveal className="order-1 lg:order-2">
+          <p data-r style={{ ["--i" as string]: 0 }} className="inline-flex items-center gap-2.5 text-[15px] font-semibold text-night-orange">
             <span className="live-dot" aria-hidden /> À l&apos;antenne
           </p>
-          <h2 id="antenne-titre" className="display mt-4 max-w-[14ch] text-[40px] sm:text-[60px]">
+          <h2 data-r style={{ ["--i" as string]: 1 }} id="antenne-titre" className="display mt-4 max-w-[14ch] text-[40px] sm:text-[60px]">
             Pendant 1h30, ton numéro reste à l&apos;écran.
           </h2>
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-night-ink-2 sm:text-[18px]">
+          <p data-r style={{ ["--i" as string]: 2 }} className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-night-ink-2 sm:text-[18px]">
             La régie affiche ton produit, ton WhatsApp et ton adresse du début à la fin. Même ceux qui arrivent en retard repartent avec ton
             contact. Le marketing avant la vente.
           </p>
           <ol className="mt-12 grid gap-7">
             {steps.map((s, k) => (
-              <li key={s.t} className="grid grid-cols-[52px_1fr] items-baseline gap-4">
+              <li key={s.t} data-r style={{ ["--i" as string]: 3 + k }} className="grid grid-cols-[52px_1fr] items-baseline gap-4">
                 <span className="display tabular text-[44px] leading-none text-transparent [-webkit-text-stroke:1.5px_var(--color-night-orange)]">
                   {k + 1}
                 </span>
@@ -145,12 +146,14 @@ export function LiveDemo() {
               window.scrollTo({ top: 0, behavior: "smooth" });
               setTimeout(() => document.getElementById("choix-studio")?.focus({ preventScroll: true }), 500);
             }}
-            className="group relative mt-12 inline-flex h-14 items-center px-7 text-[17px] font-bold text-ink"
+            data-r
+            style={{ ["--i" as string]: 6 }}
+            className="btn-sheen group relative mt-12 inline-flex h-14 items-center overflow-hidden px-7 text-[17px] font-bold text-ink"
           >
             <span aria-hidden className="chamfer-sm absolute inset-0 bg-orange transition-colors group-hover:bg-[#ff7714]" />
             <span className="relative">Réserver mon live</span>
           </a>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

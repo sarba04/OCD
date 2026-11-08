@@ -132,7 +132,7 @@ export function StepWhen({
             {Array.from({ length: lead }, (_, i) => (
               <span key={`e${i}`} aria-hidden />
             ))}
-            {days.map((d) => {
+            {days.map((d, di) => {
               const slots = byDay?.[d];
               const freeN = slots?.filter((s) => s.free).length ?? 0;
               const full = !!slots && freeN === 0;
@@ -141,6 +141,7 @@ export function StepWhen({
                 <button
                   key={d}
                   role="gridcell"
+                  style={{ ["--i" as string]: di + lead }}
                   aria-selected={sel}
                   disabled={!slots || full}
                   aria-label={`${Number(d.slice(8, 10))} décembre, ${formatDay(d).split(" ")[0]} : ${slots ? (full ? "complet" : `${freeN} créneau${freeN > 1 ? "x" : ""} libre${freeN > 1 ? "s" : ""}`) : "chargement"}`}
@@ -156,7 +157,7 @@ export function StepWhen({
                     });
                   }}
                   className={cn(
-                    "relative flex aspect-[4/5] min-h-12 flex-col items-center justify-center gap-1.5 transition-[transform,background-color] duration-150 active:scale-95 sm:aspect-square",
+                    "cascade relative flex aspect-[4/5] min-h-12 flex-col items-center justify-center gap-1.5 transition-[transform,background-color] duration-150 active:scale-95 sm:aspect-square",
                     sel ? "chamfer-sm bg-orange text-ink" : full ? "text-ink-3/60" : "chamfer-sm bg-card text-ink hover:bg-orange-soft",
                     !slots && "animate-pulse",
                   )}
@@ -182,8 +183,8 @@ export function StepWhen({
               Lives de 1h30, avec {SCHEDULE.bufferMinutes} min d&apos;installation entre deux lives.
             </p>
             <ul className="mt-4 grid gap-2">
-              {byDay[draft.day].map((s) => (
-                <li key={s.time}>
+              {byDay[draft.day].map((s, si) => (
+                <li key={s.time} className="cascade" style={{ ["--i" as string]: si * 2 }}>
                   <SlotRow
                     s={s}
                     selected={draft.time === s.time}

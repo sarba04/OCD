@@ -11,6 +11,7 @@ import { cn } from "@/lib/cn";
 import { haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
 import { LiveDemo } from "./LiveDemo";
+import { Ticker } from "@/components/motion/Ticker";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
 
@@ -37,21 +38,26 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
 
           {/* Le message et les deux choix */}
           <div className="relative z-10 pt-4 sm:pt-8 lg:order-1 lg:py-10">
-            <p className="inline-flex items-center gap-2.5 rounded-full bg-white/70 py-1.5 pr-3.5 pl-3 text-[14px] font-semibold text-ink shadow-[0_1px_0_rgb(0_0_0/0.04)] ring-1 ring-black/5 backdrop-blur-sm">
+            <p style={{ ["--d" as string]: 120 }} className="fade-up inline-flex items-center gap-2.5 rounded-full bg-white/70 py-1.5 pr-3.5 pl-3 text-[14px] font-semibold text-ink shadow-[0_1px_0_rgb(0_0_0/0.04)] ring-1 ring-black/5 backdrop-blur-sm">
               <span className="live-dot" aria-hidden />
               Ouverture des lives le 1er décembre
             </p>
             <h1 className="display mt-3.5 text-[clamp(36px,10.5vw,54px)] sm:text-[68px] lg:mr-[-14%] lg:text-[clamp(56px,5.3vw,78px)]">
-              Passe en live.
-              <br />
-              <span className="whitespace-nowrap">Place ton produit.</span>
+              <span className="reveal-line">
+                <span style={{ ["--d" as string]: 220 }}>Passe en live.</span>
+              </span>
+              <span className="reveal-line">
+                <span style={{ ["--d" as string]: 330 }} className="whitespace-nowrap">
+                  Place ton produit.
+                </span>
+              </span>
             </h1>
-            <p className="mt-4 max-w-[38ch] text-[16px] leading-relaxed text-ink-2 sm:mt-6 sm:text-[18px] [@media(max-height:700px)_and_(max-width:639px)]:hidden">
+            <p style={{ ["--d" as string]: 480 }} className="fade-up mt-4 max-w-[38ch] text-[16px] leading-relaxed text-ink-2 sm:mt-6 sm:text-[18px] [@media(max-height:700px)_and_(max-width:639px)]:hidden">
               Le marketing avant la vente&nbsp;: un créneau, une régie, et toute l&apos;audience de {BRAND.liveAccount} devant ton business.
             </p>
 
-            <h2 className="mt-6 text-[17px] font-bold tracking-[-0.01em] sm:mt-9 sm:text-[19px]">Où veux-tu faire ton live&nbsp;?</h2>
-            <div className="mt-3 grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-1">
+            <h2 style={{ ["--d" as string]: 560 }} className="fade-up mt-6 text-[17px] font-bold tracking-[-0.01em] sm:mt-9 sm:text-[19px]">Où veux-tu faire ton live&nbsp;?</h2>
+            <div className="hero-cards mt-3 grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-1">
               <SceneCard
                 id="choix-studio"
                 icon={<MapPin className="size-6" strokeWidth={2.2} />}
@@ -77,7 +83,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
               />
             </div>
 
-            <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-ink-2">
+            <p style={{ ["--d" as string]: 860 }} className="fade-up mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-ink-2">
               <span className="tabular inline-flex min-w-[17ch] items-center gap-2">
                 <span className="size-2 rounded-full bg-ok" aria-hidden />
                 {free === null ? <span className="inline-block h-3.5 w-28 animate-pulse rounded bg-black/10" /> : <>{free} créneaux libres en décembre</>}
@@ -88,6 +94,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
         </main>
       </section>
 
+      <Ticker />
       <LiveDemo />
       <Footer />
     </div>

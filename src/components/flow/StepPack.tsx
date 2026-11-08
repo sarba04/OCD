@@ -44,10 +44,10 @@ export function StepPack({
       <p className="mt-1 text-[14px] text-ink-3">Prix de lancement, valables pour tout décembre.</p>
 
       <ul className="mt-6 grid gap-3 md:grid-cols-2 md:gap-4">
-        {PACKS.map((p) => {
+        {PACKS.map((p, pi) => {
           const c = checks?.[p.id];
           return (
-            <li key={p.id}>
+            <li key={p.id} className="cascade" style={{ ["--i" as string]: pi * 3 }}>
               <PackCard
                 pack={p}
                 check={c}
