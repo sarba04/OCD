@@ -16,7 +16,7 @@ import { Finale } from "@/components/story/Finale";
 import { FilmSection } from "@/components/story/FilmSection";
 import { CinemaIntro } from "@/components/story/CinemaIntro";
 import { LiveChat } from "@/components/story/LiveChat";
-import { TryBandeau } from "@/components/story/TryBandeau";
+import { Bento } from "@/components/story/Bento";
 import { SellAnything } from "./SellAnything";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
@@ -25,12 +25,10 @@ export function StepScene({
   avail,
   selected,
   onPick,
-  onKeep,
 }: {
   avail: Availability | null;
   selected: Mode | null;
   onPick: (m: Mode) => void;
-  onKeep: (name: string, pitch: string) => void;
 }) {
   const [hover, setHover] = useState<Mode | null>(null);
   const free = useMemo(() => (avail ? freeSlotCount(avail.busy, new Date(avail.now)) : null), [avail]);
@@ -135,13 +133,7 @@ export function StepScene({
       <Statement />
       <SellAnything />
       <LiveChat />
-      <TryBandeau
-        onKeep={(name, pitch) => {
-          onKeep(name, pitch);
-          window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-          setTimeout(() => document.getElementById("choix-studio")?.focus({ preventScroll: true }), 600);
-        }}
-      />
+      <Bento />
       <div id="comment">
         <ScrollStory />
       </div>
