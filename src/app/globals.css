@@ -466,3 +466,29 @@ html:has(.sticky-preview) {
 @media (pointer: fine) {
   .spot:hover::after { opacity: 1; }
 }
+
+/* ───────────────────────────── Récit au défilement ───────────────────────────── */
+/* La phrase s'écrit : chaque mot passe du gris à l'encre selon l'avancement --p. */
+.word {
+  opacity: clamp(0.16, calc((var(--p, 0) * var(--n) * 1.25 - var(--i)) * 0.6), 1);
+  transition: opacity 120ms linear;
+}
+/* Le téléphone monte et se redresse en entrant dans le chapitre 1 ; la caméra avance doucement. */
+.story-phone {
+  transform: perspective(1400px) translate3d(0, calc((1 - min(1, var(--p, 0) * 6)) * 60px), 0) rotateX(calc((1 - min(1, var(--p, 0) * 6)) * 12deg));
+}
+.story-cam {
+  transform: scale(calc(1.18 - var(--p, 0) * 0.18));
+  transform-origin: 50% 35%;
+}
+/* Le bandeau s'illumine quand les messages arrivent. */
+.lt-glow { filter: drop-shadow(0 0 14px rgb(241 105 3 / 0.75)); transition: filter 600ms; }
+/* La photo des produits s'ouvre jusqu'aux bords. */
+.zoom-frame {
+  transform: scale(calc(0.86 + min(1, var(--p, 0) * 1.4) * 0.14));
+  border-radius: calc((1 - min(1, var(--p, 0) * 1.4)) * 28px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .word { opacity: 1; }
+  .story-phone, .story-cam, .zoom-frame { transform: none; }
+}

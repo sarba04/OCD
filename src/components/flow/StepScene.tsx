@@ -10,8 +10,9 @@ import type { Mode } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
-import { LiveDemo } from "./LiveDemo";
-import { Ticker } from "@/components/motion/Ticker";
+import { Statement } from "@/components/story/Statement";
+import { ScrollStory } from "@/components/story/ScrollStory";
+import { Finale } from "@/components/story/Finale";
 import { SellAnything } from "./SellAnything";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
@@ -116,9 +117,12 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
         </main>
       </section>
 
-      <Ticker />
+      <Statement />
       <SellAnything />
-      <LiveDemo />
+      <div id="comment">
+        <ScrollStory />
+      </div>
+      <Finale />
       <Footer />
     </div>
   );
