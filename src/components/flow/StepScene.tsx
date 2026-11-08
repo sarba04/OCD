@@ -15,6 +15,8 @@ import { ScrollStory } from "@/components/story/ScrollStory";
 import { Finale } from "@/components/story/Finale";
 import { FilmSection } from "@/components/story/FilmSection";
 import { CinemaIntro } from "@/components/story/CinemaIntro";
+import { CrossBands } from "@/components/story/CrossBands";
+import { Bento } from "@/components/story/Bento";
 import { SellAnything } from "./SellAnything";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
@@ -120,8 +122,10 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
         </main>
       </section>
 
+      <CrossBands />
       <Statement />
       <SellAnything />
+      <Bento />
       <div id="comment">
         <ScrollStory />
       </div>
