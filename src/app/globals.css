@@ -4,8 +4,8 @@
    Orange du logo (mesuré) + l'ambiance du studio : mur blanc chaud, lumière rétroéclairée,
    lettres orange et « Live » noir très gras. */
 @theme {
-  --color-paper: #fbf8f3;
-  --color-paper-2: #f3ede4;
+  --color-paper: #fdfcfa;
+  --color-paper-2: #f4f1ec;
   --color-card: #ffffff;
   --color-ink: #16120e;
   --color-ink-2: #4a433b;
@@ -159,11 +159,10 @@
 }
 
 @utility eyebrow {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 650;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.8125rem;
+  line-height: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 @utility safe-bottom {

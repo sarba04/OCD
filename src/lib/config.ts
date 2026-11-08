@@ -76,7 +76,7 @@ export const PACKS: Pack[] = [
     regular: 20000,
     showHourly: true,
     includes: [
-      `1 live de 1h30 sur le compte ${BRAND.liveAccount}`,
+      `Diffusé en direct sur le compte ${BRAND.liveAccount}`,
       "Une régie qui dirige ton live du début à la fin",
       "Ton numéro et ton adresse affichés à l'écran",
     ],
@@ -91,8 +91,8 @@ export const PACKS: Pack[] = [
     price: 35000,
     showHourly: true,
     includes: [
-      "1 live de 4 h d'affilée",
       "L'heure la moins chère de tous les packs",
+      "Le temps de répondre à chaque question",
       "Une pause de 10 min prévue avec la régie",
     ],
   },
@@ -107,7 +107,6 @@ export const PACKS: Pack[] = [
     badge: "Le plus choisi",
     minLeadHours: 48,
     includes: [
-      "1 live de 1h30",
       "Une vidéo teaser tournée et montée par l'équipe",
       "Le teaser publié avant ton live pour attirer ton audience",
     ],
@@ -122,7 +121,6 @@ export const PACKS: Pack[] = [
     price: 50000,
     showHourly: true,
     includes: [
-      "3 lives de 1h30, 3 jours de suite",
       "Même heure chaque jour",
       "Tes clients reviennent, ta confiance monte",
     ],
@@ -152,7 +150,7 @@ export const PACKS: Pack[] = [
     price: 120000,
     showHourly: false,
     includes: [
-      "4 lives de 1h30, le même jour chaque semaine",
+      "Le même jour et la même heure chaque semaine",
       `1 annonce par ${BRAND.founder}`,
       "Priorité sur les créneaux du soir",
     ],

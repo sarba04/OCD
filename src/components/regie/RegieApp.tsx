@@ -152,6 +152,7 @@ export function RegieApp() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 pt-6 sm:px-6">
+        <h1 className="sr-only">Régie OCD Live</h1>
         {/* ───── Chiffres ───── */}
         <section className="grid grid-cols-2 gap-px overflow-hidden bg-night-line lg:grid-cols-4" aria-label="Chiffres clés">
           <Kpi label="Réservations" value={rows ? String(stats.count) : "—"} sub={`${stats.taken} créneaux occupés`} />
@@ -163,7 +164,7 @@ export function RegieApp() {
         {/* ───── Prochain live ───── */}
         {next && (
           <button onClick={() => setOpen(next.b.id)} className="mt-4 flex w-full flex-wrap items-center gap-x-5 gap-y-2 bg-night-2 px-5 py-4 text-left ring-1 ring-night-line ring-inset hover:ring-night-orange">
-            <span className="eyebrow flex items-center gap-2 text-[11px] text-night-orange">
+            <span className="flex items-center gap-2 text-[12.5px] font-semibold text-night-orange">
               <span className="live-dot" aria-hidden /> Prochain live
             </span>
             <span className="tabular text-[15px] font-semibold">
@@ -178,7 +179,7 @@ export function RegieApp() {
         )}
 
         {/* ───── Onglets ───── */}
-        <div className="mt-8 flex items-center gap-1 border-b border-night-line" role="tablist">
+        <div className="mt-8 flex items-center gap-1 overflow-x-auto border-b border-night-line" role="tablist">
           <TabBtn on={tab === "planning"} onClick={() => setTab("planning")} icon={<CalendarDays className="size-4" />}>
             Planning
           </TabBtn>
@@ -236,8 +237,8 @@ export function RegieApp() {
 function Kpi({ label, value, sub, accent, bar }: { label: string; value: string; sub: string; accent?: boolean; bar?: number }) {
   return (
     <div className="bg-night-2 px-4 py-4 sm:px-5">
-      <p className="eyebrow text-[10.5px] text-night-ink-2">{label}</p>
-      <p className={cn("tabular display mt-2 text-[26px] sm:text-[32px]", accent && "text-night-orange")}>{value}</p>
+      <p className="text-[12.5px] font-semibold text-night-ink-2">{label}</p>
+      <p className={cn("tabular display mt-2 text-[clamp(19px,6vw,26px)] whitespace-nowrap sm:text-[32px]", accent && "text-night-orange")}>{value}</p>
       {bar !== undefined && (
         <div className="mt-2 h-1.5 bg-night-line" aria-hidden>
           <div className="h-full bg-night-orange transition-[width] duration-700" style={{ width: `${bar}%` }} />
@@ -250,7 +251,7 @@ function Kpi({ label, value, sub, accent, bar }: { label: string; value: string;
 
 function TabBtn({ on, onClick, icon, children }: { on: boolean; onClick: () => void; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <button role="tab" aria-selected={on} onClick={onClick} className={cn("-mb-px inline-flex h-12 items-center gap-2 border-b-2 px-3 text-[14.5px] font-semibold transition-colors sm:px-4", on ? "border-night-orange text-night-ink" : "border-transparent text-night-ink-2 hover:text-night-ink")}>
+    <button role="tab" aria-selected={on} onClick={onClick} className={cn("-mb-px inline-flex h-12 shrink-0 items-center gap-2 border-b-2 px-2.5 text-[14.5px] font-semibold transition-colors sm:px-4", on ? "border-night-orange text-night-ink" : "border-transparent text-night-ink-2 hover:text-night-ink")}>
       {icon}
       {children}
     </button>
@@ -323,7 +324,7 @@ function Planning({ rows, onOpen, now }: { rows: Row[]; onOpen: (id: string) => 
                       style={{ left: `${pos(start)}%`, width: `${pos(end) - pos(start)}%` }}
                     >
                       <span className="block truncate font-bold">{b.business.name}</span>
-                      <span className="tabular block truncate opacity-75">
+                      <span className="tabular block truncate font-medium">
                         {formatTime(start)} · {b.mode === "studio" ? "studio" : getCountry(b.country)?.code}
                         {b.sessions.length > 1 ? ` · ${i + 1}/${b.sessions.length}` : ""}
                       </span>

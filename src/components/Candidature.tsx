@@ -36,7 +36,7 @@ export function Candidature() {
         </a>
       </header>
       <main className="mx-auto max-w-3xl px-5 pt-10 pb-20 sm:px-8">
-        <p className="eyebrow text-orange-ink">On recrute à Lomé · temps plein</p>
+        <p className="text-[15px] font-semibold text-orange-ink">On recrute à Lomé, à temps plein</p>
         <h1 className="display mt-3 text-[40px] sm:text-[60px]">
           Tu sais parler.
           <br />

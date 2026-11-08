@@ -70,7 +70,7 @@ export function StepDone({
     `Bonjour OCD Live, je viens de réserver mon live.`,
     `Réf : ${b.ref}`,
     `${formatDay(first.start.slice(0, 10))}, ${formatTime(first.start)}–${formatTime(first.end)} (Lomé)`,
-    `Pack ${b.packName} · ${fcfa(b.price)}`,
+    `Pack ${b.packName}, ${fcfa(b.price)}`,
     `Business : ${b.business.name}`,
   ].join("\n");
   const teamLink = BRAND.whatsapp ? waLink(BRAND.whatsapp, teamMsg) : `https://wa.me/?text=${encodeURIComponent(teamMsg)}`;
@@ -80,7 +80,7 @@ export function StepDone({
   return (
     <div className="animate-rise grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
       <div>
-        <p className="eyebrow flex items-center gap-2 text-ok">
+        <p className="flex items-center gap-2 text-[15px] font-semibold text-ok">
           <span className="grid size-5 place-items-center rounded-full bg-ok text-white">
             <Check className="size-3.5" strokeWidth={3.5} aria-hidden />
           </span>
@@ -130,8 +130,7 @@ export function StepDone({
       <div className="grid content-start gap-10">
         {/* 1. Payer */}
         <section className="border-t-2 border-ink pt-5">
-          <p className="display tabular text-[15px] text-orange-ink">01</p>
-          <h2 className="mt-1 text-[22px] font-bold tracking-[-0.015em]">
+          <h2 className="text-[22px] font-bold tracking-[-0.015em]">
             {b.paymentMethod === "cash" ? "Tu paies au studio" : b.paymentMethod === "later" ? "L'équipe te contacte" : `Paie ${fcfa(b.price)} par ${pay?.label}`}
           </h2>
           <div className="mt-2 text-[15.5px] leading-relaxed text-ink-2">
@@ -151,7 +150,7 @@ export function StepDone({
                   .
                 </li>
                 <li>
-                  2. Mets la référence <strong className="font-mono font-semibold text-ink">{b.ref}</strong> en motif.
+                  2. Mets la référence <strong className="tabular font-bold tracking-[0.02em] text-ink">{b.ref}</strong> en motif.
                 </li>
                 <li>3. Ta place est confirmée dès réception. Tu as 24 h.</li>
               </ol>
@@ -161,8 +160,7 @@ export function StepDone({
 
         {/* 2. Affiche */}
         <section className="border-t-2 border-ink pt-5">
-          <p className="display tabular text-[15px] text-orange-ink">02</p>
-          <h2 className="mt-1 text-[22px] font-bold tracking-[-0.015em]">Fais venir tes clients</h2>
+          <h2 className="text-[22px] font-bold tracking-[-0.015em]">Fais venir tes clients</h2>
           <p className="mt-2 text-[15.5px] leading-relaxed text-ink-2">
             Ton affiche est prête. Mets-la en statut WhatsApp et sur TikTok : tes clients sauront quand te retrouver. Le marketing avant la vente.
           </p>
@@ -193,8 +191,7 @@ export function StepDone({
 
         {/* 3. Préparer */}
         <section className="border-t-2 border-ink pt-5">
-          <p className="display tabular text-[15px] text-orange-ink">03</p>
-          <h2 className="mt-1 text-[22px] font-bold tracking-[-0.015em]">Prépare ton live</h2>
+          <h2 className="text-[22px] font-bold tracking-[-0.015em]">Prépare ton live</h2>
           <ul className="mt-3 grid gap-2.5 text-[15.5px] text-ink-2">
             {(b.mode === "studio"
               ? [

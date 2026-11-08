@@ -104,7 +104,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
                 </div>
               )}
               <div className="min-w-0">
-                <p className="eyebrow text-[10.5px] text-night-orange">{b.business.category}</p>
+                <p className="text-[12.5px] font-semibold text-night-orange">{b.business.category}</p>
                 <h2 className="display mt-1 text-[28px]">{b.business.name}</h2>
                 <p className="mt-1.5 text-[15px] leading-snug text-night-ink">{b.business.pitch}</p>
                 {b.business.priceHint && <p className="mt-1 text-[13.5px] text-night-ink-2">Prix : {b.business.priceHint}</p>}
@@ -113,7 +113,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
 
             {/* Ce qui passe à l'écran */}
             <section className="mt-6 bg-night px-4 py-4 ring-1 ring-night-line ring-inset">
-              <p className="eyebrow text-[10.5px] text-night-ink-2">À l&apos;écran pendant le live</p>
+              <p className="text-[12.5px] font-semibold text-night-ink-2">À l&apos;écran pendant le live</p>
               <p className="tabular mt-2 flex items-center gap-2 text-[17px] font-bold">
                 <MessageCircle className="size-4 text-night-orange" aria-hidden /> {b.business.displayPhone}
               </p>
@@ -145,7 +145,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
 
             {/* Créneaux */}
             <section className="mt-6">
-              <h3 className="eyebrow text-[10.5px] text-night-ink-2">
+              <h3 className="text-[12.5px] font-semibold text-night-ink-2">
                 {b.sessions.length > 1 ? `${b.sessions.length} lives` : "Live"} · Pack {b.packName} · {fcfa(b.price)}
               </h3>
               <ul className="mt-2 grid gap-1.5">
@@ -170,7 +170,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
 
             {/* Contact */}
             <section className="mt-6">
-              <h3 className="eyebrow text-[10.5px] text-night-ink-2">Contact</h3>
+              <h3 className="text-[12.5px] font-semibold text-night-ink-2">Contact</h3>
               <p className="mt-2 text-[17px] font-bold">{b.contact.fullName}</p>
               <p className="tabular text-[15px] text-night-ink-2">
                 {b.contact.phone}
@@ -193,7 +193,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
 
             {/* Statut */}
             <section className="mt-8 border-t border-night-line pt-5">
-              <h3 className="eyebrow text-[10.5px] text-night-ink-2">Changer le statut</h3>
+              <h3 className="text-[12.5px] font-semibold text-night-ink-2">Changer le statut</h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {ACTIONS.filter((a) => a.s !== b.status).map((a) => (
                   <button

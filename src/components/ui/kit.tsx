@@ -9,7 +9,7 @@ export function PrimaryButton({
   children,
   loading,
   className,
-  arrow = true,
+  arrow = false,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { loading?: boolean; arrow?: boolean }) {
   return (
@@ -227,7 +227,7 @@ export function Tag({ children, tone = "ink", className }: { children: React.Rea
   return (
     <span
       className={cn(
-        "chamfer-sm inline-flex h-6 items-center gap-1 px-2 text-[11.5px] font-bold tracking-wide whitespace-nowrap uppercase",
+        "chamfer-sm inline-flex h-6 items-center gap-1 px-2 text-[12.5px] font-semibold whitespace-nowrap",
         tone === "ink" && "bg-ink text-paper",
         tone === "orange" && "bg-orange text-ink",
         tone === "live" && "bg-live text-white",

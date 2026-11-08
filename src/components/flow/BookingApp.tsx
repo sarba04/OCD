@@ -237,10 +237,10 @@ export function BookingApp() {
           onClick: () => go("pack"),
         };
       case "pack":
-        return { cta: "Continuer", disabled: !pack, onClick: () => go("business") };
+        return { cta: "Choisir ce pack", disabled: !pack, onClick: () => go("business") };
       case "business":
         return {
-          cta: "Vérifier",
+          cta: "Voir le récap",
           disabled: false,
           onClick: () => {
             if (Object.keys(errors).length) {
@@ -251,7 +251,7 @@ export function BookingApp() {
         };
       default:
         return {
-          cta: "Confirmer",
+          cta: "Réserver mon live",
           disabled: !draft.paymentMethod || !!conflict,
           onClick: submit,
         };
@@ -261,17 +261,14 @@ export function BookingApp() {
   return (
     <div className="min-h-dvh pb-36">
       <TopBar step={step} onBack={back} />
-      {avail?.demo && step === "when" && (
-        <p className="mx-auto max-w-6xl px-4 pt-3 text-[12.5px] text-ink-3 sm:px-8">
-          Démo : le planning est pré-rempli avec des réservations fictives pour montrer le fonctionnement.
-        </p>
-      )}
       <main className="mx-auto max-w-6xl px-4 pt-6 sm:px-8 sm:pt-10">
-        <div key={step} className={dir > 0 ? "animate-rise" : "animate-rise-back"}>
-          <p className="eyebrow text-orange-ink">
-            Étape {idx} sur {FLOW.length - 1}
+        {avail?.demo && step === "when" && (
+          <p className="-mt-3 mb-5 text-[13px] text-ink-3 sm:-mt-6">
+            Démo : le planning est pré-rempli avec des réservations fictives pour montrer le fonctionnement.
           </p>
-          <h1 ref={titleRef} tabIndex={-1} className="display mt-2 text-[34px] outline-none sm:text-[48px]">
+        )}
+        <div key={step} className={dir > 0 ? "animate-rise" : "animate-rise-back"}>
+          <h1 ref={titleRef} tabIndex={-1} className="display text-[34px] outline-none sm:text-[48px]">
             {title()}
           </h1>
           <div className="mt-6 sm:mt-8">
@@ -312,7 +309,7 @@ export function BookingApp() {
               {step === "review" && pack
                 ? `Total ${fcfa(pack.price)}`
                 : draft.day && draft.time
-                  ? `${formatDay(draft.day, "short")} · ${
+                  ? `${formatDay(draft.day, "short")} à ${
                       draft.mode === "remote" && country && offsetFromStudio(country.tz, toISO(draft.day, draft.time)) !== 0
                         ? `${formatTime(toISO(draft.day, draft.time), country.tz)} chez toi`
                         : draft.time
@@ -323,11 +320,11 @@ export function BookingApp() {
             </p>
             <p className="mt-0.5 truncate text-[13px] text-ink-3">
               {[
-                draft.mode === "studio" ? "Studio Lomé" : `À distance${country ? ` · ${country.name}` : ""}`,
+                draft.mode === "studio" ? "Au studio à Lomé" : `À distance${country ? `, depuis ${country.name === "Togo" ? "le Togo" : country.name}` : ""}`,
                 pack ? pack.name : draft.day && draft.time ? "pack à choisir" : "choisis ton créneau",
               ]
                 .filter((x, i) => !(i === 0 && !(draft.day && draft.time) && step !== "review"))
-                .join(" · ")}
+                .join(", ")}
             </p>
           </div>
           <PrimaryButton onClick={dock.onClick} disabled={dock.disabled} loading={step === "review" && submitting} className="shrink-0 px-5 sm:px-8">

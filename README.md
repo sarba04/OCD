@@ -104,6 +104,12 @@ Tout est dans `src/lib/config.ts` :
 - **Fuseaux horaires** : Lomé = GMT toute l'année ; l'heure locale du vendeur est calculée avec l'API `Intl` (heure d'hiver/été comprise pour la diaspora).
 - **Accessibilité** : contrastes vérifiés (AA), focus visible, navigation au clavier, bouton retour du téléphone = étape précédente, mouvements réduits respectés.
 - **Photo produit** compressée dans le téléphone (≈100 Ko) avant l'envoi.
+- **Audit d'accessibilité** (axe-core, WCAG 2.1 AA) sur les 11 écrans du parcours et de la Régie : 0 violation. Navigation au clavier, focus visible, résumé d'erreurs, fermeture des fiches avec Échap, affichage sans débordement à 320 px (zoom 200 %).
+- **Référencement Google** : données structurées schema.org (studio à Lomé, packs et prix en F CFA), `sitemap.xml`, `robots.txt` (Régie exclue), image d'aperçu pour WhatsApp et les réseaux.
+
+## Skills Claude inclus
+
+Le dossier `.claude/skills/` contient les skills officiels d'Anthropic utilisés pour ce projet (licence Apache 2.0) : `frontend-design`, `design-critique`, `ux-copy` et `accessibility-review`. Ils se chargent automatiquement dans les prochaines sessions Claude Code sur ce dépôt.
 
 ## Prochaines étapes possibles
 

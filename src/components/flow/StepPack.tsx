@@ -98,10 +98,8 @@ function PackCard({ pack, check, selected, euro, onPick }: { pack: Pack; check?:
 
         <span className="mt-4 flex flex-wrap gap-1.5">
           <Tag tone="soft">
-            {pack.sessions > 1 ? `${pack.sessions} lives` : "1 live"} · {hm(pack.minutes)}
+            {pack.sessions > 1 ? `${pack.sessions} lives de ${hm(pack.minutes)}` : `1 live de ${hm(pack.minutes)}`}
           </Tag>
-          {pack.pattern === "consecutive" && <Tag tone="soft">3 jours de suite</Tag>}
-          {pack.pattern === "weekly" && <Tag tone="soft">1 par semaine</Tag>}
         </span>
 
         <span className="mt-4 grid gap-1.5 border-t border-line pt-4">
@@ -127,7 +125,7 @@ function PackCard({ pack, check, selected, euro, onPick }: { pack: Pack; check?:
             <span className="mt-1.5 flex flex-wrap gap-1.5">
               {check.sessions.map((s) => (
                 <span key={s.start} className="chamfer-sm tabular bg-orange/15 px-2 py-1 text-[12.5px] font-semibold text-ink">
-                  {formatDay(s.start.slice(0, 10), "short")} · {formatTime(s.start)}
+                  {formatDay(s.start.slice(0, 10), "short")}, {formatTime(s.start)}
                 </span>
               ))}
             </span>

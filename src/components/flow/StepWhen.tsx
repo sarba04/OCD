@@ -143,7 +143,7 @@ export function StepWhen({
                   role="gridcell"
                   aria-selected={sel}
                   disabled={!slots || full}
-                  aria-label={`${formatDay(d)} : ${slots ? (full ? "complet" : `${freeN} créneau${freeN > 1 ? "x" : ""} libre${freeN > 1 ? "s" : ""}`) : "chargement"}`}
+                  aria-label={`${Number(d.slice(8, 10))} décembre, ${formatDay(d).split(" ")[0]} : ${slots ? (full ? "complet" : `${freeN} créneau${freeN > 1 ? "x" : ""} libre${freeN > 1 ? "s" : ""}`) : "chargement"}`}
                   onClick={() => {
                     haptic();
                     setDraft({ day: d, time: draft.day === d ? draft.time : null, packId: draft.day === d ? draft.packId : null });
@@ -165,7 +165,7 @@ export function StepWhen({
                     {Number(d.slice(8, 10))}
                   </span>
                   {slots && !full && <Ticks slots={slots} selected={sel} />}
-                  {full && <span className="text-[9.5px] font-semibold tracking-wide uppercase">complet</span>}
+                  {full && <span className="text-[10.5px] font-semibold">complet</span>}
                 </button>
               );
             })}
@@ -179,7 +179,7 @@ export function StepWhen({
           <div key={draft.day} className="animate-rise">
             <h2 className="text-[22px] font-bold tracking-[-0.015em] first-letter:uppercase sm:text-[24px]">{formatDay(draft.day)}</h2>
             <p className="mt-1 text-[14px] text-ink-3">
-              Lives de 1h30 · {SCHEDULE.bufferMinutes} min d&apos;installation entre deux lives
+              Lives de 1h30, avec {SCHEDULE.bufferMinutes} min d&apos;installation entre deux lives.
             </p>
             <ul className="mt-4 grid gap-2">
               {byDay[draft.day].map((s) => (
@@ -260,17 +260,17 @@ function SlotRow({ s, selected, tz, city, onPick }: { s: SlotState; selected: bo
               <span className="tabular flex items-baseline gap-2 text-[22px] leading-none font-bold">
                 {localStart}
                 <span className="text-[14px] font-semibold text-ink-3">
-                  → {formatTime(end, tz)} chez toi{dayShift ? " (+1 j)" : ""}
+                  – {formatTime(end, tz)} chez toi{dayShift ? " (+1 j)" : ""}
                 </span>
               </span>
               <span className="tabular mt-1.5 block text-[13.5px] text-ink-3">
-                {s.time} → {formatTime(end)} à Lomé · {city}
+                {s.time}–{formatTime(end)} à Lomé
               </span>
             </>
           ) : (
             <span className="tabular flex items-baseline gap-2 text-[22px] leading-none font-bold">
               {s.time}
-              <span className="text-[14px] font-semibold text-ink-3">→ {formatTime(end)}</span>
+              <span className="text-[14px] font-semibold text-ink-3">– {formatTime(end)}</span>
             </span>
           )}
         </span>

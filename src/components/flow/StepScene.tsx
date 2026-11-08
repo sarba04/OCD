@@ -1,5 +1,5 @@
 "use client";
-import { ArrowRight, Globe, MapPin } from "lucide-react";
+import { ChevronRight, Globe, MapPin } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AfricaMap, LOME_POS } from "@/components/brand/AfricaMap";
 import { Logo } from "@/components/brand/Logo";
@@ -53,7 +53,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
             <div className="chamfer-sm flex items-center gap-2.5 bg-ink py-2 pr-3.5 pl-3 text-paper shadow-xl">
               <span className="live-dot" />
               <span className="text-[13px] leading-tight font-semibold">
-                Studio OCD · Lomé
+                Studio OCD, Lomé
                 <span className="block text-[11.5px] font-normal text-paper/70">en direct sur {BRAND.liveAccount}</span>
               </span>
             </div>
@@ -62,31 +62,25 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
 
         {/* ───── Le message + les deux choix ───── */}
         <div className="relative z-10 pt-8 pb-8 sm:pt-16 lg:order-1 lg:py-12">
-          <p className="eyebrow flex items-center gap-2.5 text-orange-ink">
+          <p className="inline-flex items-center gap-2.5 text-[15px] font-semibold text-ink-2">
             <span className="live-dot" aria-hidden />
-            Lancement le 1er décembre
+            Ouverture des lives le 1er décembre
           </p>
           <h1 className="display mt-4 text-[clamp(37px,10.4vw,52px)] sm:text-[64px] lg:text-[clamp(52px,4.3vw,64px)]">
             Passe en live.
             <br />
-            <span className="relative inline-block whitespace-nowrap">
-              Place ton produit.
-              <svg className="absolute -bottom-[0.12em] left-0 h-[0.16em] w-full" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden>
-                <path d="M2 9 C 80 3, 200 2, 298 6" fill="none" stroke="#F16903" strokeWidth="5" strokeLinecap="round" />
-              </svg>
-            </span>
+            <span className="whitespace-nowrap">Place ton produit.</span>
           </h1>
           <p className="mt-5 max-w-[36ch] text-[16px] leading-relaxed text-ink-2 sm:mt-6 sm:text-[18px]">
             Le marketing avant la vente&nbsp;: un créneau, une régie, et toute l&apos;audience de {BRAND.liveAccount} devant ton business.
           </p>
 
-          <h2 className="eyebrow mt-7 text-ink-3 sm:mt-10">Où veux-tu faire ton live&nbsp;?</h2>
+          <h2 className="mt-7 text-[17px] font-bold tracking-[-0.01em] sm:mt-10 sm:text-[19px]">Où veux-tu faire ton live&nbsp;?</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1">
             <SceneCard
               icon={<MapPin className="size-6" strokeWidth={2.2} />}
               title="Au studio, à Lomé"
               text="Tu viens avec tes produits, la régie fait le reste."
-              meta="Togo"
               selected={selected === "studio"}
               onHover={(h) => setHover(h ? "studio" : null)}
               onClick={() => {
@@ -98,7 +92,6 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
               icon={<Globe className="size-6" strokeWidth={2.2} />}
               title="À distance"
               text="Depuis ta boutique, avec une animatrice OCD en direct."
-              meta="Afrique et monde"
               selected={selected === "remote"}
               onHover={(h) => setHover(h ? "remote" : null)}
               onClick={() => {
@@ -129,7 +122,6 @@ function SceneCard({
   icon,
   title,
   text,
-  meta,
   selected,
   onClick,
   onHover,
@@ -137,7 +129,6 @@ function SceneCard({
   icon: React.ReactNode;
   title: string;
   text: string;
-  meta: string;
   selected: boolean;
   onClick: () => void;
   onHover: (h: boolean) => void;
@@ -164,11 +155,8 @@ function SceneCard({
             <span className="text-[19px] leading-tight font-bold tracking-[-0.01em] text-ink sm:text-[20px]">{title}</span>
           </span>
           <span className="mt-1 block text-[14.5px] leading-snug text-ink-2">{text}</span>
-          <span className="eyebrow mt-2 block text-[10.5px] text-ink-3">{meta}</span>
         </span>
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-paper-2 text-ink transition-all duration-200 group-hover:translate-x-0.5 group-hover:bg-ink group-hover:text-paper">
-          <ArrowRight className="size-5" strokeWidth={2.4} />
-        </span>
+        <ChevronRight className="size-6 shrink-0 text-ink-3 transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:text-ink" strokeWidth={2.2} aria-hidden />
       </button>
     </div>
   );
@@ -181,10 +169,9 @@ function HowItWorks() {
     { n: "03", t: "Tu passes en live", d: `La régie met ton produit, ton numéro et ton adresse à l'écran sur ${BRAND.liveAccount}.` },
   ];
   return (
-    <section id="comment" className="relative z-10 border-t border-line bg-paper-2/60">
+    <section id="comment" aria-labelledby="comment-titre" className="relative z-10 border-t border-line bg-paper-2/60">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
-        <p className="eyebrow text-orange-ink">Comment ça marche</p>
-        <h2 className="display mt-3 max-w-[18ch] text-[32px] sm:text-[44px]">2 minutes pour réserver. 1h30 pour te faire connaître.</h2>
+        <h2 id="comment-titre" className="display max-w-[18ch] text-[32px] sm:text-[44px]">2 minutes pour réserver. 1h30 pour te faire connaître.</h2>
         <ol className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-6">
           {steps.map((s) => (
             <li key={s.n} className="border-t-2 border-ink pt-4">
@@ -205,7 +192,6 @@ function HowItWorks() {
           >
             <span aria-hidden className="chamfer-sm absolute inset-0 bg-orange transition-colors group-hover:bg-[#ff7714]" />
             <span className="relative">Réserver mon live</span>
-            <ArrowRight className="relative size-5" strokeWidth={2.5} />
           </a>
           <p className="text-[14px] text-ink-3">Paiement par Flooz, Mixx by Yas ou au studio.</p>
         </div>
@@ -218,7 +204,7 @@ function Footer() {
   return (
     <footer className="relative z-10 border-t border-line">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-[14px] text-ink-3 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <span>OCD Live · Lomé, Togo · 2026</span>
+        <span>OCD Live, Lomé (Togo)</span>
         <nav className="flex flex-wrap gap-x-6 gap-y-2">
           <a href="/animatrice" className="font-semibold text-ink underline decoration-orange decoration-2 underline-offset-4">
             Tu sais vendre ? Deviens animatrice

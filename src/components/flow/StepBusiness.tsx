@@ -43,7 +43,7 @@ export function StepBusiness({
 
         {/* Aperçu compact (mobile) */}
         <div className="mt-6 lg:hidden">
-          <p className="eyebrow mb-2 text-[10.5px] text-ink-3">Aperçu à l&apos;écran</p>
+          <p className="mb-2 text-[13.5px] font-semibold text-ink-2">Ton bandeau à l&apos;écran</p>
           <div className="relative overflow-hidden bg-[#3a2716] p-3">
             {draft.photo && <img src={draft.photo} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
@@ -276,7 +276,7 @@ export function StepBusiness({
       {/* Aperçu téléphone (grand écran) */}
       <aside className="hidden lg:block">
         <div className="sticky top-24">
-          <p className="eyebrow mb-3 text-center text-[10.5px] text-ink-3">Ce que verront tes clients</p>
+          <p className="mb-3 text-center text-[13.5px] font-semibold text-ink-2">Ce que verront tes clients</p>
           <PhonePreview d={preview} />
         </div>
       </aside>
