@@ -262,3 +262,81 @@
   15% { opacity: 1; }
   100% { opacity: 0; transform: translate3d(var(--dx, 0px), -160px, 0) scale(1.1); }
 }
+
+/* ───────────────────────────── Transitions entre écrans ───────────────────────────── */
+@supports (view-transition-name: none) {
+  /* la View Transition s'occupe de l'entrée : pas de double animation */
+  .step-anim { animation: none; }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 340ms;
+  animation-timing-function: var(--ease-out);
+}
+html[data-vt="forward"]::view-transition-old(root) { animation-name: vt-out-left; animation-duration: 220ms; animation-timing-function: var(--ease-in); }
+html[data-vt="forward"]::view-transition-new(root) { animation-name: vt-in-right; }
+html[data-vt="back"]::view-transition-old(root) { animation-name: vt-out-right; animation-duration: 220ms; animation-timing-function: var(--ease-in); }
+html[data-vt="back"]::view-transition-new(root) { animation-name: vt-in-left; }
+::view-transition-group(ocd-logo),
+::view-transition-group(step-title),
+::view-transition-group(dock) {
+  animation-duration: 460ms;
+  animation-timing-function: var(--ease-out);
+}
+/* la carte choisie devient le talon de billet : pas de déformation, l'ancienne image s'efface vite */
+::view-transition-old(dock),
+::view-transition-new(dock) { height: 100%; object-fit: contain; }
+::view-transition-old(dock) { animation: vt-fade 160ms var(--ease-in) both; }
+@keyframes vt-fade { to { opacity: 0; } }
+@keyframes vt-out-left { to { opacity: 0; transform: translate3d(-28px, 0, 0); } }
+@keyframes vt-in-right { from { opacity: 0; transform: translate3d(36px, 0, 0); } }
+@keyframes vt-out-right { to { opacity: 0; transform: translate3d(28px, 0, 0); } }
+@keyframes vt-in-left { from { opacity: 0; transform: translate3d(-36px, 0, 0); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Le voyant « EN DIRECT » s'allume juste après les LED du mur. */
+.on-air {
+  color: #5b3a33;
+  animation: on-air-text 0.5s linear 2.05s both;
+}
+.on-air-dot {
+  background: #4a2420;
+  animation: on-air-dot 0.5s linear 2.05s both;
+}
+@keyframes on-air-text {
+  0% { color: #5b3a33; }
+  30% { color: #ff5252; }
+  45% { color: #7a3a33; }
+  100% { color: #ff5a5a; text-shadow: 0 0 1.4cqw rgb(255 60 60 / 0.75); }
+}
+@keyframes on-air-dot {
+  0% { background: #4a2420; }
+  30% { background: #ff3b3b; }
+  45% { background: #6a2a24; }
+  100% { background: #ff3b3b; box-shadow: 0 0 1.6cqw #ff3b3b; }
+}
+
+/* L'aperçu du bandeau reste visible en haut pendant la saisie (mobile) : les champs focalisés passent dessous. */
+html:has(.sticky-preview) {
+  scroll-padding-top: 200px;
+}
+
+/* Le Pass Live sort de l'imprimante, par à-coups, puis reçoit son tampon. */
+.print-out {
+  animation: print-out 1.25s linear 0.3s both;
+}
+.print-out .animate-stamp {
+  animation-delay: 1.6s;
+}
+@keyframes print-out {
+  0% { transform: translate3d(0, -101%, 0); }
+  18% { transform: translate3d(0, -78%, 0); }
+  24% { transform: translate3d(0, -78%, 0); }
+  44% { transform: translate3d(0, -50%, 0); }
+  50% { transform: translate3d(0, -50%, 0); }
+  72% { transform: translate3d(0, -22%, 0); }
+  78% { transform: translate3d(0, -22%, 0); }
+  100% { transform: none; }
+}

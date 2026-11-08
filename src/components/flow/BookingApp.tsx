@@ -1,6 +1,7 @@
 "use client";
 import { ChevronLeft } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Logo } from "@/components/brand/Logo";
 import { PrimaryButton } from "@/components/ui/kit";
 import { getPack } from "@/lib/config";
@@ -44,6 +45,22 @@ const write = (k: string, v: unknown) => {
 };
 
 const urlFor = (s: Step) => (STEP_PARAM[s] ? `?etape=${STEP_PARAM[s]}` : location.pathname);
+
+/**
+ * Transition native entre deux écrans (View Transitions API) : le logo, le titre et le « talon de billet »
+ * glissent d'un écran à l'autre au lieu de clignoter. Sans support ou en mouvement réduit : changement direct.
+ */
+function withTransition(dir: 1 | -1, update: () => void) {
+  const d = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const run = () => {
+    flushSync(update);
+    window.scrollTo({ top: 0 });
+  };
+  if (!d.startViewTransition || reduced) return run();
+  document.documentElement.dataset.vt = dir > 0 ? "forward" : "back";
+  d.startViewTransition(run);
+}
 
 export function BookingApp() {
   const [draft, setDraftState] = useState<Draft>(EMPTY);
@@ -105,7 +122,7 @@ export function BookingApp() {
   useEffect(() => {
     const onPop = () => {
       const s = stepFromParam(new URLSearchParams(location.search).get("etape"));
-      setStep((cur) => {
+      withTransition(-1, () => setStep((cur) => {
         if (cur === "done") {
           // après confirmation, revenir en arrière repart d'un parcours neuf (jamais de double réservation)
           setDraftState((d) => ({ ...EMPTY, business: d.business, contact: d.contact, displayDial: d.displayDial, displayLocal: d.displayLocal, photo: d.photo }));
@@ -116,7 +133,7 @@ export function BookingApp() {
         }
         setDir(FLOW.indexOf(s) < FLOW.indexOf(cur) ? -1 : 1);
         return s;
-      });
+      }));
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -129,16 +146,18 @@ export function BookingApp() {
       firstRender.current = false;
       return;
     }
-    window.scrollTo({ top: 0 });
     titleRef.current?.focus({ preventScroll: true });
     if (step === "when" || step === "review") refresh();
   }, [step, ready, refresh]);
 
   const go = useCallback((s: Step, opts: { replace?: boolean } = {}) => {
-    setDir(FLOW.indexOf(s) < FLOW.indexOf(step) ? -1 : 1);
+    const dir = FLOW.indexOf(s) < FLOW.indexOf(step) && s !== "done" ? -1 : 1;
     if (opts.replace) history.replaceState({ step: s }, "", urlFor(s));
     else history.pushState({ step: s }, "", urlFor(s));
-    setStep(s);
+    withTransition(dir, () => {
+      setDir(dir);
+      setStep(s);
+    });
   }, [step]);
 
   const back = () => {
@@ -267,8 +286,8 @@ export function BookingApp() {
             Démo : le planning est pré-rempli avec des réservations fictives pour montrer le fonctionnement.
           </p>
         )}
-        <div key={step} className={dir > 0 ? "animate-rise" : "animate-rise-back"}>
-          <h1 ref={titleRef} tabIndex={-1} className="display text-[34px] outline-none sm:text-[48px]">
+        <div key={step} className={cn("step-anim", dir > 0 ? "animate-rise" : "animate-rise-back")}>
+          <h1 ref={titleRef} tabIndex={-1} className="display text-[34px] outline-none [view-transition-name:step-title] sm:text-[48px]">
             {title()}
           </h1>
           <div className="mt-6 sm:mt-8">
@@ -302,7 +321,7 @@ export function BookingApp() {
       </main>
 
       {/* Le « talon de billet » : il se remplit au fil des choix. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper shadow-[0_-12px_32px_-18px_rgb(22_18_14/0.25)] safe-bottom">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper shadow-[0_-12px_32px_-18px_rgb(22_18_14/0.25)] [view-transition-name:dock] safe-bottom">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-3 sm:gap-6 sm:px-8">
           <div className="min-w-0 flex-1" aria-live="polite">
             <p className="tabular truncate text-[15.5px] leading-tight font-bold text-ink sm:text-[17px]">
@@ -362,7 +381,7 @@ function TopBar({ step, onBack }: { step: Step; onBack: (() => void) | null }) {
           <span className="w-3" />
         )}
         <a href="/" aria-label="OCD Live, accueil" className={cn("inline-flex", !onBack && "ml-1")}>
-          <Logo size={22} />
+          <Logo size={22} className="[view-transition-name:ocd-logo]" />
         </a>
         {step !== "done" && (
           <div className="ml-auto flex items-center gap-3 pr-2">

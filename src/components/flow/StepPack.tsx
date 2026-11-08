@@ -70,49 +70,59 @@ function PackCard({ pack, check, selected, euro, onPick }: { pack: Pack; check?:
   const ok = check?.ok ?? false;
   const hours = (pack.sessions * pack.minutes) / 60;
   const perHour = Math.round(pack.price / hours / 50) * 50;
+  const dark = !!pack.premium;
+  const muted = dark ? "text-night-ink-2" : "text-ink-3";
+  const body = dark ? "text-night-ink-2" : "text-ink-2";
   return (
     <ChoiceCard
+      dark={dark}
       selected={selected}
       disabled={!check || !ok}
       onClick={onPick}
       aria-pressed={selected}
-      className={cn("h-full p-5", !ok && check && "[--surface:var(--color-paper-2)]")}
+      className={cn("h-full p-5", !ok && check && !dark && "[--surface:var(--color-paper-2)]")}
       wrapperClassName="h-full"
     >
-      <span className={cn("flex h-full flex-col", !ok && check && "opacity-60")}>
+      {dark && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(70%_100%_at_25%_0%,rgb(241_105_3/0.32),transparent_70%)]"
+        />
+      )}
+      <span className={cn("relative flex h-full flex-col", !ok && check && "opacity-60")}>
         <span className="flex items-start justify-between gap-3">
           <span className="min-w-0">
             <span className="flex flex-wrap items-center gap-2">
               <span className="text-[22px] leading-none font-extrabold tracking-[-0.02em]">{pack.name}</span>
               {pack.badge && <Tag tone={selected ? "ink" : "orange"}>{pack.badge}</Tag>}
             </span>
-            <span className="mt-2 block text-[14.5px] leading-snug text-ink-2">{pack.tagline}</span>
+            <span className={cn("mt-2 block text-[14.5px] leading-snug", body)}>{pack.tagline}</span>
           </span>
           <span className="shrink-0 text-right">
-            {pack.regular && <span className="tabular block text-[13px] text-ink-3 line-through decoration-orange decoration-2">{fcfa(pack.regular)}</span>}
+            {pack.regular && <span className={cn("tabular block text-[13px] line-through decoration-orange decoration-2", muted)}>{fcfa(pack.regular)}</span>}
             <span className="tabular block text-[22px] leading-tight font-extrabold tracking-[-0.02em]">{fcfa(pack.price)}</span>
-            {euro && <span className="tabular block text-[12.5px] text-ink-3">{eur(pack.price)}</span>}
-            {pack.showHourly && <span className="tabular mt-0.5 block text-[12.5px] text-ink-3">≈ {fcfa(perHour)} / h</span>}
+            {euro && <span className={cn("tabular block text-[12.5px]", muted)}>{eur(pack.price)}</span>}
+            {pack.showHourly && <span className={cn("tabular mt-0.5 block text-[12.5px]", muted)}>≈ {fcfa(perHour)} / h</span>}
           </span>
         </span>
 
         <span className="mt-4 flex flex-wrap gap-1.5">
-          <Tag tone="soft">
+          <Tag tone={dark ? "night" : "soft"}>
             {pack.sessions > 1 ? `${pack.sessions} lives de ${hm(pack.minutes)}` : `1 live de ${hm(pack.minutes)}`}
           </Tag>
         </span>
 
-        <span className="mt-4 grid gap-1.5 border-t border-line pt-4">
+        <span className={cn("mt-4 grid gap-1.5 border-t pt-4", dark ? "border-night-line" : "border-line")}>
           {pack.includes.map((i) => (
-            <span key={i} className="flex items-start gap-2 text-[14px] leading-snug text-ink-2">
-              <Check className="mt-0.5 size-4 shrink-0 text-orange-ink" strokeWidth={3} aria-hidden />
+            <span key={i} className={cn("flex items-start gap-2 text-[14px] leading-snug", body)}>
+              <Check className={cn("mt-0.5 size-4 shrink-0", dark ? "text-night-orange" : "text-orange-ink")} strokeWidth={3} aria-hidden />
               {i}
             </span>
           ))}
         </span>
 
         {check && !ok && (
-          <span className="mt-4 flex items-start gap-2 text-[13.5px] font-medium text-ink">
+          <span className={cn("mt-4 flex items-start gap-2 text-[13.5px] font-medium", dark ? "text-night-ink" : "text-ink")}>
             <CircleAlert className="mt-0.5 size-4 shrink-0 text-orange-ink" aria-hidden />
             {check.reason}
           </span>
