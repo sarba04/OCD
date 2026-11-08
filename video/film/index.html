@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bricolage";
+        src: url("assets/fonts/bricolage-latin-wght.woff2") format("woff2");
+        font-weight: 200 800;
+      }
+      :root {
+        --wall: #efebe6;
+        --paper: #fdfcfa;
+        --ink: #16120e;
+        --ink2: #4a433b;
+        --orange: #f16903;
+        --live: #e5262b;
+        --night: #0f0d0b;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Bricolage", sans-serif; color: var(--ink); background: var(--paper); }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .display { font-weight: 800; letter-spacing: -0.035em; line-height: 0.95; }
+      .pad { position: absolute; left: 90px; right: 90px; }
+      .chamfer { clip-path: polygon(28px 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%, 0 28px); }
+      .chamfer-sm { clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
+
+      /* 1. accroche */
+      #s1 { background: var(--paper); }
+      #s1-kicker { top: 250px; font-size: 54px; font-weight: 600; color: var(--ink2); }
+      #s1-title { top: 330px; font-size: 150px; }
+      #s1-phone { position: absolute; left: 90px; top: 760px; width: 900px; height: 520px; background: var(--night); color: #fff; }
+      #s1-handle { position: absolute; left: 56px; top: 52px; font-size: 40px; font-weight: 700; }
+      #s1-handle span { display: block; font-size: 32px; font-weight: 500; color: #a79d90; margin-top: 8px; }
+      #s1-views { position: absolute; left: 56px; bottom: 60px; display: flex; align-items: baseline; gap: 22px; }
+      #s1-views b { font-size: 230px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.8; color: #fff; }
+      #s1-views i { font-style: normal; font-size: 64px; font-weight: 700; color: #a79d90; }
+
+      /* 2. tension */
+      #s2 { background: var(--paper); }
+      #s2-a { top: 520px; font-size: 140px; }
+      #s2-b { top: 900px; font-size: 140px; }
+      #s2-b em { font-style: normal; color: var(--orange); }
+
+      /* 3. révélation : le mur s'allume */
+      #s3 { background: var(--wall); }
+      #s3-frame { position: absolute; left: 0; top: 168px; width: 1080px; height: 1012px; overflow: hidden; }
+      #s3-img { position: absolute; left: 0; top: 0; width: 1080px; }
+      #s3-dark { position: absolute; inset: 0; background: #0f0d0b; }
+      #s3-cap { position: absolute; left: 0; right: 0; top: 1180px; height: 170px; background: var(--ink); color: var(--paper); display: flex; align-items: center; padding: 0 90px; font-size: 92px; }
+
+      /* 4. preuve : une même fenêtre, quatre gestes */
+      #s4 { background: var(--wall); }
+      .verb { top: 190px; font-size: 104px; }
+      .verb small { display: block; font-size: 44px; font-weight: 600; color: var(--ink2); letter-spacing: 0; margin-bottom: 14px; }
+      #s4-win { position: absolute; left: 90px; top: 400px; width: 900px; height: 910px; background: #fff; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(40, 20, 5, 0.45); }
+      .shot { position: absolute; left: 0; top: 0; width: 900px; }
+      #s4-tap { position: absolute; left: -60px; top: -60px; width: 120px; height: 120px; opacity: 0; border-radius: 50%; border: 10px solid var(--orange); background: rgba(241, 105, 3, 0.18); }
+
+      /* 5. payoff : le live */
+      #s5 { background: var(--night); color: #fff; }
+      #s5-phone { position: absolute; left: 90px; top: 190px; width: 900px; height: 1120px; border-radius: 56px; overflow: hidden; background: #2a1d12; }
+      #s5-bg { position: absolute; left: -300px; top: -200px; width: 1500px; }
+      #s5-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 18%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.1) 55%, rgba(0,0,0,0.8) 100%); }
+      #s5-top { position: absolute; left: 40px; right: 40px; top: 40px; display: flex; align-items: center; gap: 22px; }
+      #s5-avatar { width: 84px; height: 84px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+      #s5-avatar img { width: 62px; }
+      #s5-acct { flex: 1; text-shadow: 0 2px 8px rgba(0,0,0,0.6); font-size: 30px; font-weight: 700; line-height: 1.15; }
+      #s5-acct span { display: block; font-size: 28px; font-weight: 500; opacity: 0.8; }
+      #s5-live { background: var(--live); font-size: 30px; font-weight: 800; padding: 6px 14px; border-radius: 8px; letter-spacing: 0.06em; }
+      #s5-count { background: rgba(0,0,0,0.5); font-size: 32px; font-weight: 700; padding: 8px 20px; border-radius: 40px; min-width: 190px; text-align: center; }
+      .cmt { position: absolute; left: 40px; font-size: 36px; background: rgba(0,0,0,0.42); padding: 10px 22px; border-radius: 40px; white-space: nowrap; }
+      .cmt b { font-weight: 700; opacity: 0.7; margin-right: 10px; }
+      #s5-lt { position: absolute; left: 40px; right: 40px; bottom: 50px; }
+      #s5-lt-top { background: var(--orange); color: var(--ink); padding: 26px 32px 24px; }
+      #s5-lt-top b { display: flex; justify-content: space-between; font-size: 54px; font-weight: 800; letter-spacing: -0.02em; }
+      #s5-lt-top b i { font-style: normal; font-size: 32px; font-weight: 800; align-self: center; }
+      #s5-lt-top span { display: block; font-size: 32px; font-weight: 600; margin-top: 6px; }
+      #s5-lt-bot { background: var(--ink); color: #fff; padding: 18px 32px; font-size: 33px; font-weight: 700; display: flex; gap: 26px; white-space: nowrap; }
+      #s5-lt-bot b { color: var(--orange); }
+      .wa { position: absolute; left: 130px; right: 130px; background: rgba(250, 250, 250, 0.96); color: var(--ink); border-radius: 30px; padding: 20px 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+      .wa small { display: flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 700; color: #1f7a4d; }
+      .wa small i { width: 30px; height: 30px; border-radius: 8px; background: #25d366; display: inline-block; }
+      .wa p { font-size: 34px; font-weight: 600; margin-top: 6px; }
+
+      /* 6. côté OCD */
+      #s6 { background: var(--wall); }
+      #s6-cap { top: 190px; font-size: 96px; }
+      #s6-note { position: absolute; left: 90px; right: 90px; top: 440px; background: #fff; border-radius: 40px; padding: 40px 44px; box-shadow: 0 30px 70px -30px rgba(40, 20, 5, 0.45); }
+      #s6-note small { display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 700; color: var(--ink2); }
+      #s6-note small i { width: 22px; height: 22px; border-radius: 50%; background: var(--live); display: inline-block; }
+      #s6-note h3 { font-size: 40px; font-weight: 800; margin-top: 18px; }
+      #s6-note p { font-size: 46px; font-weight: 600; line-height: 1.28; margin-top: 14px; }
+      #s6-win { position: absolute; left: 90px; top: 1010px; width: 900px; height: 300px; overflow: hidden; border-radius: 0; background: var(--night); }
+
+      /* 7. affirmation + carte de fin */
+      #s7 { background: var(--wall); }
+      #s7-claim { top: 560px; font-size: 140px; }
+      #s7-end { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 300px; }
+      #s7-mark { display: flex; align-items: flex-end; gap: 22px; }
+      #s7-mark img { width: 520px; }
+      #s7-mark b { font-size: 148px; font-weight: 800; letter-spacing: -0.045em; line-height: 0.8; transform: translateY(6px); }
+      #s7-url { margin-top: 90px; font-size: 58px; font-weight: 700; }
+      #s7-cta { margin-top: 44px; background: var(--orange); color: var(--ink); font-size: 50px; font-weight: 800; padding: 34px 56px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="43" data-width="1080" data-height="1920">
+      <!-- 1. accroche -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="3.6" data-track-index="1" data-track-kind="graphics">
+        <p id="s1-kicker" class="pad">Samedi, 9h, à Bè.</p>
+        <h1 id="s1-title" class="pad display">Afi a cousu<br />40 robes.</h1>
+        <div id="s1-phone" class="chamfer">
+          <p id="s1-handle">@afi.wax.couture<span>Robes en wax, du 36 au 52</span></p>
+          <p id="s1-views"><b id="s1-num">3</b><i>vues</i></p>
+        </div>
+      </div>
+
+      <!-- 2. tension -->
+      <div id="s2" class="scene clip" data-start="3.6" data-duration="3.4" data-track-index="1" data-track-kind="graphics">
+        <h2 id="s2-a" class="pad display">Personne<br />ne la voit.</h2>
+        <h2 id="s2-b" class="pad display">Il lui faut<br />une <em>vitrine.</em></h2>
+      </div>
+
+      <!-- 3. révélation -->
+      <div id="s3" class="scene clip" data-start="7" data-duration="4" data-track-index="1" data-track-kind="graphics">
+        <div id="s3-frame"><img id="s3-img" src="assets/screens/hero.png" alt="Accueil OCD Live" /></div>
+        <div id="s3-dark"></div>
+        <p id="s3-cap" class="display">Elle réserve un live.</p>
+      </div>
+
+      <!-- 4. preuve -->
+      <div id="s4" class="scene clip" data-start="11" data-duration="12" data-track-index="1" data-track-kind="graphics">
+        <h2 id="s4-v1" class="pad display verb"><small>1. La scène</small>Au studio, à Lomé</h2>
+        <h2 id="s4-v2" class="pad display verb"><small>2. Le jour</small>Samedi 12 · 8h00</h2>
+        <h2 id="s4-v3" class="pad display verb"><small>3. Le pack</small>Vitrine</h2>
+        <h2 id="s4-v4" class="pad display verb"><small>4. À l'écran pendant le live</small>Son numéro</h2>
+        <div id="s4-win" class="chamfer">
+          <img id="s4-i1" class="shot" src="assets/screens/hero.png" alt="Choix du format" />
+          <img id="s4-i2" class="shot" src="assets/screens/slots.png" alt="Créneaux du samedi 12 décembre" />
+          <img id="s4-i3" class="shot" src="assets/screens/pack.png" alt="Pack Vitrine" />
+          <img id="s4-i4" class="shot" src="assets/screens/form.png" alt="Fiche business avec le bandeau" />
+          <div id="s4-tap"></div>
+        </div>
+      </div>
+
+      <!-- 5. payoff -->
+      <div id="s5" class="scene clip" data-start="23" data-duration="7" data-track-index="1" data-track-kind="graphics">
+        <div id="s5-phone">
+          <img id="s5-bg" src="assets/screens/hero.png" alt="" />
+          <div id="s5-shade"></div>
+          <div id="s5-top">
+            <div id="s5-avatar"><img src="assets/ocd-logo.svg" alt="" /></div>
+            <p id="s5-acct">House of Challenge<span>avec Afi Wax Couture</span></p>
+            <span id="s5-live">LIVE</span>
+            <span id="s5-count"><span id="s5-num">3</span></span>
+          </div>
+          <p id="s5-c1" class="cmt" style="top: 600px"><b>kafui.tg</b>elle existe en bleu ?</p>
+          <p id="s5-c2" class="cmt" style="top: 670px"><b>mamie_237</b>vous livrez à Kara ?</p>
+          <p id="s5-c3" class="cmt" style="top: 740px"><b>sena_b</b>je prends la rouge</p>
+          <div id="s5-lt">
+            <div id="s5-lt-top"><b>Afi Wax Couture<i>dès 8 000 F</i></b><span>Robes en wax cousues main, du 36 au 52</span></div>
+            <div id="s5-lt-bot"><span><b>WhatsApp</b> +228 90 12 34 56</span><span>Bè-Kpota, Lomé</span></div>
+          </div>
+        </div>
+        <div id="s5-w1" class="wa" style="top: 420px"><small><i></i>WhatsApp · +228 97 ·· ·· 14</small><p>Bonjour, la rouge en 44 est dispo ?</p></div>
+        <div id="s5-w2" class="wa" style="top: 580px"><small><i></i>WhatsApp · +228 92 ·· ·· 80</small><p>Je viens la chercher à Bè ce soir</p></div>
+      </div>
+
+      <!-- 6. côté OCD -->
+      <div id="s6" class="scene clip" data-start="30" data-duration="7.5" data-track-index="1" data-track-kind="graphics">
+        <h2 id="s6-cap" class="pad display">Et chez OCD…</h2>
+        <div id="s6-note">
+          <small><i></i>OCD Live · Régie · maintenant</small>
+          <h3>Nouvelle réservation · OCD-1212-0800</h3>
+          <p>Afi Mensah (Afi Wax Couture, pagnes &amp; wax) a réservé le samedi 12 décembre de 8h00 à 9h30 et viendra au studio à Lomé.</p>
+        </div>
+        <div id="s6-win" class="chamfer"><img id="s6-img" class="shot" src="assets/screens/fiche.png" alt="Fiche dans la Régie" /></div>
+      </div>
+
+      <!-- 7. affirmation + fin -->
+      <div id="s7" class="scene clip" data-start="37.5" data-duration="5.5" data-track-index="1" data-track-kind="graphics">
+        <h2 id="s7-claim" class="pad display">Le marketing<br />avant la vente.</h2>
+        <div id="s7-end">
+          <div id="s7-mark"><img id="s7-logo" src="assets/ocd-logo.svg" alt="OCD" /><b id="s7-live">Live</b></div>
+          <p id="s7-url">ocd-pi.vercel.app</p>
+          <p id="s7-cta" class="chamfer-sm">Réserve ton live · dès 15 000 F</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const IN = "power3.out", OUT = "power3.in", CAM = "power2.inOut";
+      const S = 900 / 390; // échelle d'une capture dans la fenêtre (px CSS → px vidéo)
+
+      /* 1. accroche — le titre est déjà là à l'image 0, il pousse légèrement */
+      tl.fromTo("#s1-title", { x: 40 }, { x: 0, duration: 1.2, ease: IN }, 0);
+      tl.fromTo("#s1-phone", { x: 60 }, { x: 0, duration: 1.2, ease: IN }, 0);
+      tl.fromTo("#s1-num", { scale: 1 }, { keyframes: [{ scale: 1.14, duration: 0.18, ease: IN }, { scale: 1, duration: 0.3, ease: "back.out(2)" }], transformOrigin: "0% 100%" }, 0.6);
+      tl.to(["#s1-kicker", "#s1-title", "#s1-phone"], { x: -1100, duration: 0.35, ease: OUT, stagger: 0.04 }, 3.25);
+
+      /* 2. tension */
+      tl.fromTo("#s2-a", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 3.6);
+      tl.fromTo("#s2-b", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 4.9);
+      tl.to(["#s2-a", "#s2-b"], { y: -1400, duration: 0.45, ease: OUT, stagger: 0.05 }, 6.55);
+
+      /* 3. révélation — les LED s'allument en vacillant, la caméra entre par le haut (montée réservée) */
+      tl.fromTo("#s3-img", { y: 300, scale: 1.08 }, { y: 0, scale: 1, duration: 1.2, ease: IN, transformOrigin: "50% 30%" }, 7);
+      tl.fromTo("#s3-dark", { opacity: 0.92 }, {
+        keyframes: [{ opacity: 0.45, duration: 0.08 }, { opacity: 0.85, duration: 0.06 }, { opacity: 0.25, duration: 0.1 }, { opacity: 0.6, duration: 0.07 }, { opacity: 0, duration: 0.4 }],
+      }, 7.4);
+      tl.fromTo("#s3-cap", { y: 200 }, { y: 0, duration: 0.5, ease: IN }, 8.4);
+      tl.to(["#s3-frame", "#s3-cap"], { x: -1100, duration: 0.35, ease: OUT }, 10.65);
+
+      /* 4. preuve — une fenêtre, quatre gestes ; chaque capture entre par la droite et pousse la précédente */
+      tl.fromTo("#s4-win", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 11);
+      const shots = [
+        { img: "#s4-i1", verb: "#s4-v1", y: 360, tap: [200, 640 - 360], t: 11 },
+        { img: "#s4-i2", verb: "#s4-v2", y: 225, tap: [195, 497 - 225], t: 14 },
+        { img: "#s4-i3", verb: "#s4-v3", y: 180, tap: [195, 300 - 180], t: 17 },
+        { img: "#s4-i4", verb: "#s4-v4", y: 0, tap: [210, 135], t: 20 },
+      ];
+      shots.forEach((s, i) => {
+        tl.set(s.img, { y: -s.y * S }, 0);
+        if (i > 0) {
+          tl.fromTo(s.img, { x: 900 }, { x: 0, duration: 0.5, ease: CAM }, s.t);
+          tl.to(shots[i - 1].img, { x: -900, duration: 0.5, ease: CAM }, s.t);
+        } else tl.set(s.img, { x: 0 }, 0);
+        tl.fromTo(s.verb, { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, s.t + (i === 0 ? 0.1 : 0));
+        tl.to(s.verb, { x: -1100, duration: 0.35, ease: OUT }, s.t + 2.65);
+        // le doigt touche l'élément choisi
+        tl.set("#s4-tap", { x: s.tap[0] * S, y: s.tap[1] * S }, s.t + 1.05);
+        tl.fromTo("#s4-tap", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: IN }, s.t + 1.1);
+        tl.to("#s4-tap", { scale: 0.7, opacity: 0, duration: 0.3, ease: OUT }, s.t + 1.5);
+      });
+      shots.slice(1).forEach((s) => tl.set(s.img, { x: 900 }, 0));
+      // dernier geste : la caméra pousse sur le bandeau où s'affiche son numéro
+      tl.to("#s4-i4", { scale: 1.55, transformOrigin: "0% 7%", duration: 0.9, ease: CAM }, 21.2);
+      tl.to("#s4-win", { x: -1100, duration: 0.35, ease: OUT }, 22.65);
+
+      /* 5. payoff — le live : spectateurs 3 → 1 240, commentaires, messages WhatsApp */
+      tl.fromTo("#s5-phone", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 23);
+      tl.fromTo("#s5-lt", { y: 300 }, { y: 0, duration: 0.5, ease: IN }, 23.5);
+      const counter = { v: 3 };
+      tl.fromTo(counter, { v: 3 }, {
+        v: 1240, duration: 2.6, ease: "power2.in",
+        onUpdate: () => { document.getElementById("s5-num").textContent = Math.round(counter.v).toLocaleString("fr-FR") + " spectateurs"; },
+      }, 23.6);
+      ["#s5-c1", "#s5-c2", "#s5-c3"].forEach((c, i) => tl.fromTo(c, { x: -500 }, { x: 0, duration: 0.4, ease: IN }, 24.4 + i * 0.5));
+      tl.fromTo("#s5-w1", { x: 1100 }, { x: 0, duration: 0.45, ease: IN }, 26.4);
+      tl.fromTo("#s5-w2", { x: 1100 }, { x: 0, duration: 0.45, ease: IN }, 27.4);
+      tl.to(["#s5-phone", "#s5-w1", "#s5-w2"], { x: -1100, duration: 0.35, ease: OUT }, 29.65);
+
+      /* 6. côté OCD — la notification avec la phrase exacte, puis la fiche */
+      tl.fromTo("#s6-cap", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 30);
+      tl.fromTo("#s6-note", { y: -700 }, { y: 0, duration: 0.55, ease: IN }, 30.3);
+      tl.fromTo("#s6-win", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 31.7);
+      tl.set("#s6-img", { y: -60 * S }, 30);
+      // la fiche défile : numéro à l'écran, adresse, créneau, contact
+      tl.to("#s6-img", { y: -330 * S, duration: 3.2, ease: CAM }, 33.2);
+      tl.to(["#s6-cap", "#s6-note", "#s6-win"], { x: -1100, duration: 0.35, ease: OUT }, 37.15);
+
+      /* 7. affirmation, puis la marque monte en place (montée réservée à la fin) */
+      tl.fromTo("#s7-claim", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 37.5);
+      tl.to("#s7-claim", { y: -900, opacity: 0, duration: 0.4, ease: OUT }, 39.1);
+      tl.fromTo("#s7-logo", { y: 500, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.4)" }, 39.25);
+      tl.fromTo("#s7-live", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.4, ease: IN }, 39.65);
+      tl.fromTo("#s7-url", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: IN }, 39.85);
+      tl.fromTo("#s7-cta", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 40.05);
+      tl.set({}, {}, 43);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
