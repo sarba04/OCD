@@ -1,7 +1,6 @@
 "use client";
 import { Heart, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { StudioWall } from "@/components/brand/StudioWall";
 import { BRAND } from "@/lib/config";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { LowerThird, type PreviewData } from "./LivePreview";
@@ -17,9 +16,9 @@ const EXAMPLES: PreviewData[] = [
 
 const COMMENTS: [string, string][][] = [
   [["kafui.tg", "elle existe en bleu ?"], ["mamie_237", "vous livrez à Kara ?"], ["sena_b", "je prends la rouge"]],
-  [["lady.douala", "c'est combien la longue ?"], ["ines_cm", "trop belle 😍"], ["mel.yde", "dispo en 24 pouces ?"]],
-  [["kossi_k", "la bouteille de 1 L ?"], ["afi.tg", "livraison à Bè ?"], ["yao", "j'ai commandé 6"]],
-  [["moussa.td", "taille 43 dispo ?"], ["fatime", "le sac marron svp"], ["abakar", "prix pour 3 paires ?"]],
+  [["lady.douala", "c'est combien la longue ?"], ["ines_cm", "trop belle 😍"], ["mel.yde", "vous envoyez au Cameroun ?"]],
+  [["kossi_k", "taille 44 svp"], ["ama.lome", "livraison à Bè ?"], ["yao", "j'en prends 2"]],
+  [["fatime", "le modèle bleu est dispo ?"], ["dela", "je passe ce soir"], ["akos", "prix pour 3 robes ?"]],
 ];
 
 /** Un live en cours, comme le voient les spectateurs : le bandeau du vendeur change toutes les 3 secondes. */
@@ -39,11 +38,11 @@ function OnAirPhone() {
 
   useEffect(() => {
     if (!visible || reduced) return;
-    const t = setInterval(() => setI((n) => (n + 1) % EXAMPLES.length), 3200);
+    const t = setInterval(() => setI((n) => (n + 1) % COMMENTS.length), 3200);
     return () => clearInterval(t);
   }, [visible, reduced]);
 
-  const d = EXAMPLES[i];
+  const d = EXAMPLES[0];
   return (
     <div ref={ref} className="relative mx-auto w-full max-w-[320px]">
       {/* la lumière du plateau derrière le téléphone */}
@@ -51,8 +50,18 @@ function OnAirPhone() {
       <div className="relative aspect-[9/18] rounded-[40px] bg-[#050403] p-2.5 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9),inset_0_0_0_1.5px_rgb(255_255_255/0.08)]">
         <div className="relative h-full w-full overflow-hidden rounded-[31px] bg-[#e9e4dd]">
           {/* la caméra filme le mur du studio */}
-          <div className="wall absolute inset-0" />
-          <StudioWall animate={false} className="absolute top-[7%] left-1/2 w-[92%] -translate-x-1/2" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/media/live-seller-480.webp"
+            srcSet="/media/live-seller-480.webp 480w, /media/live-seller-720.webp 720w"
+            sizes="300px"
+            width={720}
+            height={1280}
+            loading="lazy"
+            decoding="async"
+            alt="Illustration : une vendeuse présente une robe en wax en direct depuis le studio"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent via-45% to-black/75" />
 
           {/* barre du haut */}
@@ -94,7 +103,7 @@ function OnAirPhone() {
           )}
 
           {/* le bandeau du vendeur */}
-          <div key={i} className="lt-in absolute inset-x-3 bottom-5">
+          <div className="absolute inset-x-3 bottom-5">
             <LowerThird d={d} />
           </div>
         </div>

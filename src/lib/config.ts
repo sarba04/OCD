@@ -58,6 +58,8 @@ export interface Pack {
   includes: string[];
   /** Mise en avant. */
   badge?: string;
+  /** Illustration en tête de carte. */
+  image?: { src: string; alt: string };
   /** Délai minimum spécifique (préparation d'un teaser, annonce…). */
   minLeadHours?: number;
   /** Afficher le prix à l'heure (pertinent quand le pack est « que du live »). */
@@ -107,6 +109,7 @@ export const PACKS: Pack[] = [
     pattern: "single",
     price: 30000,
     badge: "Le plus choisi",
+    image: { src: "pack-vitrine", alt: "Un vidéaste filme des sandales en cuir pour le teaser" },
     minLeadHours: 48,
     includes: [
       "Une vidéo teaser tournée et montée par l'équipe",
@@ -137,6 +140,7 @@ export const PACKS: Pack[] = [
     price: 75000,
     minLeadHours: 72,
     premium: true,
+    image: { src: "pack-spotlight", alt: "Un live sur téléphone, plein de cœurs" },
     includes: [
       `${BRAND.founder} publie ta vidéo sur son compte`,
       "Il annonce ton live à sa communauté",

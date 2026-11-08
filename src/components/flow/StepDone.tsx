@@ -134,6 +134,22 @@ export function StepDone({
       </div>
 
       <div className="grid content-start gap-10">
+        <figure className="chamfer-lg relative overflow-hidden bg-night">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/media/studio-night-640.webp"
+            srcSet="/media/studio-night-640.webp 640w, /media/studio-night-1200.webp 1200w"
+            sizes="(min-width: 1024px) 560px, 100vw"
+            width={1200}
+            height={1313}
+            decoding="async"
+            alt="Le studio OCD Live, mur Afrique allumé, prêt pour le live"
+            className="block aspect-[16/10] h-auto w-full object-cover object-[50%_40%]"
+          />
+          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-5 pt-10 pb-4 text-[17px] font-bold text-white">
+            {b.mode === "studio" ? "Le studio t'attend." : "La régie t'attend, ton animatrice aussi."}
+          </figcaption>
+        </figure>
         {/* 1. Payer */}
         <section className="border-t-2 border-ink pt-5">
           <h2 className="text-[22px] font-bold tracking-[-0.015em]">

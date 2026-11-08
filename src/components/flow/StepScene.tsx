@@ -12,6 +12,7 @@ import { haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
 import { LiveDemo } from "./LiveDemo";
 import { Ticker } from "@/components/motion/Ticker";
+import { SellAnything } from "./SellAnything";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
 
@@ -95,6 +96,7 @@ export function StepScene({ avail, selected, onPick }: { avail: Availability | n
       </section>
 
       <Ticker />
+      <SellAnything />
       <LiveDemo />
       <Footer />
     </div>
