@@ -220,6 +220,9 @@ export function BookingApp() {
       <StepScene
         avail={avail}
         selected={draft.mode}
+        onKeep={(name, pitch) =>
+          setDraft((d) => ({ business: { ...d.business, ...(name ? { name } : {}), ...(pitch ? { pitch } : {}) } }))
+        }
         onPick={(mode) => {
           setDraft((d) => ({
             mode,
