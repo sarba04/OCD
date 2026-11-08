@@ -228,7 +228,7 @@
 
 /* Les LED s'allument une fois, en vacillant, au chargement. */
 .studio-lights {
-  animation: lights-on 1.7s linear 0.25s both;
+  animation: lights-on 1.7s linear calc(0.25s + var(--intro)) both;
 }
 @keyframes lights-on {
   0% { opacity: 0; }
@@ -299,11 +299,11 @@ html[data-vt="back"]::view-transition-new(root) { animation-name: vt-in-left; }
 /* Le voyant « EN DIRECT » s'allume juste après les LED du mur. */
 .on-air {
   color: #5b3a33;
-  animation: on-air-text 0.5s linear 2.05s both;
+  animation: on-air-text 0.5s linear calc(2.05s + var(--intro)) both;
 }
 .on-air-dot {
   background: #4a2420;
-  animation: on-air-dot 0.5s linear 2.05s both;
+  animation: on-air-dot 0.5s linear calc(2.05s + var(--intro)) both;
 }
 @keyframes on-air-text {
   0% { color: #5b3a33; }
@@ -356,7 +356,7 @@ html:has(.sticky-preview) {
 .reveal-line > span {
   display: inline-block;
   animation: line-up 900ms var(--ease-out) both;
-  animation-delay: calc(var(--d, 0) * 1ms);
+  animation-delay: calc(var(--d, 0) * 1ms + var(--intro));
 }
 @keyframes line-up {
   from { transform: translate3d(0, 108%, 0) rotate(2deg); }
@@ -364,14 +364,14 @@ html:has(.sticky-preview) {
 }
 .fade-up {
   animation: rise 700ms var(--ease-out) both;
-  animation-delay: calc(var(--d, 0) * 1ms);
+  animation-delay: calc(var(--d, 0) * 1ms + var(--intro));
 }
 /* Les deux choix arrivent en dernier, l'un après l'autre. */
 .hero-cards > * {
   animation: card-in 750ms var(--ease-spring) both;
 }
-.hero-cards > *:nth-child(1) { animation-delay: 640ms; }
-.hero-cards > *:nth-child(2) { animation-delay: 740ms; }
+.hero-cards > *:nth-child(1) { animation-delay: calc(640ms + var(--intro)); }
+.hero-cards > *:nth-child(2) { animation-delay: calc(740ms + var(--intro)); }
 @keyframes card-in {
   from { opacity: 0; transform: translate3d(0, 22px, 0) scale(0.97); }
   to { opacity: 1; transform: none; }
@@ -494,7 +494,7 @@ html:has(.sticky-preview) {
 }
 
 /* ───────────────────────────── Cinéma ───────────────────────────── */
-/* L'ouverture : trait de lumière, puis les bandes noires s'écartent. */
+/* Le chargement : le logo se dessine sur l'orange OCD, puis le rideau se lève. */
 .cine-intro { display: none; }
 .js:not([data-intro-seen]) .cine-intro {
   display: block;
@@ -502,40 +502,68 @@ html:has(.sticky-preview) {
   inset: 0;
   z-index: 90;
   pointer-events: none;
-  animation: cine-gone 0s linear 1.9s forwards;
+  animation: cine-gone 0s linear 3s forwards;
 }
-.cine-bar {
+.loader-panel {
   position: absolute;
-  inset-inline: 0;
-  height: 50.5%;
-  background: #050403;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  background: var(--color-orange);
+  animation: loader-lift 900ms cubic-bezier(0.76, 0, 0.24, 1) 2.05s both;
 }
-.cine-top { top: 0; animation: cine-top 1.15s cubic-bezier(0.76, 0, 0.24, 1) 0.6s both; }
-.cine-bottom { bottom: 0; animation: cine-bottom 1.15s cubic-bezier(0.76, 0, 0.24, 1) 0.6s both; }
-.cine-beam {
+.loader-mark {
+  position: relative;
+  width: min(56vw, 300px);
+  animation: loader-mark-out 700ms var(--ease-in) 1.95s both;
+}
+.loader-path {
+  fill: #fff;
+  fill-opacity: 0;
+  stroke: #fff;
+  stroke-width: 7;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: loader-draw 1.15s cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards, loader-fill 450ms var(--ease-out) 1.05s forwards;
+}
+.loader-live {
   position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  margin-top: -1px;
-  background: linear-gradient(90deg, transparent, #ffb45c 30%, #fff3e0 50%, #ffb45c 70%, transparent);
-  box-shadow: 0 0 24px 4px rgb(241 105 3 / 0.7);
-  transform-origin: center;
-  animation: cine-beam 1.2s var(--ease-out) both;
+  top: 100%;
+  right: -2%;
+  font-size: min(15vw, 82px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--color-ink);
+  clip-path: inset(0 0 100% 0);
+  animation: loader-live 550ms var(--ease-out) 1.3s forwards;
 }
-@keyframes cine-top { to { transform: translate3d(0, -101%, 0); } }
-@keyframes cine-bottom { to { transform: translate3d(0, 101%, 0); } }
-@keyframes cine-beam {
-  0% { transform: scaleX(0); opacity: 0; }
-  35% { transform: scaleX(1); opacity: 1; }
-  60% { opacity: 1; }
-  100% { transform: scaleX(1) scaleY(30); opacity: 0; }
+.loader-sub {
+  margin-top: min(22vw, 120px);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgb(22 18 14 / 0.75);
+  opacity: 0;
+  animation: fade 500ms var(--ease-out) 1.45s forwards, loader-mark-out 500ms var(--ease-in) 1.95s forwards;
+}
+@keyframes loader-draw { to { stroke-dashoffset: 0; } }
+@keyframes loader-fill { to { fill-opacity: 1; stroke-width: 0; } }
+@keyframes loader-live { to { clip-path: inset(0 0 -10% 0); } }
+@keyframes loader-mark-out { to { opacity: 0; transform: translate3d(0, -24px, 0) scale(0.96); } }
+@keyframes loader-lift {
+  from { clip-path: ellipse(150% 150% at 50% 0%); }
+  to { clip-path: ellipse(150% 0% at 50% 0%); }
 }
 @keyframes cine-gone { to { visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) {
   .js:not([data-intro-seen]) .cine-intro { display: none; }
 }
+
+/* Pendant le chargement, la chorégraphie de l'accueil attend que le rideau se lève. */
+:root { --intro: 0ms; }
+.js:not([data-intro-seen]) { --intro: 2300ms; }
+@media (prefers-reduced-motion: reduce) { .js:not([data-intro-seen]) { --intro: 0ms; } }
 
 /* Grain de pellicule, qui bouge à 12 images/s. */
 .grain-anim::before {
@@ -567,3 +595,14 @@ html:has(.sticky-preview) {
   background: #000;
   pointer-events: none;
 }
+
+/* Deux bandes qui se croisent et défilent en sens contraire. */
+.cross-track { animation: ticker 42s linear infinite; }
+.cross-track.rev { animation-direction: reverse; animation-duration: 36s; }
+@media (prefers-reduced-motion: reduce) { .cross-track { animation: none; } }
+/* Anneau « 1h30 » qui se remplit à l'apparition. */
+.ring-fill { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.js [data-reveal]:not([data-inview]) .ring-fill { stroke-dashoffset: 1; }
+.js [data-inview] .ring-fill { animation: ring 1.6s var(--ease-out) 0.3s both; }
+@keyframes ring { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .ring-fill { stroke-dashoffset: 0 !important; animation: none !important; } }
