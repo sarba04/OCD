@@ -90,6 +90,20 @@ function PackCard({ pack, check, selected, euro, onPick }: { pack: Pack; check?:
         />
       )}
       <span className={cn("relative flex h-full flex-col", !ok && check && "opacity-60")}>
+        {pack.image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={`/media/${pack.image.src}-480.webp`}
+            srcSet={`/media/${pack.image.src}-480.webp 480w, /media/${pack.image.src}-800.webp 800w`}
+            sizes="(min-width: 768px) 520px, 100vw"
+            width={800}
+            height={450}
+            loading="lazy"
+            decoding="async"
+            alt={pack.image.alt}
+            className="chamfer-sm mb-4 block aspect-[16/8] w-full object-cover"
+          />
+        )}
         <span className="flex items-start justify-between gap-3">
           <span className="min-w-0">
             <span className="flex flex-wrap items-center gap-2">

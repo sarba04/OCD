@@ -47,6 +47,17 @@ export function Candidature() {
           l&apos;accompagnes en direct&nbsp;: tu animes, tu relances, tu fais vendre. Pas de diplôme demandé. On cherche de l&apos;éloquence, du sérieux, et
           l&apos;envie d&apos;apprendre.
         </p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/media/animatrice-760.webp"
+          srcSet="/media/animatrice-760.webp 760w, /media/animatrice-1400.webp 1400w"
+          sizes="(min-width: 768px) 720px, 100vw"
+          width={1400}
+          height={933}
+          decoding="async"
+          alt="Illustration : une animatrice OCD accompagne un vendeur en visio depuis le studio"
+          className="chamfer-lg mt-8 block h-auto w-full"
+        />
 
         {done ? (
           <div className="animate-rise mt-10 border-l-4 border-ok bg-ok-soft px-5 py-5">
