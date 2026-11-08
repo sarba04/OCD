@@ -1,6 +1,7 @@
 GOAL:    Boovan finit la vidéo en pensant « c'est exactement mon OCD Live, et ça marche déjà ».
 OUTPUT:  HyperFrames, 1080 x 1920 (vertical WhatsApp / TikTok), 30 fps
-TIME:    43 s x 30 = 1290 frames ; pas de musique (aucune source sans compte HeyGen), image pensée pour un visionnage muet
+TIME:    46 s x 30 = 1380 frames ; musique HeyGen : piano intime (0-8,4 s) puis afro-house 128 BPM qui démarre avec les LED (7 s) ;
+         sa pause tombe pendant la réservation et la reprise (30,02 s du morceau) sur le départ du live (22,95 s) ; bruitages calés sur chaque geste ; -13,6 LUFS, crête -1,1 dB
 LOOK:    sol « mur du studio » #EFEBE6 et papier #FDFCFA ; encre #16120E ; accent orange OCD #F16903, une seule fois par plan
          (le mot clé, le bouton, le bandeau) ; rouge LIVE #E5262B réservé au voyant direct ; monde « antenne » sur #0F0D0B.
          Titres Bricolage Grotesque 800, 128-150 px, interlettrage -3,5 % ; légendes 600, 54-60 px ; rien de lisible sous 34 px.

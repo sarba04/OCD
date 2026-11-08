@@ -108,7 +108,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="43" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="46" data-width="1080" data-height="1920">
       <!-- 1. accroche -->
       <div id="s1" class="scene clip" data-start="0" data-duration="3.6" data-track-index="1" data-track-kind="graphics">
         <p id="s1-kicker" class="pad">Samedi, 9h, à Bè.</p>
@@ -133,7 +133,7 @@
       </div>
 
       <!-- 4. preuve -->
-      <div id="s4" class="scene clip" data-start="11" data-duration="12" data-track-index="1" data-track-kind="graphics">
+      <div id="s4" class="scene clip" data-start="11" data-duration="11.95" data-track-index="1" data-track-kind="graphics">
         <h2 id="s4-v1" class="pad display verb"><small>1. La scène</small>Au studio, à Lomé</h2>
         <h2 id="s4-v2" class="pad display verb"><small>2. Le jour</small>Samedi 12 · 8h00</h2>
         <h2 id="s4-v3" class="pad display verb"><small>3. Le pack</small>Vitrine</h2>
@@ -148,7 +148,7 @@
       </div>
 
       <!-- 5. payoff -->
-      <div id="s5" class="scene clip" data-start="23" data-duration="7" data-track-index="1" data-track-kind="graphics">
+      <div id="s5" class="scene clip" data-start="22.95" data-duration="7.05" data-track-index="1" data-track-kind="graphics">
         <div id="s5-phone">
           <img id="s5-bg" src="assets/screens/hero.png" alt="" />
           <div id="s5-shade"></div>
@@ -182,7 +182,7 @@
       </div>
 
       <!-- 7. affirmation + fin -->
-      <div id="s7" class="scene clip" data-start="37.5" data-duration="5.5" data-track-index="1" data-track-kind="graphics">
+      <div id="s7" class="scene clip" data-start="37.5" data-duration="8.5" data-track-index="1" data-track-kind="graphics">
         <h2 id="s7-claim" class="pad display">Le marketing<br />avant la vente.</h2>
         <div id="s7-end">
           <div id="s7-mark"><img id="s7-logo" src="assets/ocd-logo.svg" alt="OCD" /><b id="s7-live">Live</b></div>
@@ -190,6 +190,38 @@
           <p id="s7-cta" class="chamfer-sm">Réserve ton live · dès 15 000 F</p>
         </div>
       </div>
+
+      <!-- flash de projecteur au départ du live -->
+      <div id="flash" class="clip" data-start="22.9" data-duration="0.6" data-track-index="9" style="position:absolute; inset:0; background:#fff; opacity:0; z-index:50; pointer-events:none"></div>
+
+      <!-- ── Son : piano intime, puis afro-house qui démarre avec les LED et repart quand Afi passe en live ── -->
+      <audio id="a-intro" class="clip" src="assets/audio/intro.mp3" data-start="0" data-duration="8.4" data-media-start="0" data-volume="0.85" data-fade-out="1.4" data-track-index="20"></audio>
+      <audio id="a-main" class="clip" src="assets/audio/main-b.mp3" data-start="7" data-duration="39" data-media-start="14.07" data-volume="0.9" data-fade-in="0.25" data-fade-out="2.5" data-track-index="21"></audio>
+
+      <audio id="sx-thud" class="clip" src="assets/audio/stamp.wav" data-start="0.62" data-duration="0.86" data-volume="0.55" data-track-index="22"></audio>
+      <audio id="sx-w1" class="clip" src="assets/audio/whoosh1.wav" data-start="3.18" data-duration="1.4" data-volume="0.45" data-track-index="23"></audio>
+      <audio id="sx-w2" class="clip" src="assets/audio/whoosh2.wav" data-start="6.5" data-duration="1.5" data-volume="0.45" data-track-index="24"></audio>
+      <audio id="sx-led1" class="clip" src="assets/audio/led.wav" data-start="7.4" data-duration="0.45" data-volume="0.5" data-track-index="25"></audio>
+      <audio id="sx-led2" class="clip" src="assets/audio/led.wav" data-start="7.54" data-duration="0.45" data-volume="0.4" data-track-index="26"></audio>
+      <audio id="sx-led3" class="clip" src="assets/audio/led.wav" data-start="7.67" data-duration="0.45" data-volume="0.55" data-track-index="27"></audio>
+      <audio id="sx-w3" class="clip" src="assets/audio/whoosh1.wav" data-start="10.6" data-duration="1.4" data-volume="0.4" data-track-index="23"></audio>
+      <audio id="sx-t1" class="clip" src="assets/audio/tap.wav" data-start="12.13" data-duration="0.24" data-volume="0.9" data-track-index="28"></audio>
+      <audio id="sx-w4" class="clip" src="assets/audio/whoosh2.wav" data-start="13.95" data-duration="1.5" data-volume="0.3" data-track-index="24"></audio>
+      <audio id="sx-t2" class="clip" src="assets/audio/tap.wav" data-start="15.13" data-duration="0.24" data-volume="0.9" data-track-index="28"></audio>
+      <audio id="sx-t3" class="clip" src="assets/audio/tap.wav" data-start="18.13" data-duration="0.24" data-volume="0.9" data-track-index="28"></audio>
+      <audio id="sx-w5" class="clip" src="assets/audio/whoosh1.wav" data-start="19.95" data-duration="1.4" data-volume="0.3" data-track-index="23"></audio>
+      <audio id="sx-t4" class="clip" src="assets/audio/tap.wav" data-start="21.13" data-duration="0.24" data-volume="0.9" data-track-index="28"></audio>
+      <audio id="sx-crowd" class="clip" src="assets/audio/crowd.wav" data-start="23.05" data-duration="3.3" data-volume="0.3" data-fade-out="1.2" data-track-index="29"></audio>
+      <audio id="sx-p1" class="clip" src="assets/audio/pop.wav" data-start="24.3" data-duration="1.3" data-volume="0.35" data-track-index="30"></audio>
+      <audio id="sx-p2" class="clip" src="assets/audio/pop.wav" data-start="24.8" data-duration="1.3" data-volume="0.3" data-track-index="31"></audio>
+      <audio id="sx-p3" class="clip" src="assets/audio/pop.wav" data-start="25.3" data-duration="1.3" data-volume="0.35" data-track-index="36"></audio>
+      <audio id="sx-n1" class="clip" src="assets/audio/ping.wav" data-start="26.45" data-duration="0.72" data-volume="0.65" data-track-index="32"></audio>
+      <audio id="sx-n2" class="clip" src="assets/audio/ping.wav" data-start="27.45" data-duration="0.72" data-volume="0.55" data-track-index="33"></audio>
+      <audio id="sx-w6" class="clip" src="assets/audio/whoosh2.wav" data-start="29.6" data-duration="1.5" data-volume="0.4" data-track-index="24"></audio>
+      <audio id="sx-n3" class="clip" src="assets/audio/ping.wav" data-start="30.38" data-duration="0.72" data-volume="0.7" data-track-index="32"></audio>
+      <audio id="sx-w7" class="clip" src="assets/audio/whoosh1.wav" data-start="37.1" data-duration="1.4" data-volume="0.4" data-track-index="23"></audio>
+      <audio id="sx-riser" class="clip" src="assets/audio/riser.wav" data-start="37.4" data-duration="2.35" data-media-start="2.0" data-volume="0.55" data-track-index="34"></audio>
+      <audio id="sx-impact" class="clip" src="assets/audio/impact.wav" data-start="39.75" data-duration="2" data-volume="0.85" data-track-index="35"></audio>
     </div>
 
     <script>
@@ -198,7 +230,8 @@
       const S = 900 / 390; // échelle d'une capture dans la fenêtre (px CSS → px vidéo)
 
       /* 1. accroche — le titre est déjà là à l'image 0, il pousse légèrement */
-      tl.fromTo("#s1-title", { x: 40 }, { x: 0, duration: 1.2, ease: IN }, 0);
+      tl.fromTo("#s1-title", { x: 40, scale: 1 }, { x: 0, duration: 1.2, ease: IN }, 0);
+      tl.to(["#s1-title", "#s1-kicker"], { scale: 1.05, transformOrigin: "0% 50%", duration: 3.2, ease: "none" }, 0);
       tl.fromTo("#s1-phone", { x: 60 }, { x: 0, duration: 1.2, ease: IN }, 0);
       tl.fromTo("#s1-num", { scale: 1 }, { keyframes: [{ scale: 1.14, duration: 0.18, ease: IN }, { scale: 1, duration: 0.3, ease: "back.out(2)" }], transformOrigin: "0% 100%" }, 0.6);
       tl.to(["#s1-kicker", "#s1-title", "#s1-phone"], { x: -1100, duration: 0.35, ease: OUT, stagger: 0.04 }, 3.25);
@@ -214,6 +247,7 @@
         keyframes: [{ opacity: 0.45, duration: 0.08 }, { opacity: 0.85, duration: 0.06 }, { opacity: 0.25, duration: 0.1 }, { opacity: 0.6, duration: 0.07 }, { opacity: 0, duration: 0.4 }],
       }, 7.4);
       tl.fromTo("#s3-cap", { y: 200 }, { y: 0, duration: 0.5, ease: IN }, 8.4);
+      tl.to("#s3-img", { scale: 1.07, transformOrigin: "50% 35%", duration: 2.4, ease: "none" }, 8.2);
       tl.to(["#s3-frame", "#s3-cap"], { x: -1100, duration: 0.35, ease: OUT }, 10.65);
 
       /* 4. preuve — une fenêtre, quatre gestes ; chaque capture entre par la droite et pousse la précédente */
@@ -243,7 +277,9 @@
       tl.to("#s4-win", { x: -1100, duration: 0.35, ease: OUT }, 22.65);
 
       /* 5. payoff — le live : spectateurs 3 → 1 240, commentaires, messages WhatsApp */
-      tl.fromTo("#s5-phone", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 23);
+      // la musique repart : le live entre d'un coup, avec un flash de projecteur
+      tl.fromTo("#s5-phone", { x: 1100, scale: 1.12 }, { x: 0, scale: 1, duration: 0.5, ease: IN }, 22.95);
+      tl.fromTo("#flash", { opacity: 0 }, { keyframes: [{ opacity: 0.7, duration: 0.06 }, { opacity: 0, duration: 0.45, ease: "power2.out" }] }, 22.95);
       tl.fromTo("#s5-lt", { y: 300 }, { y: 0, duration: 0.5, ease: IN }, 23.5);
       const counter = { v: 3 };
       tl.fromTo(counter, { v: 3 }, {
@@ -268,10 +304,11 @@
       tl.fromTo("#s7-claim", { x: 1100 }, { x: 0, duration: 0.5, ease: IN }, 37.5);
       tl.to("#s7-claim", { y: -900, opacity: 0, duration: 0.4, ease: OUT }, 39.1);
       tl.fromTo("#s7-logo", { y: 500, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.4)" }, 39.25);
+      tl.fromTo("#s7-mark", { scale: 1 }, { keyframes: [{ scale: 1.06, duration: 0.08 }, { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.5)" }] }, 39.75);
       tl.fromTo("#s7-live", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.4, ease: IN }, 39.65);
       tl.fromTo("#s7-url", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: IN }, 39.85);
       tl.fromTo("#s7-cta", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 40.05);
-      tl.set({}, {}, 43);
+      tl.set({}, {}, 46);
 
       window.__timelines["main"] = tl;
     </script>
