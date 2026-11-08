@@ -95,7 +95,7 @@ export function StepReview({
         <p className="mt-1.5 text-[15px] text-ink-2">
           Rien n&apos;est débité maintenant. Ta place est bloquée <strong className="font-semibold text-ink">24 h</strong> le temps de payer.
         </p>
-        <div role="radiogroup" aria-label="Moyen de paiement" className="mt-5 grid gap-2.5 sm:grid-cols-2">
+        <div role="radiogroup" aria-label="Moyen de paiement" className="cascade-auto mt-5 grid gap-2.5 sm:grid-cols-2">
           {methods.map((m) => {
             const on = draft.paymentMethod === m.id;
             return (

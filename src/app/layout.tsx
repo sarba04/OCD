@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 const bricolage = localFont({
   src: "../fonts/bricolage-latin-wght.woff2",
@@ -10,7 +11,7 @@ const bricolage = localFont({
   fallback: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
 });
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://ocd-live.vercel.app";
+const SITE = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -40,7 +41,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={bricolage.variable}>
+    <html lang="fr" className={bricolage.variable} suppressHydrationWarning>
+      <head>
+        {/* active les apparitions au défilement seulement si le JavaScript tourne */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="min-h-dvh">{children}</body>
     </html>
   );

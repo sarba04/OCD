@@ -1,6 +1,7 @@
 import { BRAND, PACKS } from "@/lib/config";
+import { SITE_URL } from "@/lib/site";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://ocd-live.vercel.app";
+const SITE = SITE_URL;
 
 /** Données structurées (schema.org) : Google comprend qu'OCD Live est un studio de live à Lomé, avec ses offres et ses prix. */
 export function StructuredData() {

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://ocd-live.vercel.app";
+const SITE = SITE_URL;
 
 export default function robots(): MetadataRoute.Robots {
   return {

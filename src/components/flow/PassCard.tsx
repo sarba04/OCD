@@ -98,7 +98,7 @@ export function PassCard({ data, stamped, className }: { data: PassData; stamped
       </div>
 
       {stamped && (
-        <div className="animate-stamp pointer-events-none absolute top-[36%] right-4 select-none sm:right-5" aria-hidden>
+        <div className="animate-stamp pointer-events-none absolute top-[40%] right-4 select-none sm:right-5" aria-hidden>
           <div className="border-[2.5px] border-ok px-2 py-0.5 text-[14px] font-extrabold tracking-[0.14em] text-ok opacity-90 mix-blend-multiply sm:text-[17px]">RÉSERVÉ</div>
         </div>
       )}
