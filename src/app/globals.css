@@ -215,3 +215,50 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ───────────────────────────── Le mur du studio ───────────────────────────── */
+/* Lettres orange en relief : chaque ombre nette décale la lettre d'un cran, comme une découpe épaisse. */
+@utility sign-3d {
+  filter: drop-shadow(0.12cqw 0.18cqw 0 #d55c00) drop-shadow(0.12cqw 0.18cqw 0 #c25200) drop-shadow(0.12cqw 0.18cqw 0 #ad4800)
+    drop-shadow(0.12cqw 0.18cqw 0 #9a4000) drop-shadow(0.6cqw 1.4cqw 1.1cqw rgb(70 35 5 / 0.32));
+}
+.sign-live {
+  text-shadow: 0.1cqw 0.15cqw 0 #3a332c, 0.2cqw 0.3cqw 0 #3a332c, 0.5cqw 1.1cqw 0.9cqw rgb(40 25 10 / 0.3);
+}
+
+/* Les LED s'allument une fois, en vacillant, au chargement. */
+.studio-lights {
+  animation: lights-on 1.7s linear 0.25s both;
+}
+@keyframes lights-on {
+  0% { opacity: 0; }
+  10% { opacity: 0.55; }
+  14% { opacity: 0.08; }
+  22% { opacity: 0.8; }
+  27% { opacity: 0.3; }
+  36% { opacity: 0.95; }
+  42% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Le mur : un blanc cassé légèrement plus sombre que la page, avec la lumière du studio. */
+@utility wall {
+  background-color: #efebe6;
+  background-image:
+    radial-gradient(120% 90% at 70% 35%, rgb(255 255 255 / 0.85) 0%, rgb(255 255 255 / 0) 60%),
+    radial-gradient(80% 60% at 0% 100%, rgb(60 40 20 / 0.06) 0%, transparent 70%);
+}
+
+/* Bandeau du live qui défile : apparition du nouveau vendeur. */
+@keyframes lt-in {
+  from { opacity: 0; transform: translate3d(-14px, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+.lt-in {
+  animation: lt-in 520ms var(--ease-out) both;
+}
+@keyframes float-up {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.6); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--dx, 0px), -160px, 0) scale(1.1); }
+}
