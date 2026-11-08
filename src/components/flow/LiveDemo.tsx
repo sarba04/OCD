@@ -114,35 +114,34 @@ function OnAirPhone() {
 
 export function LiveDemo() {
   const steps = [
-    { t: "Choisis ta scène", d: "Au studio à Lomé, ou à distance depuis ta boutique." },
-    { t: "Ton jour, ton heure, ton pack", d: "Tout décembre est ouvert. Les créneaux pris disparaissent en direct." },
-    { t: "Tu passes en live", d: `En direct sur ${BRAND.liveAccount}, avec une régie qui dirige tout.` },
+    { tc: "00:00:00", t: "Tu choisis ta caméra", d: "Au studio à Lomé, ou en duplex depuis ta boutique." },
+    { tc: "00:00:30", t: "Tu prends ta case", d: "Ton jour, ton heure, ton format. Les cases prises disparaissent en direct." },
+    { tc: "00:01:30", t: "Tu remplis ta fiche antenne", d: "Ton produit, ton WhatsApp, ton adresse : c'est ton bandeau à l'écran." },
+    { tc: "J", t: "Tu passes à l'antenne", d: `En direct sur ${BRAND.liveAccount}, avec une régie qui dirige tout.` },
   ];
   return (
-    <section id="comment" aria-labelledby="antenne-titre" className="relative overflow-hidden bg-night text-night-ink">
+    <section id="conducteur" aria-labelledby="antenne-titre" className="deck relative overflow-hidden">
       <div className="mx-auto grid max-w-6xl gap-14 px-5 py-20 sm:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-20 lg:py-28">
         <Reveal className="r-phone order-2 lg:order-1">
           <OnAirPhone />
         </Reveal>
         <Reveal className="order-1 lg:order-2">
-          <p data-r style={{ ["--i" as string]: 0 }} className="inline-flex items-center gap-2.5 text-[15px] font-semibold text-night-orange">
-            <span className="live-dot" aria-hidden /> À l&apos;antenne
+          <p data-r style={{ ["--i" as string]: 0 }} className="mono-label inline-flex items-center gap-2.5 text-night-orange">
+            <span className="tally tally-on" aria-hidden /> Le conducteur
           </p>
-          <h2 data-r style={{ ["--i" as string]: 1 }} id="antenne-titre" className="display mt-4 max-w-[14ch] text-[40px] sm:text-[60px]">
+          <h2 data-r style={{ ["--i" as string]: 1 }} id="antenne-titre" className="tv mt-4 max-w-[14ch] text-[52px] sm:text-[84px]">
             Pendant 1h30, ton numéro reste à l&apos;écran.
           </h2>
           <p data-r style={{ ["--i" as string]: 2 }} className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-night-ink-2 sm:text-[18px]">
             La régie affiche ton produit, ton WhatsApp et ton adresse du début à la fin. Même ceux qui arrivent en retard repartent avec ton
             contact. Le marketing avant la vente.
           </p>
-          <ol className="mt-12 grid gap-7">
+          <ol className="mt-10 border-t border-deck-line">
             {steps.map((s, k) => (
-              <li key={s.t} data-r style={{ ["--i" as string]: 3 + k }} className="grid grid-cols-[52px_1fr] items-baseline gap-4">
-                <span className="display tabular text-[44px] leading-none text-transparent [-webkit-text-stroke:1.5px_var(--color-night-orange)]">
-                  {k + 1}
-                </span>
+              <li key={s.t} data-r style={{ ["--i" as string]: 3 + k }} className="grid grid-cols-[92px_1fr] items-baseline gap-4 border-b border-deck-line py-4">
+                <span className="mono text-[13px] font-semibold text-night-orange">{s.tc === "J" ? "JOUR J" : s.tc}</span>
                 <span>
-                  <span className="block text-[19px] font-bold">{s.t}</span>
+                  <span className="tv block text-[28px]">{s.t}</span>
                   <span className="mt-1 block text-[15.5px] leading-relaxed text-night-ink-2">{s.d}</span>
                 </span>
               </li>

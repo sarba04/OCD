@@ -18,7 +18,7 @@ export function PrimaryButton({
       disabled={props.disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        "btn-sheen group relative inline-flex h-14 min-w-0 select-none items-center justify-center gap-2.5 px-6 text-[17px] font-bold text-ink transition-transform duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:text-ink-3 disabled:active:scale-100",
+        "btn-sheen group relative inline-flex h-14 min-w-0 overflow-hidden select-none items-center justify-center gap-2.5 px-6 text-[17px] font-bold text-ink transition-transform duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:text-ink-3 disabled:active:scale-100",
         className,
       )}
     >

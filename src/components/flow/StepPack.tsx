@@ -8,6 +8,7 @@ import { cn } from "@/lib/cn";
 import { ChoiceCard, Tag, haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
 import { countryOf, type Draft } from "./state";
+import { AirtimeBar } from "@/components/broadcast/AirtimeBar";
 
 export function StepPack({
   draft,
@@ -107,19 +108,22 @@ function PackCard({ pack, check, selected, euro, onPick }: { pack: Pack; check?:
         <span className="flex items-start justify-between gap-3">
           <span className="min-w-0">
             <span className="flex flex-wrap items-center gap-2">
-              <span className="text-[22px] leading-none font-extrabold tracking-[-0.02em]">{pack.name}</span>
+              <span className="tv text-[34px]">{pack.name}</span>
               {pack.badge && <Tag tone={selected ? "ink" : "orange"}>{pack.badge}</Tag>}
             </span>
             <span className={cn("mt-2 block text-[14.5px] leading-snug", body)}>{pack.tagline}</span>
           </span>
           <span className="shrink-0 text-right">
             {pack.regular && <span className={cn("tabular block text-[13px] line-through decoration-orange decoration-2", muted)}>{fcfa(pack.regular)}</span>}
-            <span className="tabular block text-[22px] leading-tight font-extrabold tracking-[-0.02em]">{fcfa(pack.price)}</span>
+            <span className="mono block text-[21px] leading-tight font-extrabold tracking-[-0.03em]">{fcfa(pack.price)}</span>
             {euro && <span className={cn("tabular block text-[12.5px]", muted)}>{eur(pack.price)}</span>}
             {pack.showHourly && <span className={cn("tabular mt-0.5 block text-[12.5px]", muted)}>≈ {fcfa(perHour)} / h</span>}
           </span>
         </span>
 
+        <span className="mt-5 block">
+          <AirtimeBar pack={pack} dark={dark} />
+        </span>
         <span className="mt-4 flex flex-wrap gap-1.5">
           <Tag tone={dark ? "night" : "soft"}>
             {pack.sessions > 1 ? `${pack.sessions} lives de ${hm(pack.minutes)}` : `1 live de ${hm(pack.minutes)}`}

@@ -8,6 +8,7 @@ import { cn } from "@/lib/cn";
 import { ChoiceCard, Tag, haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
 import type { Draft } from "./state";
+import { DayTrack, GuideHours } from "@/components/broadcast/ProgramGuide";
 
 const WEEK = ["L", "M", "M", "J", "V", "S", "D"];
 const WEEK_FULL = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
@@ -105,8 +106,8 @@ export function StepWhen({
 
         {/* ───── Calendrier ───── */}
         <div className="flex items-end justify-between gap-4">
-          <h2 className="display text-[30px] capitalize sm:text-[36px]">
-            {monthName(days[0])} <span className="font-semibold text-ink-3">{days[0].slice(0, 4)}</span>
+          <h2 className="tv text-[40px] sm:text-[52px]">
+            {monthName(days[0])} <span className="text-ink-3">{days[0].slice(0, 4)}</span>
           </h2>
           <Legend />
         </div>
@@ -162,7 +163,7 @@ export function StepWhen({
                     !slots && "animate-pulse",
                   )}
                 >
-                  <span className={cn("tabular text-[17px] leading-none font-bold sm:text-[19px]", full && "line-through decoration-1")}>
+                  <span className={cn("tv text-[24px] leading-none sm:text-[28px]", full && "line-through decoration-1")}>
                     {Number(d.slice(8, 10))}
                   </span>
                   {slots && !full && <Ticks slots={slots} selected={sel} />}
@@ -178,8 +179,25 @@ export function StepWhen({
       <div ref={slotsRef} className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
         {draft.day && byDay ? (
           <div key={draft.day} className="animate-rise">
-            <h2 className="text-[22px] font-bold tracking-[-0.015em] first-letter:uppercase sm:text-[24px]">{formatDay(draft.day)}</h2>
-            <p className="mt-1 text-[14px] text-ink-3">
+            <p className="mono-label text-ink-3">Grille du jour</p>
+            <h2 className="tv mt-2 text-[34px] sm:text-[40px]">{formatDay(draft.day)}</h2>
+            <div className="mt-4 border-y-2 border-ink bg-[#f3eee6] px-2 pt-2 pb-1">
+              <GuideHours />
+              {avail && now && (
+                <DayTrack
+                  tall
+                  day={draft.day}
+                  busy={avail.busy}
+                  now={now}
+                  selectedTime={draft.time}
+                  onPick={(t) => {
+                    haptic();
+                    setDraft({ time: t, packId: null });
+                  }}
+                />
+              )}
+            </div>
+            <p className="mt-3 text-[14px] text-ink-3">
               Lives de 1h30, avec {SCHEDULE.bufferMinutes} min d&apos;installation entre deux lives.
             </p>
             <ul className="mt-4 grid gap-2">
@@ -201,7 +219,7 @@ export function StepWhen({
           </div>
         ) : (
           <div className="hidden h-full min-h-64 flex-col justify-center border-2 border-dashed border-line-2 p-8 text-center lg:flex">
-            <p className="text-[17px] font-semibold">Choisis un jour</p>
+            <p className="tv text-[30px]">Choisis un jour</p>
             <p className="mt-1 text-[14.5px] text-ink-3">Les créneaux libres s&apos;affichent ici.</p>
           </div>
         )}
@@ -258,7 +276,7 @@ function SlotRow({ s, selected, tz, city, onPick }: { s: SlotState; selected: bo
         <span className={cn("min-w-0 flex-1", unavailable && "opacity-55")}>
           {tz ? (
             <>
-              <span className="tabular flex items-baseline gap-2 text-[22px] leading-none font-bold">
+              <span className="mono flex items-baseline gap-2 text-[22px] leading-none font-bold">
                 {localStart}
                 <span className="text-[14px] font-semibold text-ink-3">
                   – {formatTime(end, tz)} chez toi{dayShift ? " (+1 j)" : ""}
@@ -269,7 +287,7 @@ function SlotRow({ s, selected, tz, city, onPick }: { s: SlotState; selected: bo
               </span>
             </>
           ) : (
-            <span className="tabular flex items-baseline gap-2 text-[22px] leading-none font-bold">
+            <span className="mono flex items-baseline gap-2 text-[22px] leading-none font-bold">
               {s.time}
               <span className="text-[14px] font-semibold text-ink-3">– {formatTime(end)}</span>
             </span>

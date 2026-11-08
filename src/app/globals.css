@@ -33,7 +33,16 @@
 
   --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  --font-mono: var(--font-jb), ui-monospace, "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  --font-tv: var(--font-bs), Impact, "Arial Narrow", sans-serif;
+
+  /* Régie de diffusion */
+  --color-deck: #0d0c0b;
+  --color-deck-2: #161412;
+  --color-deck-3: #211e1b;
+  --color-deck-line: #2e2a26;
+  --color-tally: #d61b1b;
+  --color-preview: #23d96b;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
@@ -448,4 +457,178 @@ html:has(.sticky-preview) {
   .ticker-track { animation: none !important; }
   .js [data-reveal]:not([data-inview]) [data-r],
   .js [data-reveal].r-phone:not([data-inview]) { opacity: 1; }
+}
+
+/* ═════════════════════════════ L'antenne : OCD Live comme une chaîne ═════════════════════════════
+   Régie (multiview, tally, timecode), grille des programmes, conducteur. */
+
+/* Titres d'antenne : condensés, capitales, serrés. */
+@utility tv {
+  font-family: var(--font-tv);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Étiquettes de régie (UMD du multiview). */
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+@utility mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hachures « déjà à l'antenne ». */
+@utility hatch {
+  background-image: repeating-linear-gradient(-45deg, var(--hatch, rgb(0 0 0 / 0.14)) 0 2px, transparent 2px 7px);
+}
+
+/* Lignes de balayage d'un moniteur, très discrètes. */
+@utility scanlines {
+  background-image: repeating-linear-gradient(0deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 3px);
+}
+
+/* Le mur de la régie : graphite, quadrillage fin. */
+@utility deck {
+  background-color: var(--color-deck);
+  background-image:
+    radial-gradient(70% 60% at 50% 0%, rgb(255 140 50 / 0.07), transparent 70%),
+    linear-gradient(rgb(255 255 255 / 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.028) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  color: var(--color-night-ink);
+}
+
+/* Le papier de la grille des programmes (TV magazine). */
+@utility guide-paper {
+  background-color: #f3eee6;
+  background-image: linear-gradient(90deg, rgb(22 18 14 / 0.06) 1px, transparent 1px);
+  background-size: calc(100% / 14) 100%;
+}
+
+/* Tally : le voyant au-dessus de chaque moniteur. PVW = vert (en preview), PGM = rouge (à l'antenne). */
+.tally {
+  --t: #3b3530;
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--t);
+  transition: background-color 160ms, box-shadow 160ms;
+}
+[data-tally="pvw"] .tally { --t: var(--color-preview); box-shadow: 0 0 10px var(--color-preview); }
+[data-tally="pgm"] .tally { --t: var(--color-tally); box-shadow: 0 0 12px var(--color-tally); }
+.tally-on { --t: var(--color-tally); box-shadow: 0 0 10px var(--color-tally); animation: tally-blink 1.6s steps(1) infinite; }
+@keyframes tally-blink { 50% { opacity: 0.35; } }
+
+/* Moniteur du multiview : cadre noir, bordure qui s'allume selon le tally. */
+.monitor {
+  position: relative;
+  background: #050505;
+  outline: 1px solid var(--color-deck-line);
+  transition: outline-color 160ms, box-shadow 220ms;
+}
+[data-tally="pvw"] .monitor { outline: 2px solid var(--color-preview); }
+[data-tally="pgm"] .monitor { outline: 3px solid var(--color-tally); box-shadow: 0 0 0 1px #000, 0 0 40px -6px rgb(255 45 45 / 0.6); }
+.monitor img { transition: transform 900ms var(--ease-out), filter 400ms; }
+@media (hover: hover) {
+  .cam:hover .monitor img { transform: scale(1.045); }
+}
+.cam:not([data-tally]) .monitor img { filter: saturate(0.82) brightness(0.86); }
+
+/* Vu-mètres : les barres audio de la régie. */
+.vu > span {
+  transform-origin: bottom;
+  animation: vu 1s var(--ease-out) infinite alternate;
+  animation-delay: calc(var(--k, 0) * -0.37s);
+  animation-duration: calc(0.55s + var(--k, 0) * 0.09s);
+}
+@keyframes vu {
+  0% { transform: scaleY(0.18); }
+  40% { transform: scaleY(0.72); }
+  60% { transform: scaleY(0.46); }
+  100% { transform: scaleY(0.94); }
+}
+
+/* « TAKE » : le flash de coupe quand on envoie une caméra à l'antenne. */
+.cut-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  background: #fff;
+  animation: cut-flash 260ms var(--ease-in) both;
+}
+@keyframes cut-flash { from { opacity: 0.55; } to { opacity: 0; } }
+
+/* Le titre d'antenne s'imprime comme un habillage : un cache orange balaie, puis découvre le texte. */
+.wipe-in {
+  position: relative;
+  display: inline-block;
+  animation: wipe-text 0.01s linear calc(var(--d, 0) * 1ms + 380ms) both;
+}
+.wipe-in::after {
+  content: "";
+  position: absolute;
+  inset: -0.02em -0.06em 0.04em;
+  background: var(--color-orange);
+  transform-origin: left;
+  animation: wipe-bar 760ms var(--ease-out) calc(var(--d, 0) * 1ms) both;
+}
+@keyframes wipe-text { from { color: transparent; } }
+@keyframes wipe-bar {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(1); transform-origin: left; }
+  50.01% { transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+/* Ligne du direct qui avance sur la grille. */
+.now-line { box-shadow: 0 0 10px var(--color-tally); }
+
+/* Les cases de la grille s'allument une à une. */
+.guide-in {
+  animation: guide-in 520ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 35ms + 150ms);
+}
+@keyframes guide-in {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+/* Transition d'écran façon régie : volet horizontal (wipe) au lieu d'un fondu. */
+html[data-vt="forward"]::view-transition-old(root),
+html[data-vt="back"]::view-transition-old(root) { animation: none; }
+html[data-vt="forward"]::view-transition-new(root) { animation: vt-wipe-r 520ms var(--ease-out) both; }
+html[data-vt="back"]::view-transition-new(root) { animation: vt-wipe-l 520ms var(--ease-out) both; }
+@keyframes vt-wipe-r { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+@keyframes vt-wipe-l { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .vu > span, .tally-on { animation: none !important; }
+  .wipe-in, .wipe-in::after { animation: none !important; }
+  .wipe-in::after { display: none; }
+}
+
+/* Le temps d'antenne se remplit. */
+.air-fill {
+  transform-origin: left;
+  animation: air-fill 900ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 120ms + 250ms);
+}
+@keyframes air-fill { from { transform: scaleX(0); } }
+/* Ton live entre dans la grille. */
+.air-in { animation: air-in 700ms var(--ease-spring) 500ms both; }
+@keyframes air-in {
+  from { opacity: 0; transform: translate3d(0, -26px, 0) scale(1.08); }
+  to { opacity: 1; transform: none; }
 }

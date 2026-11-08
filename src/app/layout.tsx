@@ -11,6 +11,24 @@ const bricolage = localFont({
   fallback: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
 });
 
+/* Les titres « antenne » : une grotesque condensée, comme les enseignes et les habillages TV. */
+const tv = localFont({
+  src: "../fonts/big-shoulders-latin-wght.woff2",
+  variable: "--font-bs",
+  weight: "100 900",
+  display: "swap",
+  fallback: ["Impact", "Arial Narrow", "sans-serif"],
+});
+
+/* Les timecodes et étiquettes de régie. */
+const mono = localFont({
+  src: "../fonts/jetbrains-mono-latin-wght.woff2",
+  variable: "--font-jb",
+  weight: "100 800",
+  display: "swap",
+  fallback: ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
+});
+
 const SITE = SITE_URL;
 
 export const metadata: Metadata = {
@@ -36,12 +54,12 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#fbf8f3",
+  themeColor: "#0d0c0b",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={bricolage.variable} suppressHydrationWarning>
+    <html lang="fr" className={`${bricolage.variable} ${tv.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         {/* active les apparitions au défilement seulement si le JavaScript tourne */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

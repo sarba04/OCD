@@ -11,6 +11,9 @@ import { bookingIcs, download } from "@/lib/client/ics";
 import { drawPoster } from "@/lib/client/poster";
 import { GhostButton, InkButton, PrimaryButton } from "@/components/ui/kit";
 import { PassCard } from "./PassCard";
+import { DayTrack, GuideHours } from "@/components/broadcast/ProgramGuide";
+import { SCHEDULE } from "@/lib/config";
+import { addMinutes } from "@/lib/schedule";
 
 export function StepDone({
   booking: b,
@@ -86,8 +89,9 @@ export function StepDone({
           </span>
           Réservation enregistrée
         </p>
-        <h1 ref={titleRef} tabIndex={-1} className="display mt-3 text-[38px] outline-none sm:text-[54px]">
-          C&apos;est réservé, {firstName}&nbsp;!
+        <h1 ref={titleRef} tabIndex={-1} className="tv mt-3 text-[52px] outline-none sm:text-[80px]">
+          <span className="block">{firstName},</span>
+          <span className="block text-orange-ink">ton live est programmé.</span>
         </h1>
         <p className="mt-4 max-w-[40ch] text-[17px] leading-relaxed text-ink-2">
           {b.mode === "studio" ? "On t'attend au studio le " : "Tu passes en live le "}
@@ -96,6 +100,20 @@ export function StepDone({
           </strong>
           {b.mode === "remote" && c && c.tz !== "Africa/Lome" ? ` (heure de ${c.city})` : ""}. L&apos;équipe OCD vient de recevoir ta fiche.
         </p>
+
+        {/* ton live entre dans la grille des programmes */}
+        <div className="mt-7 border-y-2 border-ink bg-[#f3eee6] px-2 pt-2 pb-1" aria-hidden>
+          <p className="mono-label px-1 pb-2 text-ink-3">Grille du {formatDay(first.start.slice(0, 10), "short")}</p>
+          <GuideHours />
+          <DayTrack
+            tall
+            day={first.start.slice(0, 10)}
+            busy={b.sessions.map((s) => ({ start: s.start, end: addMinutes(s.end, SCHEDULE.bufferMinutes) }))}
+            now={new Date(0)}
+            highlight={[first]}
+            highlightLabel={b.business.name}
+          />
+        </div>
 
         {/* la fente de l'imprimante à tickets */}
         <div aria-hidden className="relative z-10 mx-auto mt-8 h-4 w-[min(100%,500px)] rounded-full bg-ink shadow-[0_6px_14px_-6px_rgb(0_0_0/0.5)]">
