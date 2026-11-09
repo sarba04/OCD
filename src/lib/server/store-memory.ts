@@ -7,6 +7,7 @@ import { getCountry } from "../countries";
 import { prettyPhone } from "../format";
 import { addMinutes, isFree, packSessions, windowDays, type Interval } from "../schedule";
 import type { Booking } from "../types";
+import { sessionState, type LiveEntry, type Seller } from "../lives";
 import { ConflictError, type Application, type Store } from "./store";
 
 /**
@@ -19,6 +20,8 @@ const FILE = join(tmpdir(), "ocd-live-demo.json");
 interface Data {
   bookings: Booking[];
   applications: Application[];
+  lives?: LiveEntry[];
+  sellers?: Seller[];
 }
 
 function load(): Data | null {
@@ -111,12 +114,46 @@ function seed(): Data {
       placed++;
     }
   }
-  return { bookings, applications: [] };
+  return { bookings, applications: [], lives: seedLives(), sellers: [] };
+}
+
+/** Démo de l'annuaire : des vendeurs fictifs « en live » aujourd'hui, dans plusieurs pays. */
+const DEMO_LIVES: [string, string, LiveEntry["category"]][] = [
+  ["Mama Rose Cuisine", "CM", "food"], ["Ndolé Express", "CM", "food"], ["Mimi Hair Douala", "CM", "cheveux"], ["SM Fashion", "CM", "mode"],
+  ["Bastos Phones", "CM", "tech"], ["Karité Yaoundé", "CM", "beaute"], ["Afi Wax Couture", "TG", "wax"], ["Jus Sika", "TG", "food"],
+  ["Les Délices d'Abla", "TG", "food"], ["KJ Phones", "TG", "tech"], ["Lawson Farm", "TG", "local"], ["Edem Déco", "TG", "maison"],
+  ["Chez Tantie Bénin", "BJ", "food"], ["Cotonou Style", "BJ", "mode"], ["Glow by Esther", "CI", "beaute"], ["Garba de Yopougon", "CI", "food"],
+  ["Abidjan Bijoux", "CI", "bijoux"], ["Thiéboudienne Mame", "SN", "food"], ["Dakar Wax", "SN", "wax"], ["Karité d'Or", "ML", "beaute"],
+  ["Nzinga Bijoux", "CD", "bijoux"], ["Kin Couture", "CD", "mode"], ["Sahel Cuirs", "TD", "local"], ["Ouaga Répare", "BF", "services"],
+];
+
+function seedLives(): LiveEntry[] {
+  const { today, current, next } = sessionState();
+  return DEMO_LIVES.map(([name, country, category], i) => ({
+    id: crypto.randomUUID(),
+    createdAt: new Date(Date.now() - (i + 1) * 240_000).toISOString(),
+    status: i % 9 === 8 ? "pending" : "approved",
+    day: today,
+    session: (current ?? next).id,
+    name,
+    country,
+    category,
+    url: `https://www.tiktok.com/@${name.toLowerCase().replace(/[^a-z]+/g, "")}/live`,
+    shortUrl: "",
+    phone: `+${getCountry(country)!.dial} 6${String(1000000 + i * 7919).slice(0, 7)}`,
+    reviewedAt: i % 9 === 8 ? null : new Date(Date.now() - i * 200_000).toISOString(),
+    subscribed: i % 5 !== 4,
+  }));
 }
 
 export function createMemoryStore(): Store {
   const data: Data = load() ?? seed();
+  // la démo de l'annuaire se renouvelle chaque jour
+  if (!data.lives || !data.lives.some((l) => l.day === sessionState().today)) data.lives = [...(data.lives ?? []).filter((l) => !DEMO_LIVES.some(([n]) => n === l.name)), ...seedLives()];
+  data.sellers ??= [];
   save(data);
+  const lives = data.lives;
+  const sellers = data.sellers;
 
   return {
     kind: "memory",
@@ -162,6 +199,41 @@ export function createMemoryStore(): Store {
 
     async listApplications() {
       return data.applications;
+    },
+
+    async createLive(e) {
+      lives.unshift(e);
+      save(data);
+    },
+
+    async listLives(opts = {}) {
+      return lives.filter((l) => (!opts.day || l.day === opts.day) && (!opts.status || l.status === opts.status) && (!opts.since || l.createdAt >= opts.since));
+    },
+
+    async updateLive(id, status) {
+      const l = lives.find((x) => x.id === id);
+      if (!l) return null;
+      l.status = status;
+      l.reviewedAt = new Date().toISOString();
+      save(data);
+      return l;
+    },
+
+    async getSeller(phone) {
+      return sellers.find((x) => x.phone === phone) ?? null;
+    },
+
+    async extendSeller(phone, name, days) {
+      const today = new Date().toISOString().slice(0, 10);
+      let s = sellers.find((x) => x.phone === phone);
+      if (!s) sellers.push((s = { phone, name, paidUntil: null }));
+      const from = s.paidUntil && s.paidUntil > today ? s.paidUntil : today;
+      const d = new Date(`${from}T12:00:00Z`);
+      d.setUTCDate(d.getUTCDate() + days);
+      s.name = name;
+      s.paidUntil = d.toISOString().slice(0, 10);
+      save(data);
+      return s;
     },
   };
 }

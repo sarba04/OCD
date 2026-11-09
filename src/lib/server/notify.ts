@@ -103,3 +103,14 @@ export async function notifyApplication(a: Application) {
     [`WhatsApp : ${a.phone}`, `Pourquoi : ${a.why}`, a.link ? `Vidéo / vocal : ${a.link}` : ""].filter(Boolean),
   ).catch((e) => console.error("[OCD Live] notification", e));
 }
+
+export async function notifyLive(e: import("../lives").LiveEntry, origin?: string) {
+  const { getCategory } = await import("../lives");
+  const { getCountry } = await import("../countries");
+  await send(
+    "Live à valider",
+    `${e.name} est en live (${getCategory(e.category).label}, ${getCountry(e.country)?.name ?? e.country}).`,
+    [`Lien : ${e.url}`, `WhatsApp : ${e.phone}`, e.subscribed ? "Abonnement : actif" : "Abonnement : à payer"],
+    origin ? `${origin}/regie?vue=lives` : undefined,
+  ).catch((err) => console.error("[OCD Live] notification", err));
+}

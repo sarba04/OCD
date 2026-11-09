@@ -2,6 +2,7 @@ import "server-only";
 import postgres from "postgres";
 import type { Interval } from "../schedule";
 import type { Booking, BookingStatus } from "../types";
+import type { LiveEntry, Seller } from "../lives";
 import { ConflictError, type Application, type Store } from "./store";
 
 /**
@@ -44,6 +45,27 @@ create table if not exists ocd_applications (
   city text not null,
   why text not null,
   link text not null default ''
+);
+create table if not exists ocd_lives (
+  id uuid primary key,
+  created_at timestamptz not null default now(),
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  day date not null,
+  session text not null,
+  name text not null,
+  country text not null,
+  category text not null,
+  url text not null,
+  short_url text not null default '',
+  phone text not null,
+  reviewed_at timestamptz,
+  subscribed boolean not null default false
+);
+create index if not exists ocd_lives_day_idx on ocd_lives (day, status);
+create table if not exists ocd_live_sellers (
+  phone text primary key,
+  name text not null,
+  paid_until date
 );
 `;
 
@@ -177,5 +199,81 @@ export async function createPostgresStore(url: string): Promise<Store> {
         link: r.link,
       }));
     },
+
+    async createLive(e) {
+      await sql`insert into ocd_lives (id, created_at, status, day, session, name, country, category, url, short_url, phone, reviewed_at, subscribed)
+        values (${e.id}, ${e.createdAt}, ${e.status}, ${e.day}, ${e.session}, ${e.name}, ${e.country}, ${e.category}, ${e.url},
+          ${e.shortUrl}, ${e.phone}, ${e.reviewedAt}, ${e.subscribed})`;
+    },
+
+    async listLives(opts = {}) {
+      const rows = await sql<LiveRow[]>`select * from ocd_lives
+        where true
+        ${opts.day ? sql`and day = ${opts.day}` : sql``}
+        ${opts.status ? sql`and status = ${opts.status}` : sql``}
+        ${opts.since ? sql`and created_at >= ${opts.since}` : sql``}
+        order by created_at desc limit 500`;
+      return rows.map(toLive);
+    },
+
+    async updateLive(id, status) {
+      if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+      const rows = await sql<LiveRow[]>`update ocd_lives set status = ${status}, reviewed_at = now() where id = ${id} returning *`;
+      return rows[0] ? toLive(rows[0]) : null;
+    },
+
+    async getSeller(phone) {
+      const rows = await sql<{ phone: string; name: string; paid_until: Date | string | null }[]>`select * from ocd_live_sellers where phone = ${phone}`;
+      return rows[0] ? toSeller(rows[0]) : null;
+    },
+
+    async extendSeller(phone, name, days) {
+      const rows = await sql<{ phone: string; name: string; paid_until: Date | string | null }[]>`
+        insert into ocd_live_sellers (phone, name, paid_until) values (${phone}, ${name}, current_date + ${days}::int)
+        on conflict (phone) do update set name = excluded.name,
+          paid_until = greatest(coalesce(ocd_live_sellers.paid_until, current_date), current_date) + ${days}::int
+        returning *`;
+      return toSeller(rows[0]);
+    },
   };
 }
+
+type LiveRow = {
+  id: string;
+  created_at: Date;
+  status: LiveEntry["status"];
+  day: Date | string;
+  session: LiveEntry["session"];
+  name: string;
+  country: string;
+  category: LiveEntry["category"];
+  url: string;
+  short_url: string;
+  phone: string;
+  reviewed_at: Date | null;
+  subscribed: boolean;
+};
+
+const isoDay = (d: Date | string) => (typeof d === "string" ? d.slice(0, 10) : d.toISOString().slice(0, 10));
+
+const toLive = (r: LiveRow): LiveEntry => ({
+  id: r.id,
+  createdAt: new Date(r.created_at).toISOString(),
+  status: r.status,
+  day: isoDay(r.day),
+  session: r.session,
+  name: r.name,
+  country: r.country,
+  category: r.category,
+  url: r.url,
+  shortUrl: r.short_url,
+  phone: r.phone,
+  reviewedAt: r.reviewed_at ? new Date(r.reviewed_at).toISOString() : null,
+  subscribed: r.subscribed,
+});
+
+const toSeller = (r: { phone: string; name: string; paid_until: Date | string | null }): Seller => ({
+  phone: r.phone,
+  name: r.name,
+  paidUntil: r.paid_until ? isoDay(r.paid_until) : null,
+});

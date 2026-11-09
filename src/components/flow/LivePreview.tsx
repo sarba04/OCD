@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { Heart, MapPin, MessageCircle, Truck, Users } from "lucide-react";
-import { AFRICA_PATH, AFRICA_VIEWBOX } from "@/lib/geo/africa";
 import { BRAND } from "@/lib/config";
 import { cn } from "@/lib/cn";
 
@@ -53,11 +52,8 @@ export function PhonePreview({ d }: { d: PreviewData }) {
           <img src={d.photo} alt="" className="absolute inset-0 h-full w-full object-cover" />
         ) : (
           <>
-            {/* le mur du studio, flouté comme une vraie image de live */}
+            {/* la lumière du studio, floutée comme une vraie image de live */}
             <div className="absolute inset-0 bg-[radial-gradient(120%_70%_at_50%_30%,#f6e3c8_0%,#d9a46b_45%,#4a2c14_100%)]" />
-            <svg viewBox={`0 0 ${AFRICA_VIEWBOX.width} ${AFRICA_VIEWBOX.height}`} className="absolute top-[12%] left-1/2 w-[78%] -translate-x-1/2 opacity-90" aria-hidden>
-              <path d={AFRICA_PATH} fill="#fff8ee" style={{ filter: "drop-shadow(0 0 18px #ffb45c)" }} />
-            </svg>
             <img src="/brand/ocd-logo.svg" alt="" className="absolute top-[30%] left-1/2 w-[42%] -translate-x-1/2" />
           </>
         )}

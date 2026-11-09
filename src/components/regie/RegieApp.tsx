@@ -1,5 +1,5 @@
 "use client";
-import { CalendarDays, Download, List as ListIcon, LogOut, Search, Users, X } from "lucide-react";
+import { CalendarDays, Download, Radio, List as ListIcon, LogOut, Search, Users, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { SCHEDULE } from "@/lib/config";
@@ -10,6 +10,7 @@ import { STATUS_LABEL, type Booking, type BookingStatus } from "@/lib/types";
 import type { Application } from "@/lib/server/store";
 import { cn } from "@/lib/cn";
 import { Fiche } from "./Fiche";
+import { RegieLives } from "./RegieLives";
 
 export type Row = Omit<Booking, "photo"> & { hasPhoto: boolean };
 
@@ -35,7 +36,7 @@ export function StatusChip({ s }: { s: BookingStatus }) {
   return <span className={cn("inline-flex h-6 shrink-0 items-center px-2 text-[12px] font-semibold whitespace-nowrap", STATUS_STYLE[s])}>{s === "pending" ? "À payer" : STATUS_LABEL[s]}</span>;
 }
 
-type Tab = "planning" | "liste" | "candidatures";
+type Tab = "lives" | "planning" | "liste" | "candidatures";
 
 export function RegieApp() {
   const [rows, setRows] = useState<Row[] | null>(null);
@@ -43,6 +44,9 @@ export function RegieApp() {
   const [demo, setDemo] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const [tab, setTab] = useState<Tab>("planning");
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get("vue") === "lives") setTab("lives");
+  }, []);
   const [open, setOpen] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [q, setQ] = useState("");
@@ -180,6 +184,9 @@ export function RegieApp() {
 
         {/* ───── Onglets ───── */}
         <div className="mt-8 flex items-center gap-1 overflow-x-auto border-b border-night-line" role="tablist">
+          <TabBtn on={tab === "lives"} onClick={() => setTab("lives")} icon={<Radio className="size-4" />}>
+            Lives à valider
+          </TabBtn>
           <TabBtn on={tab === "planning"} onClick={() => setTab("planning")} icon={<CalendarDays className="size-4" />}>
             Planning
           </TabBtn>
@@ -191,7 +198,9 @@ export function RegieApp() {
           </TabBtn>
         </div>
 
-        {!rows ? (
+        {tab === "lives" ? (
+          <RegieLives onToast={setToast} />
+        ) : !rows ? (
           <div className="mt-6 grid gap-2">
             {Array.from({ length: 6 }, (_, i) => (
               <div key={i} className="h-14 animate-pulse bg-night-2" />
