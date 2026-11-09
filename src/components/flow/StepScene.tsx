@@ -56,7 +56,8 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
           {data?.session ? (
             <span className="inline-flex items-center gap-2 rounded-full bg-live px-3.5 py-2 text-white">
               <span className="size-2 rounded-full bg-white motion-safe:animate-pulse" aria-hidden />
-              En direct · {data.lives.length} vendeur{data.lives.length > 1 ? "s" : ""} · jusqu&apos;à {data.session.end.replace(":00", "h")}
+              En direct · {data.lives.length} vendeur{data.lives.length > 1 ? "s" : ""}
+              {!data.testMode && <> · jusqu&apos;à {data.session.end.replace(":00", "h")}</>}
             </span>
           ) : data ? (
             <span className="inline-flex items-center gap-2 rounded-full bg-card px-3.5 py-2 ring-1 ring-line">
@@ -66,7 +67,7 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
           ) : (
             <span className="h-9 w-64 animate-pulse rounded-full bg-paper-2" />
           )}
-          {data?.demo && <span className="text-[12.5px] font-medium text-ink-3">démo</span>}
+          {(data?.demo || data?.testMode) && <span className="text-[12.5px] font-medium text-ink-3">{data?.testMode ? "mode test" : "démo"}</span>}
         </p>
 
         <h1 className="display mt-5 text-[clamp(40px,11vw,96px)]">
