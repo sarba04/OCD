@@ -5,6 +5,12 @@
  */
 import { COUNTRIES } from "./countries";
 
+/**
+ * MODE TEST : ouvert à toute heure (pas de sessions), pour les essais.
+ * Pour remettre les sessions 8h–11h et 18h–21h : passer à `false`, ou mettre NEXT_PUBLIC_LIVE_TEST_MODE=0 sur Vercel.
+ */
+export const LIVE_TEST_MODE = process.env.NEXT_PUBLIC_LIVE_TEST_MODE ? process.env.NEXT_PUBLIC_LIVE_TEST_MODE !== "0" : true;
+
 /** Les sessions où l'équipe valide les lives (heure de Lomé = GMT). Modifiable ici. */
 export const LIVE_SESSIONS = [
   { id: "matin", label: "Session du matin", start: "08:00", end: "11:00" },

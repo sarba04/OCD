@@ -89,9 +89,11 @@ export function Directory({ data, error, onRetry, onSell }: { data: LivesState |
             <MoonStar className="size-7" strokeWidth={1.8} />
           </span>
           <p className="mt-2 text-[19px] font-bold">{data.session ? "Personne en live ici pour l'instant." : "Pas de session en ce moment."}</p>
-          <p className="mt-1 text-[15px] text-ink-2">
-            Prochaine session à {data.next.start.replace(":00", "h")}, {untilLabel(data.next.at, new Date(data.now).getTime())}.
-          </p>
+          {!data.testMode && (
+            <p className="mt-1 text-[15px] text-ink-2">
+              Prochaine session à {data.next.start.replace(":00", "h")}, {untilLabel(data.next.at, new Date(data.now).getTime())}.
+            </p>
+          )}
           <button onClick={onSell} className="mt-5 inline-flex h-12 items-center rounded-full bg-ink px-6 text-[15px] font-bold text-paper">
             Je vends : je m&apos;inscris
           </button>

@@ -5,7 +5,8 @@ import type { PublicLive } from "@/lib/lives";
 export interface LivesState {
   now: string;
   demo: boolean;
-  session: { id: string; start: string; end: string; endsAt: string } | null;
+  testMode?: boolean;
+  session: { id: string; start: string; end: string; endsAt: string | null } | null;
   next: { id: string; start: string; end: string; at: string };
   lives: PublicLive[];
 }

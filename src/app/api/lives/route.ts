@@ -1,6 +1,6 @@
 import { NextResponse, after, type NextRequest } from "next/server";
 import { getCountry } from "@/lib/countries";
-import { LIVE_CATEGORIES, LIVE_SESSIONS, isTikTokUrl, sessionState, type LiveEntry, type PublicLive } from "@/lib/lives";
+import { LIVE_CATEGORIES, LIVE_SESSIONS, LIVE_TEST_MODE, isTikTokUrl, sessionState, type LiveEntry, type PublicLive } from "@/lib/lives";
 import { notifyLive } from "@/lib/server/notify";
 import { getStore, isDemo } from "@/lib/server/store";
 import { validPhone } from "@/lib/validate";
@@ -17,12 +17,17 @@ export async function GET() {
   const store = await getStore();
   const demo = isDemo();
   const approved = await store.listLives({ day: st.today, status: "approved" });
-  const live = demo ? approved : st.current ? approved.filter((l) => l.session === st.current!.id) : [];
+  // mode test ou démo : tous les lives validés du jour, à toute heure
+  const open = demo || LIVE_TEST_MODE;
+  const live = open ? approved : st.current ? approved.filter((l) => l.session === st.current!.id) : [];
   return NextResponse.json(
     {
       now: now.toISOString(),
       demo,
-      session: st.current ? { id: st.current.id, start: st.current.start, end: st.current.end, endsAt: st.endsAt } : null,
+      testMode: LIVE_TEST_MODE,
+      session: LIVE_TEST_MODE
+        ? { id: (st.current ?? st.next).id, start: "00:00", end: "24:00", endsAt: null }
+        : st.current ? { id: st.current.id, start: st.current.start, end: st.current.end, endsAt: st.endsAt } : null,
       next: { id: st.next.id, start: st.next.start, end: st.next.end, at: st.nextStart },
       sessions: LIVE_SESSIONS,
       lives: live.map(pub),
@@ -37,7 +42,7 @@ export async function POST(req: NextRequest) {
   if (body.website) return NextResponse.json({ ok: true }, { status: 201 });
   const st = sessionState();
   const demo = isDemo();
-  if (!st.current && !demo) {
+  if (!st.current && !demo && !LIVE_TEST_MODE) {
     return NextResponse.json(
       { message: `L'équipe valide les lives de ${LIVE_SESSIONS.map((s) => `${s.start.replace(":00", "h")} à ${s.end.replace(":00", "h")}`).join(" et de ")}. Reviens à ${st.next.start.replace(":00", "h")}.`, closed: true },
       { status: 409 },

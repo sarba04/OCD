@@ -2,7 +2,7 @@
 import { Check, ExternalLink, RotateCcw, Wallet, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { getCountry } from "@/lib/countries";
-import { LIVE_PASS, LIVE_SESSIONS, getCategory, type LiveEntry } from "@/lib/lives";
+import { LIVE_PASS, LIVE_SESSIONS, LIVE_TEST_MODE, getCategory, type LiveEntry } from "@/lib/lives";
 import { Flag } from "@/components/ui/Flag";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { fcfa } from "@/lib/format";
@@ -73,7 +73,7 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
           </button>
         ))}
         <span className="ml-auto text-[13px] text-night-ink-2">
-          Sessions : {LIVE_SESSIONS.map((s) => `${s.start}–${s.end}`).join(" et ")} · abonnement {fcfa(LIVE_PASS.price)} / mois
+          {LIVE_TEST_MODE ? "Mode test : ouvert à toute heure" : `Sessions : ${LIVE_SESSIONS.map((s) => `${s.start}–${s.end}`).join(" et ")}`} · abonnement {fcfa(LIVE_PASS.price)} / mois
         </span>
       </div>
 
