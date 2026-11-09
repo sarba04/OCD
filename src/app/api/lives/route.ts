@@ -1,6 +1,6 @@
 import { NextResponse, after, type NextRequest } from "next/server";
 import { getCountry } from "@/lib/countries";
-import { LIVE_CATEGORIES, LIVE_SESSIONS, LIVE_TEST_MODE, isTikTokUrl, resolveTikTokVideo, tiktokVideoId, sessionState, type LiveEntry, type PublicLive } from "@/lib/lives";
+import { LIVE_CATEGORIES, LIVE_SESSIONS, LIVE_TEST_MODE, isPhotoDataUrl, isTikTokUrl, resolveTikTokVideo, tiktokVideoId, sessionState, type LiveEntry, type PublicLive } from "@/lib/lives";
 import { notifyLive } from "@/lib/server/notify";
 import { getStore, isDemo } from "@/lib/server/store";
 import { validPhone } from "@/lib/validate";
@@ -8,7 +8,7 @@ import { validPhone } from "@/lib/validate";
 export const dynamic = "force-dynamic";
 
 const clean = (s: unknown, max: number) => (typeof s === "string" ? s.trim().slice(0, max) : "");
-const pub = (l: LiveEntry): PublicLive => ({ id: l.id, name: l.name, country: l.country, category: l.category, url: l.url, shortUrl: l.shortUrl, reviewedAt: l.reviewedAt });
+const pub = (l: LiveEntry): PublicLive => ({ id: l.id, name: l.name, country: l.country, category: l.category, url: l.url, shortUrl: l.shortUrl, reviewedAt: l.reviewedAt, hasPhoto: l.hasPhoto });
 
 /** Les lives validés de la session en cours (en démo : ceux du jour, pour que la page ait l'air vivante). */
 export async function GET() {
@@ -62,7 +62,9 @@ export async function POST(req: NextRequest) {
     phone: clean(body.phone, 24),
     reviewedAt: null,
     subscribed: false,
+    hasPhoto: false,
   };
+  const photo = body.photo == null || body.photo === "" ? null : body.photo;
   const errors: Record<string, string> = {};
   if (e.name.length < 2) errors.name = "Écris ton nom ou le nom de ta boutique.";
   if (!getCountry(e.country)) errors.country = "Choisis ton pays.";
@@ -70,6 +72,7 @@ export async function POST(req: NextRequest) {
   if (!isTikTokUrl(e.url)) errors.url = "Colle le lien de ton live TikTok (il commence par https://www.tiktok.com ou https://vm.tiktok.com).";
   if (e.shortUrl && !isTikTokUrl(e.shortUrl)) errors.shortUrl = "Ce lien n'est pas une vidéo TikTok.";
   if (!validPhone(e.phone)) errors.phone = "Ton numéro WhatsApp semble incomplet.";
+  if (photo !== null && !isPhotoDataUrl(photo)) errors.photo = "Cette photo n'a pas pu être envoyée. Essaie une autre photo.";
   if (Object.keys(errors).length) return NextResponse.json({ message: "À compléter.", errors }, { status: 400 });
 
   // vidéo courte : on retrouve l'identifiant de la vidéo derrière un lien court
@@ -81,7 +84,8 @@ export async function POST(req: NextRequest) {
 
   const seller = await store.getSeller(e.phone);
   e.subscribed = !!seller?.paidUntil && seller.paidUntil >= e.day;
-  await store.createLive(e);
+  e.hasPhoto = !!photo;
+  await store.createLive(e, photo);
   after(() => notifyLive(e, req.nextUrl.origin));
   return NextResponse.json(
     { ok: true, status: e.status, subscribed: e.subscribed, paidUntil: seller?.paidUntil ?? null, short: e.shortUrl ? !!tiktokVideoId(e.shortUrl) : null },

@@ -22,6 +22,7 @@ interface Data {
   applications: Application[];
   lives?: LiveEntry[];
   sellers?: Seller[];
+  photos?: Record<string, string>;
 }
 
 function load(): Data | null {
@@ -117,6 +118,16 @@ function seed(): Data {
   return { bookings, applications: [], lives: seedLives(), sellers: [] };
 }
 
+/** Démo : quelques vendeurs ont une photo produit (images du site), les autres gardent la couverture à initiales. */
+const DEMO_PHOTOS: Record<string, string> = {
+  "Afi Wax Couture": "/media/live-seller-480.webp",
+  "Lawson Farm": "/media/products-760.webp",
+  "Sahel Cuirs": "/media/pack-vitrine-480.webp",
+  "KJ Phones": "/media/pack-spotlight-480.webp",
+  "Dakar Wax": "/media/live-seller-720.webp",
+  "Karité d'Or": "/media/products-760.webp",
+};
+
 /** Démo de l'annuaire : des vendeurs fictifs « en live » aujourd'hui, dans plusieurs pays. */
 const DEMO_LIVES: [string, string, LiveEntry["category"]][] = [
   ["Mama Rose Cuisine", "CM", "food"], ["Ndolé Express", "CM", "food"], ["Mimi Hair Douala", "CM", "cheveux"], ["SM Fashion", "CM", "mode"],
@@ -143,6 +154,7 @@ function seedLives(): LiveEntry[] {
     phone: `+${getCountry(country)!.dial} 6${String(1000000 + i * 7919).slice(0, 7)}`,
     reviewedAt: i % 9 === 8 ? null : new Date(Date.now() - i * 200_000).toISOString(),
     subscribed: i % 5 !== 4,
+    hasPhoto: !!DEMO_PHOTOS[name],
   }));
 }
 
@@ -151,9 +163,12 @@ export function createMemoryStore(): Store {
   // la démo de l'annuaire se renouvelle chaque jour
   if (!data.lives || !data.lives.some((l) => l.day === sessionState().today)) data.lives = [...(data.lives ?? []).filter((l) => !DEMO_LIVES.some(([n]) => n === l.name)), ...seedLives()];
   data.sellers ??= [];
+  data.photos ??= {};
+  for (const l of data.lives) if (DEMO_PHOTOS[l.name]) data.photos[l.id] = DEMO_PHOTOS[l.name];
   save(data);
   const lives = data.lives;
   const sellers = data.sellers;
+  const photos = data.photos;
 
   return {
     kind: "memory",
@@ -203,9 +218,15 @@ export function createMemoryStore(): Store {
       return data.applications;
     },
 
-    async createLive(e) {
+    async createLive(e, photo) {
       lives.unshift(e);
+      if (photo) photos[e.id] = photo;
       save(data);
+    },
+
+    async getLivePhoto(id) {
+      const l = lives.find((x) => x.id === id);
+      return l && photos[id] ? { status: l.status, photo: photos[id] } : null;
     },
 
     async listLives(opts = {}) {

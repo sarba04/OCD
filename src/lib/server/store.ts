@@ -30,7 +30,9 @@ export interface Store {
   createApplication(a: Application): Promise<void>;
   listApplications(): Promise<Application[]>;
   /* Annuaire des lives */
-  createLive(e: LiveEntry): Promise<void>;
+  createLive(e: LiveEntry, photo: string | null): Promise<void>;
+  /** La photo d'un live (data URL ou chemin /media/… en démo) et son statut. */
+  getLivePhoto(id: string): Promise<{ status: LiveStatus; photo: string } | null>;
   listLives(opts?: { day?: string; status?: LiveStatus; since?: string }): Promise<LiveEntry[]>;
   updateLive(id: string, status: LiveStatus): Promise<LiveEntry | null>;
   getSeller(phone: string): Promise<Seller | null>;
@@ -43,7 +45,7 @@ export interface Store {
 const g = globalThis as unknown as { __ocdStore?: Promise<Store> };
 
 /** Lectures sans effet de bord : on peut les relancer sans risque sur une connexion neuve. */
-const READS = new Set(["listBusy", "listBookings", "getBooking", "listApplications", "listLives", "getSeller"]);
+const READS = new Set(["listBusy", "listBookings", "getBooking", "listApplications", "listLives", "getSeller", "getLivePhoto"]);
 
 /**
  * Sur Vercel, l'instance est mise en pause entre deux visites ; pendant la pause, le pooler de la base peut couper

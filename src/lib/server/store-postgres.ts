@@ -61,6 +61,7 @@ create table if not exists ocd_lives (
   reviewed_at timestamptz,
   subscribed boolean not null default false
 );
+alter table ocd_lives add column if not exists photo text;
 create index if not exists ocd_lives_day_idx on ocd_lives (day, status);
 create table if not exists ocd_live_sellers (
   phone text primary key,
@@ -129,7 +130,8 @@ export async function createPostgresStore(url: string): Promise<Store> {
   const [{ ok }] = await sql<{ ok: boolean }[]>`
     select (to_regclass('public.ocd_bookings') is not null and to_regclass('public.ocd_slots') is not null
       and to_regclass('public.ocd_applications') is not null and to_regclass('public.ocd_lives') is not null
-      and to_regclass('public.ocd_live_sellers') is not null) as ok`;
+      and to_regclass('public.ocd_live_sellers') is not null
+      and exists (select 1 from information_schema.columns where table_name = 'ocd_lives' and column_name = 'photo')) as ok`;
   if (!ok) {
     await sql.begin(async (tx) => {
       await tx.unsafe("set local lock_timeout = '5s'; set local statement_timeout = '30s'");
@@ -137,6 +139,8 @@ export async function createPostgresStore(url: string): Promise<Store> {
     });
   }
 
+  // la liste n'embarque jamais les photos (lourdes) : seulement si elle existe
+  const LIVE_COLS = sql`id, created_at, status, day, session, name, country, category, url, short_url, phone, reviewed_at, subscribed, (photo is not null) as has_photo`;
   const COLS = sql`id, ref, created_at, status, mode, country, timezone, pack_id, pack_name, price, sessions, business, contact, payment_method`;
 
   return {
@@ -222,14 +226,20 @@ export async function createPostgresStore(url: string): Promise<Store> {
       }));
     },
 
-    async createLive(e) {
-      await sql`insert into ocd_lives (id, created_at, status, day, session, name, country, category, url, short_url, phone, reviewed_at, subscribed)
+    async createLive(e, photo) {
+      await sql`insert into ocd_lives (id, created_at, status, day, session, name, country, category, url, short_url, phone, reviewed_at, subscribed, photo)
         values (${e.id}, ${e.createdAt}, ${e.status}, ${e.day}, ${e.session}, ${e.name}, ${e.country}, ${e.category}, ${e.url},
-          ${e.shortUrl}, ${e.phone}, ${e.reviewedAt}, ${e.subscribed})`;
+          ${e.shortUrl}, ${e.phone}, ${e.reviewedAt}, ${e.subscribed}, ${photo})`;
+    },
+
+    async getLivePhoto(id) {
+      if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+      const rows = await sql<{ status: LiveEntry["status"]; photo: string | null }[]>`select status, photo from ocd_lives where id = ${id}`;
+      return rows[0]?.photo ? { status: rows[0].status, photo: rows[0].photo } : null;
     },
 
     async listLives(opts = {}) {
-      const rows = await sql<LiveRow[]>`select * from ocd_lives
+      const rows = await sql<LiveRow[]>`select ${LIVE_COLS} from ocd_lives
         where true
         ${opts.day ? sql`and day = ${opts.day}` : sql``}
         ${opts.status ? sql`and status = ${opts.status}` : sql``}
@@ -240,7 +250,7 @@ export async function createPostgresStore(url: string): Promise<Store> {
 
     async updateLive(id, status) {
       if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
-      const rows = await sql<LiveRow[]>`update ocd_lives set status = ${status}, reviewed_at = now() where id = ${id} returning *`;
+      const rows = await sql<LiveRow[]>`update ocd_lives set status = ${status}, reviewed_at = now() where id = ${id} returning ${LIVE_COLS}`;
       return rows[0] ? toLive(rows[0]) : null;
     },
 
@@ -274,6 +284,7 @@ type LiveRow = {
   phone: string;
   reviewed_at: Date | null;
   subscribed: boolean;
+  has_photo: boolean;
 };
 
 const isoDay = (d: Date | string) => (typeof d === "string" ? d.slice(0, 10) : d.toISOString().slice(0, 10));
@@ -292,6 +303,7 @@ const toLive = (r: LiveRow): LiveEntry => ({
   phone: r.phone,
   reviewedAt: r.reviewed_at ? new Date(r.reviewed_at).toISOString() : null,
   subscribed: r.subscribed,
+  hasPhoto: !!r.has_photo,
 });
 
 const toSeller = (r: { phone: string; name: string; paid_until: Date | string | null }): Seller => ({
