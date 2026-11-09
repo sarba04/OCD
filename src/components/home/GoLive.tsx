@@ -89,6 +89,7 @@ export function GoLive() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ name: f.name, country: f.country, category: f.category, url: f.url, shortUrl: f.shortUrl, phone }),
+        signal: AbortSignal.timeout(20000),
       });
       const j = await r.json().catch(() => ({}));
       if (r.ok) {
@@ -99,7 +100,7 @@ export function GoLive() {
         setErrors({ ...j.errors, local: j.errors.phone });
       } else setMessage(j.message || "Une erreur est survenue. Réessaie.");
     } catch {
-      setMessage("Connexion perdue. Réessaie.");
+      setMessage("Le serveur met trop de temps à répondre. Appuie encore sur « Envoyer mon live » : si c'était déjà parti, il ne sera pas compté deux fois.");
     } finally {
       setSending(false);
     }

@@ -179,6 +179,7 @@ export function BookingApp() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(toInput(draft)),
+        signal: AbortSignal.timeout(25000),
       });
       const j = await r.json().catch(() => ({}));
       if (r.status === 201) {
@@ -197,7 +198,7 @@ export function BookingApp() {
         setSubmitError(j.message || "Une erreur est survenue. Réessaie dans un instant.");
       }
     } catch {
-      setSubmitError("Connexion perdue. Vérifie ton réseau puis appuie à nouveau sur Confirmer : rien n'a été enregistré.");
+      setSubmitError("Pas de réponse du serveur. Vérifie ton réseau puis appuie à nouveau : si ta réservation était déjà passée, elle ne sera pas faite deux fois.");
     } finally {
       setSubmitting(false);
     }

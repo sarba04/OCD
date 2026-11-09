@@ -158,6 +158,8 @@ export function createMemoryStore(): Store {
   return {
     kind: "memory",
 
+    async close() {},
+
     async listBusy(from, to) {
       return data.bookings.flatMap(slotsOf).filter((s) => s.end > from && s.start < to);
     },

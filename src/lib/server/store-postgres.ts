@@ -113,7 +113,9 @@ export async function createPostgresStore(url: string): Promise<Store> {
   const sql = postgres(url, {
     prepare: false, // compatible avec les poolers (Supabase port 6543, PgBouncer)
     max: 3,
-    idle_timeout: 20,
+    // connexions de courte durée : on ne garde pas une connexion qui risque d'être coupée pendant la pause de l'instance
+    idle_timeout: 5,
+    max_lifetime: 120,
     connect_timeout: 10,
     ssl: local ? false : "require",
     onnotice: () => {},
@@ -139,6 +141,10 @@ export async function createPostgresStore(url: string): Promise<Store> {
 
   return {
     kind: "postgres",
+
+    async close() {
+      await sql.end({ timeout: 0 });
+    },
 
     async listBusy(from, to) {
       const rows = await sql<{ starts_at: Date; ends_at: Date }[]>`

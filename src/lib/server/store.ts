@@ -36,25 +36,55 @@ export interface Store {
   getSeller(phone: string): Promise<Seller | null>;
   /** Ajoute `days` jours d'abonnement (à partir d'aujourd'hui ou de la fin de l'abonnement en cours). */
   extendSeller(phone: string, name: string, days: number): Promise<Seller>;
+  /** Ferme les connexions (on jette un stockage dont la connexion est morte). */
+  close(): Promise<void>;
 }
 
 const g = globalThis as unknown as { __ocdStore?: Promise<Store> };
 
-/** Chaque appel à la base a 12 s maximum : au-delà, on renvoie une erreur au lieu de laisser la page tourner. */
+/** Lectures sans effet de bord : on peut les relancer sans risque sur une connexion neuve. */
+const READS = new Set(["listBusy", "listBookings", "getBooking", "listApplications", "listLives", "getSeller"]);
+
+/**
+ * Sur Vercel, l'instance est mise en pause entre deux visites ; pendant la pause, le pooler de la base peut couper
+ * la connexion sans prévenir, et une requête envoyée dessus attendrait pour toujours.
+ * Donc : chaque appel a 8 s maximum ; au-delà, on jette ce stockage (et ses connexions) et, pour une lecture,
+ * on relance une fois sur un stockage neuf.
+ */
 function withTimeouts(store: Store): Store {
   return new Proxy(store, {
     get(target, key, recv) {
       const v = Reflect.get(target, key, recv);
-      if (typeof v !== "function") return v;
-      return (...args: unknown[]) => {
-        let t: ReturnType<typeof setTimeout>;
-        const timeout = new Promise<never>((_, reject) => {
-          t = setTimeout(() => reject(new Error(`Base de données : « ${String(key)} » trop lent.`)), 12_000);
-        });
-        return Promise.race([v.apply(target, args), timeout]).finally(() => clearTimeout(t));
+      if (typeof v !== "function" || key === "close") return v;
+      return async (...args: unknown[]) => {
+        try {
+          return await race(v.apply(target, args), String(key));
+        } catch (e) {
+          if (!(e instanceof TimeoutError)) throw e;
+          drop(target);
+          if (!READS.has(String(key))) throw e;
+          const fresh = await getStore();
+          return race((fresh as unknown as Record<string, (...a: unknown[]) => Promise<unknown>>)[String(key)](...args), String(key));
+        }
       };
     },
   });
+}
+
+class TimeoutError extends Error {}
+
+function race<T>(p: Promise<T>, what: string): Promise<T> {
+  let t: ReturnType<typeof setTimeout>;
+  const timeout = new Promise<never>((_, reject) => {
+    t = setTimeout(() => reject(new TimeoutError(`Base de données : « ${what} » sans réponse.`)), 8_000);
+  });
+  return Promise.race([p, timeout]).finally(() => clearTimeout(t));
+}
+
+function drop(raw: Store) {
+  // tout de suite (pas après une promesse) : la relance doit obtenir un stockage neuf
+  g.__ocdStore = undefined;
+  raw.close().catch(() => {});
 }
 
 /**
