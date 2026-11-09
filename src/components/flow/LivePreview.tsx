@@ -78,7 +78,7 @@ export function PhonePreview({ d }: { d: PreviewData }) {
         <div className="absolute right-12 bottom-[31%] left-3 grid gap-1.5 text-[10.5px] leading-snug text-white">
           <p><b className="font-semibold text-white/70">kafui.tg</b> c&apos;est combien ?</p>
           <p><b className="font-semibold text-white/70">mamie_237</b> vous livrez à Douala ?</p>
-          <p><b className="font-semibold text-white/70">sena_b</b> je prends 2 🔥</p>
+          <p><b className="font-semibold text-white/70">sena_b</b> je prends 2 !</p>
         </div>
         <Heart className="absolute right-3 bottom-[33%] size-6 fill-live text-live" aria-hidden />
 

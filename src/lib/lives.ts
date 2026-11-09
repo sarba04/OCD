@@ -18,27 +18,24 @@ export const LIVE_PASS = {
   days: 30,
 };
 
-/** Les rayons du marché : une icône claire pour chacun, sans avoir besoin de lire. */
+/** Les rayons du marché : une couleur et une icône (voir CategoryIcon) pour chacun. */
 export const LIVE_CATEGORIES = [
-  { id: "food", label: "Nourriture", icon: "🍲", color: "#f6b73c" },
-  { id: "mode", label: "Habits", icon: "👗", color: "#f28c6b" },
-  { id: "wax", label: "Pagnes", icon: "🧵", color: "#e0582a" },
-  { id: "beaute", label: "Beauté", icon: "💄", color: "#ef7aa0" },
-  { id: "cheveux", label: "Cheveux", icon: "💇🏾‍♀️", color: "#b68cf0" },
-  { id: "tech", label: "Téléphones", icon: "📱", color: "#5aa9f0" },
-  { id: "maison", label: "Maison", icon: "🛋️", color: "#7cc79a" },
-  { id: "bijoux", label: "Bijoux", icon: "💍", color: "#f3d36b" },
-  { id: "local", label: "Produits locaux", icon: "🌿", color: "#8fc46a" },
-  { id: "services", label: "Services", icon: "🛠️", color: "#9aa7b4" },
+  { id: "food", label: "Nourriture", color: "#d98e2b" },
+  { id: "mode", label: "Habits", color: "#c8624a" },
+  { id: "wax", label: "Pagnes", color: "#b8452a" },
+  { id: "beaute", label: "Beauté", color: "#b8607e" },
+  { id: "cheveux", label: "Cheveux", color: "#7a5ea8" },
+  { id: "tech", label: "Téléphones", color: "#3f6f9e" },
+  { id: "maison", label: "Maison", color: "#4f8a6c" },
+  { id: "bijoux", label: "Bijoux", color: "#a8862e" },
+  { id: "local", label: "Produits locaux", color: "#6a8a3e" },
+  { id: "services", label: "Services", color: "#5f6b78" },
 ] as const;
 export type CategoryId = (typeof LIVE_CATEGORIES)[number]["id"];
 export const getCategory = (id: string) => LIVE_CATEGORIES.find((c) => c.id === id) ?? LIVE_CATEGORIES[0];
 
 /** Les pays de l'annuaire : l'Afrique d'abord. */
 export const LIVE_COUNTRIES = COUNTRIES;
-
-/** Drapeau en emoji à partir du code pays (CM → 🇨🇲). */
-export const flag = (code: string) => String.fromCodePoint(...[...code.toUpperCase()].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
 
 export type LiveStatus = "pending" | "approved" | "rejected";
 

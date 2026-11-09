@@ -1,8 +1,10 @@
 "use client";
-import { ArrowLeft, ArrowUpRight, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Clapperboard, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { getCountry } from "@/lib/countries";
-import { flag, getCategory } from "@/lib/lives";
+import { getCategory } from "@/lib/lives";
+import { Flag } from "@/components/ui/Flag";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 
 interface Short {
   id: string;
@@ -36,9 +38,9 @@ export function Shorts() {
         ))}
         <section className="grid h-dvh snap-start place-items-center px-6 text-center">
           <div>
-            <p className="text-[56px]" aria-hidden>
-              🎬
-            </p>
+            <span className="mx-auto grid size-16 place-items-center rounded-full bg-white/10" aria-hidden>
+              <Clapperboard className="size-8" strokeWidth={1.8} />
+            </span>
             <h2 className="display mt-3 text-[34px]">Ta vidéo ici.</h2>
             <p className="mx-auto mt-2 max-w-[30ch] text-[16px] text-white/70">Envoie ton live avec une vidéo courte de ton produit.</p>
             <a href="/en-live" className="mt-6 inline-flex h-14 items-center rounded-full bg-live px-7 text-[17px] font-bold">
@@ -120,15 +122,15 @@ function TikTokShort({ s }: { s: Short }) {
           className="h-full w-full max-w-[min(100vw,56.25dvh)] border-0"
         />
       ) : (
-        <span className="text-[64px]" aria-hidden>
-          {c.icon}
+        <span className="grid size-20 place-items-center rounded-full text-white" style={{ background: c.color }} aria-hidden>
+          <CategoryIcon id={c.id} className="size-10" />
         </span>
       )}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto flex max-w-[min(100vw,56.25dvh)] items-end justify-between gap-3 p-4">
         <p className="rounded-2xl bg-black/60 px-3 py-2 text-[14px] backdrop-blur">
           <b>{s.name}</b>
           <span className="block text-white/75">
-            {flag(s.country)} {getCountry(s.country)?.name} · {c.label}
+            <Flag code={s.country} className="mr-1 inline-block w-5 align-[-2px]" /> {getCountry(s.country)?.name} · {c.label}
           </span>
         </p>
         <a href={s.url} target="_blank" rel="noopener" className="pointer-events-auto inline-flex h-12 items-center gap-1.5 rounded-full bg-live px-4 text-[15px] font-bold">
