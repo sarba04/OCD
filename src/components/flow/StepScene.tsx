@@ -1,5 +1,5 @@
 "use client";
-import { ArrowRight, Clapperboard } from "lucide-react";
+import { ArrowRight, Clapperboard, Eye, Megaphone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { PACKS } from "@/lib/config";
@@ -82,8 +82,8 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
         <div role="tablist" aria-label="Que veux-tu faire ?" className="fade-up mt-7 grid grid-cols-2 gap-1.5 rounded-full bg-paper-2 p-1.5 sm:max-w-[560px]" style={{ ["--d" as string]: 380 }}>
           {(
             [
-              ["watch", "👀", "Je regarde"],
-              ["sell", "📣", "Je vends"],
+              ["watch", <Eye key="w" className="size-5" strokeWidth={2.2} />, "Je regarde"],
+              ["sell", <Megaphone key="s" className="size-5" strokeWidth={2.2} />, "Je vends"],
             ] as const
           ).map(([k, icon, label]) => (
             <button
@@ -97,9 +97,7 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
                 door === k ? "bg-ink text-paper shadow-[0_10px_24px_-12px_rgb(22_18_14/0.6)]" : "text-ink-2 hover:text-ink",
               )}
             >
-              <span aria-hidden className="text-[22px]">
-                {icon}
-              </span>
+              <span aria-hidden>{icon}</span>
               {label}
             </button>
           ))}
@@ -113,16 +111,14 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
           <div className="cascade-auto grid gap-3 lg:grid-cols-3">
             <SellTile
               href="/en-live"
-              icon="📲"
-              color="#ffd9d6"
+              photo={{ src: "/media/live-seller-480.webp", pos: "50% 78%" }}
               title="Je suis en live"
               text="Envoie ton lien. On te montre à toute l'Afrique."
               price={`${fcfa(LIVE_PASS.price)} / mois`}
             />
             <SellTile
               id="choix-studio"
-              icon="🎬"
-              color="#ffe2c4"
+              photo={{ src: "/media/studio-night-640.webp", pos: "50% 88%" }}
               title="Live au studio"
               text="À Lomé, avec la régie et la lumière."
               price={`dès ${fcfa(MIN_PRICE)}`}
@@ -130,8 +126,7 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
               onClick={() => onPick("studio")}
             />
             <SellTile
-              icon="🏠"
-              color="#dff1e5"
+              photo={{ src: "/media/animatrice-760.webp", pos: "62% 92%" }}
               title="Live depuis chez toi"
               text="Une animatrice OCD te prend en duplex."
               price={`dès ${fcfa(MIN_PRICE)}`}
@@ -168,8 +163,7 @@ export function StepScene({ selected, onPick }: { avail: Availability | null; se
 function SellTile({
   id,
   href,
-  icon,
-  color,
+  photo,
   title,
   text,
   price,
@@ -178,8 +172,7 @@ function SellTile({
 }: {
   id?: string;
   href?: string;
-  icon: string;
-  color: string;
+  photo: { src: string; pos: string };
   title: string;
   text: string;
   price: string;
@@ -188,15 +181,23 @@ function SellTile({
 }) {
   const body = (
     <>
-      <span className="grid size-16 shrink-0 place-items-center rounded-2xl text-[34px] lg:size-20 lg:text-[42px]" style={{ background: color }} aria-hidden>
-        {icon}
-      </span>
-      <span className="min-w-0 flex-1 lg:mt-6">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={photo.src}
+        alt=""
+        width={480}
+        height={480}
+        loading="lazy"
+        decoding="async"
+        style={{ objectPosition: photo.pos }}
+        className="size-20 shrink-0 rounded-2xl object-cover sm:size-24 lg:aspect-[4/3] lg:h-auto lg:w-full"
+      />
+      <span className="min-w-0 flex-1 lg:mt-5">
         <span className="block text-[20px] leading-tight font-bold tracking-[-0.015em] lg:text-[24px]">{title}</span>
         <span className="mt-1 block text-[14.5px] leading-snug text-ink-2">{text}</span>
         <span className="tabular mt-2 block text-[14px] font-bold text-orange-ink">{price}</span>
       </span>
-      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform duration-200 group-hover:translate-x-0.5 lg:mt-6 lg:self-end" aria-hidden>
+      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform duration-200 group-hover:translate-x-0.5 lg:mt-4 lg:self-end" aria-hidden>
         <ArrowRight className="size-5" strokeWidth={2.4} />
       </span>
     </>

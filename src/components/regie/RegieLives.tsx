@@ -2,7 +2,9 @@
 import { Check, ExternalLink, RotateCcw, Wallet, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { getCountry } from "@/lib/countries";
-import { LIVE_PASS, LIVE_SESSIONS, flag, getCategory, type LiveEntry } from "@/lib/lives";
+import { LIVE_PASS, LIVE_SESSIONS, getCategory, type LiveEntry } from "@/lib/lives";
+import { Flag } from "@/components/ui/Flag";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { fcfa } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
@@ -93,13 +95,13 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
             return (
               <li key={l.id} className="grid gap-3 bg-night-2 p-4 ring-1 ring-night-line sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-full text-[24px]" style={{ background: cat.color }} aria-hidden>
-                    {cat.icon}
+                  <span className="grid size-12 shrink-0 place-items-center rounded-full text-white" style={{ background: cat.color }} aria-hidden>
+                    <CategoryIcon id={cat.id} className="size-6" />
                   </span>
                   <div className="min-w-0">
                     <p className="truncate text-[16px] font-bold">{l.name}</p>
                     <p className="truncate text-[13.5px] text-night-ink-2">
-                      {flag(l.country)} {c?.name} · {cat.label} · {l.session === "matin" ? "session du matin" : "session du soir"}{l.day === today ? "" : ` du ${l.day}`}
+                      <Flag code={l.country} className="mr-1 inline-block w-5 align-[-2px]" /> {c?.name} · {cat.label} · {l.session === "matin" ? "session du matin" : "session du soir"}{l.day === today ? "" : ` du ${l.day}`}
                     </p>
                     <a href={`https://wa.me/${l.phone.replace(/\D/g, "")}`} target="_blank" rel="noopener" className="tabular mt-0.5 inline-block text-[13.5px] font-semibold text-night-orange">
                       WhatsApp {l.phone}

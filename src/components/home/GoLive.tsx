@@ -1,11 +1,13 @@
 "use client";
-import { ArrowLeft, Check, ClipboardPaste, Copy, LoaderCircle, MessageCircle, Share2, Smartphone } from "lucide-react";
+import { ArrowLeft, Check, ClipboardPaste, Clock, Copy, LoaderCircle, MessageCircle, Share2, Smartphone } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { BRAND } from "@/lib/config";
 import { COUNTRIES, getCountry, guessCountry } from "@/lib/countries";
 import { fcfa, prettyPhone, waLink } from "@/lib/format";
-import { LIVE_CATEGORIES, LIVE_PASS, LIVE_SESSIONS, flag, getCategory, isTikTokUrl } from "@/lib/lives";
+import { LIVE_CATEGORIES, LIVE_PASS, LIVE_SESSIONS, getCategory, isTikTokUrl } from "@/lib/lives";
+import { Flag } from "@/components/ui/Flag";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { cn } from "@/lib/cn";
 import { haptic, inputClass } from "@/components/ui/kit";
 import { untilLabel, useLives } from "./useLives";
@@ -132,9 +134,9 @@ export function GoLive() {
       <main className="mx-auto max-w-2xl px-4 pt-6 pb-28 sm:px-6 sm:pt-10">
         {!ready ? null : closed ? (
           <div className="animate-rise text-center">
-            <p className="text-[64px]" aria-hidden>
-              ⏰
-            </p>
+            <span className="mx-auto grid size-20 place-items-center rounded-full bg-paper-2 text-ink" aria-hidden>
+              <Clock className="size-10" strokeWidth={1.8} />
+            </span>
             <h1 ref={title} tabIndex={-1} className="display mt-3 text-[40px] outline-none sm:text-[52px]">
               Reviens à {data!.next.start.replace(":00", "h")}.
             </h1>
@@ -156,7 +158,7 @@ export function GoLive() {
               {done.again ? "Déjà envoyé." : "C'est envoyé !"}
             </h1>
             <p className="mt-3 text-[17px] leading-relaxed text-ink-2">
-              L&apos;équipe regarde ton live. Dès qu&apos;elle valide, tu apparais dans {flag(f.country)} {country?.name}, rayon {getCategory(f.category).label}.
+              L&apos;équipe regarde ton live. Dès qu&apos;elle valide, tu apparais dans <Flag code={f.country} className="mx-0.5 inline-block w-5 align-[-2px]" /> {country?.name}, rayon {getCategory(f.category).label}.
             </p>
             {!done.subscribed && (
               <div className="mt-7 rounded-3xl bg-orange-soft p-5">
@@ -198,9 +200,7 @@ export function GoLive() {
               {COUNTRIES.filter((c) => c.tz.startsWith("Africa")).map((c) => (
                 <li key={c.code}>
                   <Pick on={f.country === c.code} onClick={() => (set({ country: c.code }), go(1))}>
-                    <span className="text-[28px]" aria-hidden>
-                      {flag(c.code)}
-                    </span>
+                    <Flag code={c.code} className="w-9" />
                     <span className="min-w-0 truncate text-[16px] font-semibold">{c.name}</span>
                   </Pick>
                 </li>
@@ -212,9 +212,7 @@ export function GoLive() {
                 {COUNTRIES.filter((c) => !c.tz.startsWith("Africa")).map((c) => (
                   <li key={c.code}>
                     <Pick on={f.country === c.code} onClick={() => (set({ country: c.code }), go(1))}>
-                      <span className="text-[28px]" aria-hidden>
-                        {flag(c.code)}
-                      </span>
+                      <Flag code={c.code} className="w-9" />
                       <span className="min-w-0 truncate text-[16px] font-semibold">{c.name}</span>
                     </Pick>
                   </li>
@@ -231,8 +229,8 @@ export function GoLive() {
               {LIVE_CATEGORIES.map((c) => (
                 <li key={c.id}>
                   <Pick on={f.category === c.id} onClick={() => (set({ category: c.id }), go(2))} tall>
-                    <span className="grid size-16 place-items-center rounded-full text-[32px]" style={{ background: c.color }} aria-hidden>
-                      {c.icon}
+                    <span className="grid size-16 place-items-center rounded-full text-white" style={{ background: c.color }} aria-hidden>
+                      <CategoryIcon id={c.id} className="size-8" />
                     </span>
                     <span className="text-[16px] font-semibold">{c.label}</span>
                   </Pick>
@@ -247,10 +245,10 @@ export function GoLive() {
             </h1>
             <p className="mt-2 flex flex-wrap items-center gap-2 text-[15px] text-ink-2">
               <button onClick={() => go(0)} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-paper-2 px-3 font-semibold text-ink">
-                {flag(f.country)} {country?.name}
+                <Flag code={f.country} className="w-5" /> {country?.name}
               </button>
               <button onClick={() => go(1)} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-paper-2 px-3 font-semibold text-ink">
-                {getCategory(f.category).icon} {getCategory(f.category).label}
+                <CategoryIcon id={f.category} className="size-4" strokeWidth={2.2} /> {getCategory(f.category).label}
               </button>
             </p>
 

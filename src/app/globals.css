@@ -621,3 +621,11 @@ html:has(.sticky-preview) {
 .chip-row::-webkit-scrollbar { display: none; }
 .shorts { scrollbar-width: none; }
 .shorts::-webkit-scrollbar { display: none; }
+
+/* Couverture d'une carte vendeur : la couleur du rayon, une lumière en haut, une trame fine en diagonale. */
+.cover {
+  background:
+    radial-gradient(120% 70% at 85% 0%, rgb(255 255 255 / 0.22), transparent 60%),
+    repeating-linear-gradient(135deg, rgb(255 255 255 / 0.07) 0 1px, transparent 1px 9px),
+    linear-gradient(170deg, var(--c), color-mix(in srgb, var(--c) 72%, #000));
+}
