@@ -1,6 +1,6 @@
 import { NextResponse, after, type NextRequest } from "next/server";
 import { getCountry } from "@/lib/countries";
-import { LIVE_CATEGORIES, LIVE_SESSIONS, LIVE_TEST_MODE, isTikTokUrl, sessionState, type LiveEntry, type PublicLive } from "@/lib/lives";
+import { LIVE_CATEGORIES, LIVE_SESSIONS, LIVE_TEST_MODE, isTikTokUrl, resolveTikTokVideo, tiktokVideoId, sessionState, type LiveEntry, type PublicLive } from "@/lib/lives";
 import { notifyLive } from "@/lib/server/notify";
 import { getStore, isDemo } from "@/lib/server/store";
 import { validPhone } from "@/lib/validate";
@@ -72,6 +72,9 @@ export async function POST(req: NextRequest) {
   if (!validPhone(e.phone)) errors.phone = "Ton numéro WhatsApp semble incomplet.";
   if (Object.keys(errors).length) return NextResponse.json({ message: "À compléter.", errors }, { status: 400 });
 
+  // vidéo courte : on retrouve l'identifiant de la vidéo derrière un lien court
+  if (e.shortUrl) e.shortUrl = await resolveTikTokVideo(e.shortUrl);
+
   const store = await getStore();
   const already = (await store.listLives({ day: e.day })).find((l) => l.phone === e.phone && l.session === e.session && l.status !== "rejected");
   if (already) return NextResponse.json({ ok: true, status: already.status, subscribed: already.subscribed, again: true }, { status: 200 });
@@ -80,5 +83,8 @@ export async function POST(req: NextRequest) {
   e.subscribed = !!seller?.paidUntil && seller.paidUntil >= e.day;
   await store.createLive(e);
   after(() => notifyLive(e, req.nextUrl.origin));
-  return NextResponse.json({ ok: true, status: e.status, subscribed: e.subscribed, paidUntil: seller?.paidUntil ?? null }, { status: 201 });
+  return NextResponse.json(
+    { ok: true, status: e.status, subscribed: e.subscribed, paidUntil: seller?.paidUntil ?? null, short: e.shortUrl ? !!tiktokVideoId(e.shortUrl) : null },
+    { status: 201 },
+  );
 }

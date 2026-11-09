@@ -1,5 +1,5 @@
 "use client";
-import { Check, ExternalLink, RotateCcw, Wallet, X } from "lucide-react";
+import { Check, Clapperboard, ExternalLink, RotateCcw, Wallet, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { getCountry } from "@/lib/countries";
 import { LIVE_PASS, LIVE_SESSIONS, LIVE_TEST_MODE, getCategory, type LiveEntry } from "@/lib/lives";
@@ -118,6 +118,11 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
                   <a href={l.url} target="_blank" rel="noopener" className="inline-flex h-11 items-center gap-2 bg-night-3 px-4 text-[14px] font-semibold ring-1 ring-night-line hover:ring-night-orange">
                     <ExternalLink className="size-4" aria-hidden /> Ouvrir le live
                   </a>
+                  {l.shortUrl && (
+                    <a href={l.shortUrl} target="_blank" rel="noopener" className="inline-flex h-11 items-center gap-2 bg-night-3 px-4 text-[14px] font-semibold ring-1 ring-night-line hover:ring-night-orange">
+                      <Clapperboard className="size-4" aria-hidden /> Vidéo Shorts
+                    </a>
+                  )}
                   {!active && (
                     <button disabled={busy === l.id} onClick={() => pay(l)} className="inline-flex h-11 items-center gap-2 bg-night-3 px-4 text-[14px] font-semibold text-[#ffc65c] ring-1 ring-night-line hover:ring-[#ffc65c]">
                       <Wallet className="size-4" aria-hidden /> Payé (+{LIVE_PASS.days} j)

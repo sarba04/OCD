@@ -116,9 +116,9 @@ function TikTokShort({ s }: { s: Short }) {
     <section ref={ref} className="relative grid h-dvh snap-start place-items-center">
       {near ? (
         <iframe
-          src={`https://www.tiktok.com/embed/v2/${s.video}?lang=fr`}
+          src={`https://www.tiktok.com/player/v1/${s.video}?autoplay=1&loop=1&music_info=1&description=1&rel=0`}
           title={`Vidéo de ${s.name}`}
-          allow="encrypted-media; fullscreen; picture-in-picture"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
           className="h-full w-full max-w-[min(100vw,56.25dvh)] border-0"
         />
       ) : (

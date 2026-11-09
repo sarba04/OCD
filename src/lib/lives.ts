@@ -102,3 +102,24 @@ export const isTikTokUrl = (u: string) => {
 
 /** Identifiant d'une vidéo TikTok (…/video/7312345678901234567), pour l'intégrer dans les Shorts. */
 export const tiktokVideoId = (u: string) => /\/video\/(\d{8,25})/.exec(u)?.[1] ?? null;
+
+/**
+ * Les liens copiés depuis l'appli TikTok sont courts (vm.tiktok.com/…, tiktok.com/t/…) et ne contiennent pas
+ * l'identifiant de la vidéo : on suit la redirection côté serveur pour retrouver le lien complet.
+ */
+export async function resolveTikTokVideo(u: string): Promise<string> {
+  if (!u || tiktokVideoId(u)) return u;
+  try {
+    const r = await fetch(u, {
+      redirect: "follow",
+      headers: { "user-agent": "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Mobile Safari/537.36" },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (tiktokVideoId(r.url)) return r.url.split("?")[0];
+    const html = await r.text();
+    const id = /"(?:videoId|itemId)"\s*:\s*"(\d{8,25})"/.exec(html)?.[1] ?? /\/video\/(\d{8,25})/.exec(html)?.[1];
+    return id ? `https://www.tiktok.com/video/${id}` : u;
+  } catch {
+    return u;
+  }
+}
