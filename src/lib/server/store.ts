@@ -1,6 +1,7 @@
 import "server-only";
 import type { Interval } from "../schedule";
 import type { Booking, BookingStatus } from "../types";
+import type { LiveEntry, LiveStatus, Seller } from "../lives";
 
 export class ConflictError extends Error {
   constructor(message = "Ce créneau vient d'être réservé.") {
@@ -28,6 +29,13 @@ export interface Store {
   updateStatus(id: string, status: BookingStatus): Promise<Booking | null>;
   createApplication(a: Application): Promise<void>;
   listApplications(): Promise<Application[]>;
+  /* Annuaire des lives */
+  createLive(e: LiveEntry): Promise<void>;
+  listLives(opts?: { day?: string; status?: LiveStatus; since?: string }): Promise<LiveEntry[]>;
+  updateLive(id: string, status: LiveStatus): Promise<LiveEntry | null>;
+  getSeller(phone: string): Promise<Seller | null>;
+  /** Ajoute `days` jours d'abonnement (à partir d'aujourd'hui ou de la fin de l'abonnement en cours). */
+  extendSeller(phone: string, name: string, days: number): Promise<Seller>;
 }
 
 const g = globalThis as unknown as { __ocdStore?: Promise<Store> };

@@ -494,7 +494,7 @@ html:has(.sticky-preview) {
 }
 
 /* ───────────────────────────── Cinéma ───────────────────────────── */
-/* Le chargement : la bande LED fait le tour de l'Afrique, le mur s'éclaire, l'enseigne s'allume, on entre. */
+/* Le chargement : 3, 2, 1… EN DIRECT, puis l'écran s'ouvre depuis le point rouge. */
 .cine-intro { display: none; }
 .js:not([data-intro-seen]) .cine-intro {
   display: block;
@@ -502,38 +502,59 @@ html:has(.sticky-preview) {
   inset: 0;
   z-index: 90;
   pointer-events: none;
-  animation: cine-gone 0s linear 2.9s forwards;
+  animation: cine-gone 0s linear 2.25s forwards;
 }
-.studio-dark {
+.cd-stage {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  background: radial-gradient(80% 60% at 50% 50%, #1c140d, #070504 70%);
-  animation: studio-enter 520ms cubic-bezier(0.6, 0, 0.9, 0.4) 2.05s both;
+  background: var(--color-ink);
+  color: #fff;
+  clip-path: circle(150% at 50% 50%);
+  animation: cd-iris 560ms cubic-bezier(0.7, 0, 0.3, 1) 1.7s forwards;
 }
-.studio-plate { position: relative; width: min(64vw, 360px); }
-.led-strip {
-  stroke: #ffd59a;
-  stroke-width: 7;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  filter: drop-shadow(0 0 6px #ffb45c) drop-shadow(0 0 18px #ff8a1f);
-  animation: led-run 1.1s cubic-bezier(0.55, 0, 0.35, 1) 0.15s forwards, led-settle 500ms ease-out 1.25s forwards;
+.cd-n, .cd-live { grid-area: 1 / 1; }
+.cd-n {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: min(42vw, 220px);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  opacity: 0;
+  animation: cd-num 420ms var(--ease-out) both;
 }
-.led-bloom { opacity: 0; animation: fade 700ms var(--ease-out) 1.05s forwards; }
-.led-plate { opacity: 0; animation: plate-on 700ms var(--ease-out) 1.1s forwards; }
-.led-sign { opacity: 0; animation: lights-on 900ms linear 1.35s forwards; }
-@keyframes led-run { to { stroke-dashoffset: 0; } }
-@keyframes led-settle { to { stroke-width: 3; opacity: 0.6; } }
-@keyframes plate-on { from { opacity: 0; } to { opacity: 0.97; } }
-/* on avance dans le studio : le mur grandit et la nuit s'efface sur l'accueil */
-@keyframes studio-enter {
-  0% { opacity: 1; transform: scale(1); filter: blur(0); }
-  45% { opacity: 1; }
-  100% { opacity: 0; transform: scale(3.4); filter: blur(14px); }
+.cd-3 { animation-delay: 0.05s; }
+.cd-2 { animation-delay: 0.42s; color: var(--color-glow); }
+.cd-1 { animation-delay: 0.79s; color: var(--color-orange); }
+.cd-live {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  opacity: 0;
+  animation: cd-live 500ms var(--ease-spring) 1.16s both;
 }
+.cd-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: var(--color-live);
+  padding: 9px 18px;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+}
+.cd-dot { width: 10px; height: 10px; border-radius: 99px; background: #fff; animation: tally-blink 0.6s steps(1) infinite; }
+@keyframes cd-num {
+  0% { opacity: 0; transform: scale(1.6); }
+  25% { opacity: 1; transform: scale(1); }
+  75% { opacity: 1; transform: scale(0.94); }
+  100% { opacity: 0; transform: scale(0.7); }
+}
+@keyframes cd-live { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
+@keyframes cd-iris { to { clip-path: circle(0% at 50% 50%); } }
+@keyframes tally-blink { 50% { opacity: 0.25; } }
 @keyframes cine-gone { to { visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) {
   .js:not([data-intro-seen]) .cine-intro { display: none; }
@@ -541,7 +562,7 @@ html:has(.sticky-preview) {
 
 /* Pendant le chargement, la chorégraphie de l'accueil attend que le rideau se lève. */
 :root { --intro: 0ms; }
-.js:not([data-intro-seen]) { --intro: 2300ms; }
+.js:not([data-intro-seen]) { --intro: 1900ms; }
 @media (prefers-reduced-motion: reduce) { .js:not([data-intro-seen]) { --intro: 0ms; } }
 
 /* Grain de pellicule, qui bouge à 12 images/s. */
@@ -594,3 +615,9 @@ html:has(.sticky-preview) {
 /* Les barres du temps d'antenne se remplissent l'une après l'autre. */
 .air-seg { transform-origin: left; animation: air-seg 700ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 110ms + 300ms); }
 @keyframes air-seg { from { transform: scaleX(0); } }
+
+/* Rangées de puces qui défilent au doigt, sans barre visible. */
+.chip-row { scrollbar-width: none; }
+.chip-row::-webkit-scrollbar { display: none; }
+.shorts { scrollbar-width: none; }
+.shorts::-webkit-scrollbar { display: none; }

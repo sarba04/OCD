@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
-    "geo": "node scripts/build-africa.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",

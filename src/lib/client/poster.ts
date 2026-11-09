@@ -1,6 +1,5 @@
 import { BRAND } from "../config";
 import { getCountry } from "../countries";
-import { AFRICA_PATH, AFRICA_VIEWBOX } from "../geo/africa";
 import { formatDay, formatTime } from "../schedule";
 import type { PublicBooking } from "../types";
 
@@ -90,20 +89,15 @@ export async function drawPoster(b: PublicBooking, photo: string | null): Promis
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
 
-  /* le mur du studio : la carte d'Afrique rétroéclairée */
-  const mapW = 860;
-  const s = mapW / AFRICA_VIEWBOX.width;
-  const mx = (W - mapW) / 2;
-  const my = 200;
-  const africa = new Path2D(AFRICA_PATH);
+  /* le projecteur : un grand disque de lumière derrière le logo */
   ctx.save();
-  ctx.translate(mx, my);
-  ctx.scale(s, s);
   ctx.shadowColor = C.glow;
-  for (const blur of [140, 70, 24]) {
-    ctx.shadowBlur = blur * s * 1.6;
+  for (const blur of [160, 80, 26]) {
+    ctx.shadowBlur = blur;
     ctx.fillStyle = "#FFFDF8";
-    ctx.fill(africa);
+    ctx.beginPath();
+    ctx.arc(W / 2, 620, 380, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.restore();
 

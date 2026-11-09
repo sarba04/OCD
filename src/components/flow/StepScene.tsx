@@ -1,226 +1,230 @@
 "use client";
-import { ChevronRight } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, Clapperboard } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
-import { StudioWall } from "@/components/brand/StudioWall";
-import { BRAND, PACKS } from "@/lib/config";
+import { PACKS } from "@/lib/config";
 import { fcfa } from "@/lib/format";
-import { freeSlotCount } from "@/lib/schedule";
+import { LIVE_PASS } from "@/lib/lives";
 import type { Mode } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { haptic } from "@/components/ui/kit";
 import type { Availability } from "./BookingApp";
-import { Statement } from "@/components/story/Statement";
-import { ScrollStory } from "@/components/story/ScrollStory";
-import { Finale } from "@/components/story/Finale";
-import { FilmSection } from "@/components/story/FilmSection";
 import { CinemaIntro } from "@/components/story/CinemaIntro";
-import { LiveChat } from "@/components/story/LiveChat";
-import { Bento } from "@/components/story/Bento";
-import { SellAnything } from "./SellAnything";
+import { Directory } from "@/components/home/Directory";
+import { untilLabel, useLives } from "@/components/home/useLives";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
+type Door = "watch" | "sell";
 
-export function StepScene({
-  avail,
-  selected,
-  onPick,
-}: {
-  avail: Availability | null;
-  selected: Mode | null;
-  onPick: (m: Mode) => void;
-}) {
-  const [hover, setHover] = useState<Mode | null>(null);
-  const free = useMemo(() => (avail ? freeSlotCount(avail.busy, new Date(avail.now)) : null), [avail]);
-  const wallRef = useRef<HTMLElement>(null);
+/**
+ * L'accueil : deux portes. « Je regarde » : les vendeurs en live, par pays et par rayon.
+ * « Je vends » : trois façons de passer en live avec OCD. Peu de texte, de grandes actions.
+ */
+export function StepScene({ selected, onPick }: { avail: Availability | null; selected: Mode | null; onPick: (m: Mode) => void }) {
+  const { data, error, reload } = useLives();
+  const [door, setDoor] = useState<Door>("watch");
 
-  /* Ordinateur : la lumière du studio suit la souris sur le mur, comme un projecteur qu'on oriente. */
+  // la porte choisie est gardée si on recharge ou si on revient en arrière
   useEffect(() => {
-    const el = wallRef.current;
-    if (!el || !window.matchMedia("(pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const move = (e: PointerEvent) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const r = el.getBoundingClientRect();
-        el.style.setProperty("--lx", `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
-        el.style.setProperty("--ly", `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
-      });
-    };
-    el.addEventListener("pointermove", move, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      el.removeEventListener("pointermove", move);
-    };
+    try {
+      const d = sessionStorage.getItem("ocd-door") as Door | null;
+      if (d === "sell" || location.hash === "#vendre") setDoor("sell");
+    } catch {}
   }, []);
+  const open = (d: Door) => {
+    haptic();
+    setDoor(d);
+    try {
+      sessionStorage.setItem("ocd-door", d);
+    } catch {}
+  };
 
   return (
-    <div className="relative overflow-x-clip">
+    <div className="relative min-h-dvh overflow-x-clip">
       <CinemaIntro />
-      {/* ───── Le plateau : on entre dans le studio ───── */}
-      <section ref={wallRef} className="wall spot relative">
-        <header role="banner" className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 sm:pt-7">
-          <Logo size={26} className="[view-transition-name:ocd-logo]" />
-          <a href="#comment" className="inline-flex h-11 items-center text-[14px] font-semibold text-ink-2 underline decoration-ink/20 underline-offset-[6px] hover:decoration-orange">
-            Comment ça marche
-          </a>
-        </header>
 
-        <main className="relative z-10 mx-auto grid max-w-6xl px-5 pb-10 sm:px-8 lg:min-h-[calc(min(100dvh,940px)-92px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:items-center lg:gap-6 lg:pb-14">
-          {/* Le mur rétroéclairé, avec l'enseigne */}
-          <div className="relative mx-auto mt-1 flex h-[clamp(150px,30vh,300px)] justify-center sm:h-[340px] lg:order-2 lg:mt-0 lg:h-auto lg:w-full lg:max-w-[620px]">
-            <StudioWall tilt onAir intensity={hover || selected ? 1.7 : 1} className="h-full lg:h-auto lg:w-full" />
+      <header role="banner" className="mx-auto flex max-w-6xl items-center justify-between px-4 pt-4 sm:px-8 sm:pt-6">
+        <Logo size={26} className="[view-transition-name:ocd-logo]" />
+        <a href="/shorts" className="inline-flex h-11 items-center gap-2 rounded-full bg-ink px-4 text-[14.5px] font-bold text-paper">
+          <Clapperboard className="size-4" aria-hidden /> Shorts
+        </a>
+      </header>
+
+      <main className="mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-8 sm:pt-10">
+        {/* l'état de l'antenne : la première info, toujours visible */}
+        <p className="fade-up flex flex-wrap items-center gap-2 text-[14.5px] font-semibold" style={{ ["--d" as string]: 60 }} aria-live="polite">
+          {data?.session ? (
+            <span className="inline-flex items-center gap-2 rounded-full bg-live px-3.5 py-2 text-white">
+              <span className="size-2 rounded-full bg-white motion-safe:animate-pulse" aria-hidden />
+              En direct · {data.lives.length} vendeur{data.lives.length > 1 ? "s" : ""} · jusqu&apos;à {data.session.end.replace(":00", "h")}
+            </span>
+          ) : data ? (
+            <span className="inline-flex items-center gap-2 rounded-full bg-card px-3.5 py-2 ring-1 ring-line">
+              <span className="size-2 rounded-full bg-ink-3" aria-hidden />
+              Prochaine session {data.next.start.replace(":00", "h")}–{data.next.end.replace(":00", "h")}, {untilLabel(data.next.at, new Date(data.now).getTime())}
+            </span>
+          ) : (
+            <span className="h-9 w-64 animate-pulse rounded-full bg-paper-2" />
+          )}
+          {data?.demo && <span className="text-[12.5px] font-medium text-ink-3">démo</span>}
+        </p>
+
+        <h1 className="display mt-5 text-[clamp(40px,11vw,96px)]">
+          <span className="reveal-line">
+            <span style={{ ["--d" as string]: 140 }}>Le marché,</span>
+          </span>
+          <span className="reveal-line">
+            <span style={{ ["--d" as string]: 240 }}>en live.</span>
+          </span>
+        </h1>
+
+        {/* les deux portes */}
+        <div role="tablist" aria-label="Que veux-tu faire ?" className="fade-up mt-7 grid grid-cols-2 gap-1.5 rounded-full bg-paper-2 p-1.5 sm:max-w-[560px]" style={{ ["--d" as string]: 380 }}>
+          {(
+            [
+              ["watch", "👀", "Je regarde"],
+              ["sell", "📣", "Je vends"],
+            ] as const
+          ).map(([k, icon, label]) => (
+            <button
+              key={k}
+              role="tab"
+              aria-selected={door === k}
+              aria-controls={`porte-${k}`}
+              onClick={() => open(k)}
+              className={cn(
+                "inline-flex h-14 items-center justify-center gap-2 rounded-full text-[17px] font-bold transition-[background-color,color,box-shadow] duration-200 sm:h-16 sm:text-[19px]",
+                door === k ? "bg-ink text-paper shadow-[0_10px_24px_-12px_rgb(22_18_14/0.6)]" : "text-ink-2 hover:text-ink",
+              )}
+            >
+              <span aria-hidden className="text-[22px]">
+                {icon}
+              </span>
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <section id="porte-watch" role="tabpanel" aria-label="Les vendeurs en live" hidden={door !== "watch"} className="mt-8">
+          <Directory data={data} error={error} onRetry={reload} onSell={() => open("sell")} />
+        </section>
+
+        <section id="porte-sell" role="tabpanel" aria-label="Passer en live avec OCD" hidden={door !== "sell"} className="mt-8">
+          <div className="cascade-auto grid gap-3 lg:grid-cols-3">
+            <SellTile
+              href="/en-live"
+              icon="📲"
+              color="#ffd9d6"
+              title="Je suis en live"
+              text="Envoie ton lien. On te montre à toute l'Afrique."
+              price={`${fcfa(LIVE_PASS.price)} / mois`}
+            />
+            <SellTile
+              id="choix-studio"
+              icon="🎬"
+              color="#ffe2c4"
+              title="Live au studio"
+              text="À Lomé, avec la régie et la lumière."
+              price={`dès ${fcfa(MIN_PRICE)}`}
+              selected={selected === "studio"}
+              onClick={() => onPick("studio")}
+            />
+            <SellTile
+              icon="🏠"
+              color="#dff1e5"
+              title="Live depuis chez toi"
+              text="Une animatrice OCD te prend en duplex."
+              price={`dès ${fcfa(MIN_PRICE)}`}
+              selected={selected === "remote"}
+              onClick={() => onPick("remote")}
+            />
           </div>
+        </section>
+      </main>
 
-          {/* Le message et les deux choix */}
-          <div className="relative z-10 pt-4 sm:pt-8 lg:order-1 lg:py-10">
-            <p style={{ ["--d" as string]: 120 }} className="fade-up inline-flex items-center gap-2.5 rounded-full bg-white/70 py-1.5 pr-3.5 pl-3 text-[14px] font-semibold text-ink shadow-[0_1px_0_rgb(0_0_0/0.04)] ring-1 ring-black/5 backdrop-blur-sm">
-              <span className="live-dot" aria-hidden />
-              Ouverture des lives le 1er décembre
-            </p>
-            <h1 className="display mt-3.5 text-[clamp(36px,10.5vw,54px)] sm:text-[68px] lg:mr-[-14%] lg:text-[clamp(56px,5.3vw,78px)]">
-              <span className="reveal-line">
-                <span style={{ ["--d" as string]: 220 }}>Passe en live.</span>
-              </span>
-              <span className="reveal-line">
-                <span style={{ ["--d" as string]: 330 }} className="whitespace-nowrap">
-                  Place ton produit.
-                </span>
-              </span>
-            </h1>
-            <p style={{ ["--d" as string]: 480 }} className="fade-up mt-4 max-w-[38ch] text-[16px] leading-relaxed text-ink-2 sm:mt-6 sm:text-[18px] [@media(max-height:700px)_and_(max-width:639px)]:hidden">
-              Le marketing avant la vente&nbsp;: un créneau, une régie, et toute l&apos;audience de {BRAND.liveAccount} devant ton business.
-            </p>
-
-            <h2 style={{ ["--d" as string]: 560 }} className="fade-up mt-6 text-[17px] font-bold tracking-[-0.01em] sm:mt-9 sm:text-[19px]">Où veux-tu faire ton live&nbsp;?</h2>
-            <div className="hero-cards mt-3 grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-1">
-              <SceneCard
-                id="choix-studio"
-                photo={{ src: "/media/live-seller-480.webp", pos: "50% 22%", alt: "" }}
-                title="Au studio, à Lomé"
-                text="Tu viens avec tes produits, la régie fait le reste."
-                selected={selected === "studio"}
-                onHover={(h) => setHover(h ? "studio" : null)}
-                onClick={() => {
-                  haptic();
-                  onPick("studio");
-                }}
-              />
-              <SceneCard
-                photo={{ src: "/media/animatrice-760.webp", pos: "34% 30%", alt: "" }}
-                title="À distance"
-                text="Depuis ta boutique, avec une animatrice OCD en direct."
-                selected={selected === "remote"}
-                onHover={(h) => setHover(h ? "remote" : null)}
-                onClick={() => {
-                  haptic();
-                  onPick("remote");
-                }}
-              />
-            </div>
-
-            <p style={{ ["--d" as string]: 860 }} className="fade-up mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-ink-2">
-              <span className="tabular inline-flex min-w-[17ch] items-center gap-2">
-                <span className="size-2 rounded-full bg-ok" aria-hidden />
-                {free === null ? <span className="inline-block h-3.5 w-28 animate-pulse rounded bg-black/10" /> : <>{free} créneaux libres en décembre</>}
-              </span>
-              <span>Lives de 1h30 dès {fcfa(MIN_PRICE)}</span>
-            </p>
-          </div>
-        </main>
-      </section>
-
-      <Statement />
-      <SellAnything />
-      <LiveChat />
-      <Bento />
-      <div id="comment">
-        <ScrollStory />
-      </div>
-      <FilmSection />
-      <Finale />
-      <Footer />
+      <footer className="border-t border-line">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-[14px] text-ink-2 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <span className="inline-flex items-center gap-3">
+            <Logo size={18} />
+            <span>Les opportunités, c&apos;est dehors.</span>
+          </span>
+          <nav aria-label="Liens secondaires" className="flex flex-wrap gap-x-6 gap-y-2">
+            <a href="/shorts" className="font-semibold text-ink">
+              Shorts OCD
+            </a>
+            <a href="/animatrice" className="font-semibold text-ink">
+              Deviens animatrice
+            </a>
+            <a href="/regie" className="hover:text-ink">
+              Régie
+            </a>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }
 
-function SceneCard({
+function SellTile({
   id,
-  photo,
+  href,
+  icon,
+  color,
   title,
   text,
+  price,
   selected,
   onClick,
-  onHover,
 }: {
   id?: string;
-  photo: { src: string; pos: string; alt: string };
+  href?: string;
+  icon: string;
+  color: string;
   title: string;
   text: string;
-  selected: boolean;
-  onClick: () => void;
-  onHover: (h: boolean) => void;
+  price: string;
+  selected?: boolean;
+  onClick?: () => void;
 }) {
-  return (
-    <div className={cn("transition-[filter] duration-300", selected ? "glow" : "drop-shadow-[0_10px_18px_rgb(60_35_10/0.08)]")}>
-      <button
-        id={id}
-        type="button"
-        onClick={(e) => {
-          // la carte choisie se transforme en « talon de billet » en bas de l'écran
-          e.currentTarget.style.setProperty("view-transition-name", "dock");
-          onClick();
-        }}
-        onMouseEnter={() => onHover(true)}
-        onMouseLeave={() => onHover(false)}
-        onFocus={() => onHover(true)}
-        onBlur={() => onHover(false)}
-        className={cn(
-          "edge chamfer group flex w-full items-center gap-3.5 px-4 py-3.5 text-left transition-transform duration-200 ease-out active:scale-[0.985] sm:p-5",
-          selected ? "[--edge-w:2px] [--edge:var(--color-orange)] [--surface:#fff7f0]" : "[--edge:rgb(0_0_0/0.07)] [--surface:var(--color-card)] hover:[--edge:var(--color-ink)]",
-        )}
-      >
-        {/* une fenêtre sur la scène : la photo s'éclaire au survol */}
-        <span className="chamfer-sm relative size-[68px] shrink-0 overflow-hidden bg-paper-2 sm:size-[76px]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={photo.src}
-            alt={photo.alt}
-            width={152}
-            height={152}
-            decoding="async"
-            style={{ objectPosition: photo.pos }}
-            className="h-full w-full scale-[1.02] object-cover saturate-[0.9] transition-[transform,filter] duration-500 ease-out group-hover:scale-110 group-hover:saturate-[1.1]"
-          />
-          <span aria-hidden className={cn("absolute inset-0 ring-2 ring-orange ring-inset transition-opacity duration-200", selected ? "opacity-100" : "opacity-0")} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-[19px] leading-tight font-bold tracking-[-0.01em] text-ink sm:text-[20px]">{title}</span>
-          <span className="mt-1 block text-[14.5px] leading-snug text-ink-2">{text}</span>
-        </span>
-        <ChevronRight className="size-6 shrink-0 text-ink-3 transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:text-ink" strokeWidth={2.2} aria-hidden />
-      </button>
-    </div>
+  const body = (
+    <>
+      <span className="grid size-16 shrink-0 place-items-center rounded-2xl text-[34px] lg:size-20 lg:text-[42px]" style={{ background: color }} aria-hidden>
+        {icon}
+      </span>
+      <span className="min-w-0 flex-1 lg:mt-6">
+        <span className="block text-[20px] leading-tight font-bold tracking-[-0.015em] lg:text-[24px]">{title}</span>
+        <span className="mt-1 block text-[14.5px] leading-snug text-ink-2">{text}</span>
+        <span className="tabular mt-2 block text-[14px] font-bold text-orange-ink">{price}</span>
+      </span>
+      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform duration-200 group-hover:translate-x-0.5 lg:mt-6 lg:self-end" aria-hidden>
+        <ArrowRight className="size-5" strokeWidth={2.4} />
+      </span>
+    </>
   );
-}
-
-function Footer() {
+  const cls = cn(
+    "group flex w-full items-center gap-4 rounded-3xl bg-card p-4 text-left ring-1 transition-[box-shadow,transform] duration-200 active:scale-[0.99] sm:p-5 lg:h-full lg:flex-col lg:items-start lg:p-7",
+    selected ? "ring-2 ring-orange" : "ring-line hover:ring-ink/30 hover:shadow-[0_18px_36px_-22px_rgb(22_18_14/0.4)]",
+  );
   return (
-    <footer className="border-t border-night-line bg-night text-night-ink-2">
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-10 text-[14px] sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <span className="inline-flex items-center gap-3">
-          <Logo tone="white" size={20} />
-          <span>Lomé, Togo</span>
-        </span>
-        <nav aria-label="Liens secondaires" className="flex flex-wrap gap-x-6 gap-y-2">
-          <a href="/animatrice" className="font-semibold text-night-ink underline decoration-night-orange decoration-2 underline-offset-4">
-            Tu sais vendre ? Deviens animatrice
-          </a>
-          <a href="/regie" className="hover:text-night-ink">
-            Régie
-          </a>
-        </nav>
-      </div>
-    </footer>
+    <div>
+      {href ? (
+        <a href={href} className={cls}>
+          {body}
+        </a>
+      ) : (
+        <button
+          id={id}
+          type="button"
+          className={cls}
+          onClick={(e) => {
+            haptic();
+            e.currentTarget.style.setProperty("view-transition-name", "dock");
+            onClick?.();
+          }}
+        >
+          {body}
+        </button>
+      )}
+    </div>
   );
 }
