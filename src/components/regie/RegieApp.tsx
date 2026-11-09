@@ -55,9 +55,12 @@ export function RegieApp() {
   const known = useRef<Set<string> | null>(null);
 
   const load = useCallback(async () => {
-    const r = await fetch("/api/regie/bookings", { cache: "no-store" }).catch(() => null);
-    if (!r) return;
-    if (r.status === 401) return location.reload();
+    const r = await fetch("/api/regie/bookings", { cache: "no-store", signal: AbortSignal.timeout(15000) }).catch(() => null);
+    if (r?.status === 401) return location.reload();
+    if (!r || !r.ok) {
+      setToast("La base de données ne répond pas. Nouvel essai dans 20 secondes.");
+      return;
+    }
     const j = await r.json();
     const list: Row[] = j.bookings;
     if (known.current) {

@@ -14,10 +14,15 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
   const [sellers, setSellers] = useState<Record<string, string | null>>({});
   const [filter, setFilter] = useState<"pending" | "approved" | "all">("pending");
   const [busy, setBusy] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
 
   const load = useCallback(async () => {
-    const r = await fetch("/api/regie/lives", { cache: "no-store" });
-    if (!r.ok) return;
+    const r = await fetch("/api/regie/lives", { cache: "no-store", signal: AbortSignal.timeout(15000) }).catch(() => null);
+    if (!r || !r.ok) {
+      setFailed(true);
+      return;
+    }
+    setFailed(false);
     const j = await r.json();
     setLives(j.lives);
     setSellers(j.sellers);
@@ -77,6 +82,14 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
         </span>
       </div>
 
+      {failed && (
+        <div role="alert" className="mt-5 flex items-center justify-between gap-4 bg-[#3a1210] px-4 py-3 text-[14.5px] text-[#ffb4a8] ring-1 ring-[#6e211c]">
+          La base de données ne répond pas. Réessaie dans un instant.
+          <button onClick={load} className="inline-flex h-10 items-center gap-1.5 font-semibold text-night-ink">
+            <RotateCcw className="size-4" aria-hidden /> Réessayer
+          </button>
+        </div>
+      )}
       {!lives ? (
         <div className="mt-5 grid gap-2">
           {Array.from({ length: 4 }, (_, i) => (

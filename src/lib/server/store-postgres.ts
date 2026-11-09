@@ -114,10 +114,26 @@ export async function createPostgresStore(url: string): Promise<Store> {
     prepare: false, // compatible avec les poolers (Supabase port 6543, PgBouncer)
     max: 3,
     idle_timeout: 20,
+    connect_timeout: 10,
     ssl: local ? false : "require",
     onnotice: () => {},
   });
-  await sql.unsafe(SCHEMA);
+
+  /*
+   * Création des tables : seulement si l'une d'elles manque (pas de verrou pris à chaque démarrage),
+   * et jamais plus de quelques secondes d'attente sur un verrou : sinon on échoue proprement et on réessaie
+   * à la requête suivante, au lieu de bloquer tout le site.
+   */
+  const [{ ok }] = await sql<{ ok: boolean }[]>`
+    select (to_regclass('public.ocd_bookings') is not null and to_regclass('public.ocd_slots') is not null
+      and to_regclass('public.ocd_applications') is not null and to_regclass('public.ocd_lives') is not null
+      and to_regclass('public.ocd_live_sellers') is not null) as ok`;
+  if (!ok) {
+    await sql.begin(async (tx) => {
+      await tx.unsafe("set local lock_timeout = '5s'; set local statement_timeout = '30s'");
+      await tx.unsafe(SCHEMA);
+    });
+  }
 
   const COLS = sql`id, ref, created_at, status, mode, country, timezone, pack_id, pack_name, price, sessions, business, contact, payment_method`;
 
