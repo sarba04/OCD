@@ -40,11 +40,22 @@ export interface Store {
 
 const g = globalThis as unknown as { __ocdStore?: Promise<Store> };
 
+/**
+ * Le stockage, créé une fois par instance. S'il échoue ou met plus de 20 s à démarrer (base injoignable,
+ * verrou), on oublie la tentative : la requête suivante réessaie au lieu de rester bloquée pour toujours.
+ */
 export function getStore(): Promise<Store> {
   if (!g.__ocdStore) {
-    g.__ocdStore = process.env.DATABASE_URL
+    const start = process.env.DATABASE_URL
       ? import("./store-postgres").then((m) => m.createPostgresStore(process.env.DATABASE_URL!))
       : import("./store-memory").then((m) => m.createMemoryStore());
+    const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Base de données trop lente à répondre.")), 20_000));
+    const p = Promise.race([start, timeout]);
+    g.__ocdStore = p;
+    p.catch((e) => {
+      console.error("[OCD Live] stockage", e);
+      if (g.__ocdStore === p) g.__ocdStore = undefined;
+    });
   }
   return g.__ocdStore;
 }

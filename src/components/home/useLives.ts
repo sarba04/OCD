@@ -17,7 +17,7 @@ export function useLives() {
   const [error, setError] = useState(false);
   const load = useCallback(async () => {
     try {
-      const r = await fetch("/api/lives", { cache: "no-store" });
+      const r = await fetch("/api/lives", { cache: "no-store", signal: AbortSignal.timeout(15000) });
       if (!r.ok) throw new Error();
       setData(await r.json());
       setError(false);

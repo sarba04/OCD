@@ -19,7 +19,7 @@ interface Short {
 export function Shorts() {
   const [shorts, setShorts] = useState<Short[] | null>(null);
   useEffect(() => {
-    fetch("/api/shorts", { cache: "no-store" })
+    fetch("/api/shorts", { cache: "no-store", signal: AbortSignal.timeout(15000) })
       .then((r) => r.json())
       .then((j) => setShorts(j.shorts))
       .catch(() => setShorts([]));

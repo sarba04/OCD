@@ -89,7 +89,7 @@ export function BookingApp() {
   /* Disponibilités (heures occupées seulement) + heure du serveur, pour ne pas dépendre de l'horloge du téléphone. */
   const refresh = useCallback(async () => {
     try {
-      const r = await fetch("/api/availability", { cache: "no-store" });
+      const r = await fetch("/api/availability", { cache: "no-store", signal: AbortSignal.timeout(15000) });
       if (!r.ok) throw new Error();
       setAvail(await r.json());
       setAvailError(false);
