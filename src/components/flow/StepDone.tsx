@@ -50,10 +50,10 @@ export function StepDone({
     titleRef.current?.focus({ preventScroll: true });
   }, [titleRef]);
 
-  const posterName = `live-ocd-${b.ref}.png`;
+  const posterName = `live-ocd-${b.ref}.jpg`;
   async function sharePoster() {
     if (!poster) return;
-    const file = new File([poster.blob], posterName, { type: "image/png" });
+    const file = new File([poster.blob], posterName, { type: "image/jpeg" });
     const text = `Je passe en live sur ${BRAND.liveAccount} le ${formatDay(first.start.slice(0, 10))} ! Viens découvrir ${b.business.name}.`;
     try {
       if (navigator.canShare?.({ files: [file] })) {
