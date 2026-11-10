@@ -94,7 +94,7 @@ function pill(ctx: CanvasRenderingContext2D, x: number, y: number, text: string,
 }
 
 export async function drawPoster(b: PublicBooking, photo: string | null): Promise<Blob> {
-  const family = getComputedStyle(document.documentElement).getPropertyValue("--font-bricolage").trim() || "system-ui, sans-serif";
+  const family = getComputedStyle(document.documentElement).getPropertyValue("--font-archivo").trim() || "system-ui, sans-serif";
   const F = (w: number, s: number) => `${w} ${s}px ${family}`;
   await Promise.all([document.fonts.load(F(800, 100)), document.fonts.load(F(600, 40))]).catch(() => {});
 

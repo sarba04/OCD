@@ -18,13 +18,13 @@ export function PrimaryButton({
       disabled={props.disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        "btn-sheen group relative inline-flex h-14 min-w-0 select-none items-center justify-center gap-2.5 px-6 text-[17px] font-bold text-ink transition-transform duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:text-ink-3 disabled:active:scale-100",
+        "btn-sheen group relative inline-flex h-14 min-w-0 select-none items-center justify-center gap-2.5 px-6 text-[17px] font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:text-ink-3 disabled:active:scale-100",
         className,
       )}
     >
       <span
         aria-hidden
-        className="chamfer-sm absolute inset-0 bg-orange transition-colors duration-200 group-hover:bg-[#ff7714] group-disabled:bg-line"
+        className="chamfer-sm absolute inset-0 bg-coal transition-colors duration-200 group-hover:bg-[#2b2b2b] group-disabled:bg-line"
       />
       <span className="relative truncate">{children}</span>
       {loading ? (
