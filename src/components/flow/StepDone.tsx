@@ -134,7 +134,7 @@ export function StepDone({
         {/* 1. Le paiement et le reçu à garder */}
         <section className="border-t-2 border-ink pt-5">
           <div className="flex items-center gap-3">
-            {pay && <img src={`/pay/${pay.id}.svg`} alt="" width={96} height={64} className="h-10 w-auto rounded-md ring-1 ring-line" />}
+            {pay && <img src={`/pay/${pay.id}.webp`} alt="" width={96} height={64} className="h-10 w-auto rounded-md ring-1 ring-line" />}
             <div className="min-w-0">
               <h2 className="text-[22px] font-bold tracking-[-0.015em]">{pay ? "Paiement confirmé" : "Paiement à faire"}</h2>
               <p className="tabular text-[14.5px] text-ink-2">

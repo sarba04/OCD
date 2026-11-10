@@ -113,7 +113,7 @@ export function StepReview({
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/pay/${m.id}.svg`} alt="" width={96} height={64} className="h-10 w-auto rounded-md ring-1 ring-black/5" />
+                <img src={`/pay/${m.id}.webp`} alt="" width={96} height={64} className="h-10 w-auto rounded-md ring-1 ring-black/5" />
                 <span className="flex w-full items-end justify-between gap-2">
                   <span>
                     <span className="block text-[15.5px] leading-tight font-bold">{m.label}</span>

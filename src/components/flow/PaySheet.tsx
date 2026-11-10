@@ -74,7 +74,7 @@ export function PaySheet({
         {phase === "form" && (
           <>
             <div className="flex items-center gap-3">
-              <img src={`/pay/${m.id}.svg`} alt="" width={96} height={64} className="h-11 w-auto rounded-lg ring-1 ring-line" />
+              <img src={`/pay/${m.id}.webp`} alt="" width={96} height={64} className="h-11 w-auto rounded-lg ring-1 ring-line" />
               <div className="min-w-0 flex-1">
                 <p id="pay-title" className="text-[18px] font-bold">
                   Payer avec {m.label}
@@ -118,7 +118,7 @@ export function PaySheet({
 
         {phase === "processing" && (
           <div className="grid place-items-center py-8 text-center" role="status" aria-live="polite">
-            <img src={`/pay/${m.id}.svg`} alt="" width={96} height={64} className="h-14 w-auto rounded-lg ring-1 ring-line" />
+            <img src={`/pay/${m.id}.webp`} alt="" width={96} height={64} className="h-14 w-auto rounded-lg ring-1 ring-line" />
             <LoaderCircle className="mt-6 size-9 animate-spin text-ink" aria-hidden />
             <p className="mt-4 text-[18px] font-bold">Paiement en cours…</p>
             <p className="mt-1 max-w-[30ch] text-[14.5px] text-ink-2">
