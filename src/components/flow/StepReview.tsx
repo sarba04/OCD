@@ -4,8 +4,9 @@ import { getPack, PAYMENT_METHODS } from "@/lib/config";
 import { eur, fcfa } from "@/lib/format";
 import { packSessions } from "@/lib/schedule";
 import { ChoiceCard, haptic } from "@/components/ui/kit";
-import { PassCard } from "./PassCard";
-import { countryOf, type Draft, type Step } from "./state";
+import { OcdCard } from "./OcdCard";
+import { formatTime, offsetFromStudio } from "@/lib/schedule";
+import { countryOf, displayPhone, type Draft, type Step } from "./state";
 
 export interface Conflict {
   message: string;
@@ -40,15 +41,20 @@ export function StepReview({
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
       <div>
-        <PassCard
-          data={{
-            mode: draft.mode!,
-            country: country?.code ?? "TG",
-            sessions,
+        <OcdCard
+          status="review"
+          d={{ ...draft.business, phone: displayPhone(draft), photo: draft.photo }}
+          meta={{
             packName: pack.name,
             price: pack.price,
-            businessName: draft.business.name,
-            fullName: draft.contact.fullName,
+            mode: draft.mode!,
+            start: sessions[0].start,
+            end: sessions[0].end,
+            sessions: sessions.length,
+            localTime:
+              draft.mode === "remote" && country && offsetFromStudio(country.tz, sessions[0].start) !== 0
+                ? `${formatTime(sessions[0].start, country.tz)} à ${country.city}`
+                : null,
           }}
         />
         <div className="mx-auto mt-5 flex max-w-[460px] flex-wrap justify-center gap-x-5 gap-y-1 text-[14px]">

@@ -7,7 +7,8 @@ import { COUNTRIES } from "@/lib/countries";
 import { compressImage } from "@/lib/client/image";
 import { cn } from "@/lib/cn";
 import { Checkbox, Field, Toggle, inputClass } from "@/components/ui/kit";
-import { LowerThird, PhonePreview, type PreviewData } from "./LivePreview";
+import { OcdCard, type CardData } from "./OcdCard";
+import { initials } from "@/lib/format";
 import { displayPhone, type Draft } from "./state";
 
 const DIALS = Array.from(new Map(COUNTRIES.map((c) => [c.dial, c])).values());
@@ -26,31 +27,36 @@ export function StepBusiness({
   const setC = (p: Partial<Draft["contact"]>) => setDraft((d) => ({ contact: { ...d.contact, ...p } }));
   const errList = Object.entries(errors).filter(([, v]) => v) as [string, string][];
 
-  const preview: PreviewData = useMemo(
-    () => ({ name: b.name, pitch: b.pitch, phone: displayPhone(draft), address: b.address, delivers: b.delivers, priceHint: b.priceHint, photo: draft.photo }),
+  const preview: CardData = useMemo(
+    () => ({ name: b.name, pitch: b.pitch, phone: displayPhone(draft), address: b.address, delivers: b.delivers, priceHint: b.priceHint, social: b.social, photo: draft.photo }),
     [b, draft],
   );
 
   const describedBy = (k: string, hint = false) => (errors[k] ? `${k}-error` : hint ? `${k}-hint` : undefined);
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
       <div>
         <p className="max-w-[52ch] text-[16px] leading-relaxed text-ink-2">
-          C&apos;est ce que la régie affichera à l&apos;écran pendant ton live. Ton produit, ton numéro, ton adresse : c&apos;est comme ça que les
-          clients te retrouvent après.
+          Ta carte OCD se remplit pendant que tu écris : au recto ton produit, au verso comment te joindre. C&apos;est elle que les acheteurs
+          voient de toi.
         </p>
 
-        {/* Aperçu compact (mobile) */}
-        <div className="sticky-preview sticky top-16 z-20 -mx-4 mt-6 bg-[#2a1d12] px-4 pt-2 pb-3 shadow-[0_10px_24px_-14px_rgb(0_0_0/0.6)] lg:hidden">
-          <p className="mb-1.5 flex items-center gap-2 text-[12.5px] font-semibold text-white/80">
-            <span className="rounded-[3px] bg-live px-1 py-px text-[10px] font-extrabold tracking-wide text-white">LIVE</span>
-            Ton bandeau à l&apos;écran, en direct
-          </p>
-          <div className="relative overflow-hidden">
-            {draft.photo && <img src={draft.photo} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
-            <LowerThird d={preview} className="relative" />
+        {/* Aperçu compact (mobile) : la carte en miniature, toujours visible pendant la saisie */}
+        <div className="sticky-preview sticky top-16 z-20 -mx-4 mt-6 border-b border-line bg-paper/95 px-4 py-2.5 backdrop-blur lg:hidden">
+          <div className="flex items-center gap-3">
+            {draft.photo ? (
+              <img src={draft.photo} alt="" className="size-14 shrink-0 rounded-2xl object-cover" />
+            ) : (
+              <span className="card-cover display grid size-14 shrink-0 place-items-center rounded-2xl text-[22px] tracking-[-0.05em] text-white" aria-hidden>
+                {initials(b.name || "Ta boutique")}
+              </span>
+            )}
+            <span className="min-w-0 flex-1">
+              <span className="block text-[11.5px] font-semibold text-ink-3">Ta carte OCD</span>
+              <span className="block truncate text-[16px] leading-tight font-bold">{b.name || "Le nom de ta boutique"}</span>
+              <span className="block truncate text-[13px] text-ink-2">{b.pitch || "Ce que tu vas présenter"}</span>
+            </span>
           </div>
         </div>
 
@@ -187,7 +193,7 @@ export function StepBusiness({
                 className={inputClass}
               />
             </Field>
-            <Toggle checked={b.delivers} onChange={(delivers) => setB({ delivers })} label="Je livre ou j'expédie" hint="On l'affiche dans ton bandeau." />
+            <Toggle checked={b.delivers} onChange={(delivers) => setB({ delivers })} label="Je livre ou j'expédie" hint="On l'affiche sur ta carte." />
             <Field id="business.social" label="Ton TikTok, Instagram ou Facebook" optional>
               <input
                 id="business.social"
@@ -276,11 +282,11 @@ export function StepBusiness({
         </fieldset>
       </div>
 
-      {/* Aperçu téléphone (grand écran) */}
+      {/* La carte OCD (grand écran) */}
       <aside className="hidden lg:block">
         <div className="sticky top-24">
-          <p className="mb-3 text-center text-[13.5px] font-semibold text-ink-2">Ce que verront tes clients</p>
-          <PhonePreview d={preview} />
+          <p className="mb-3 text-center text-[13.5px] font-semibold text-ink-2">Ta carte OCD</p>
+          <OcdCard d={preview} status="draft" />
         </div>
       </aside>
     </div>
@@ -356,6 +362,7 @@ function PhotoInput({ photo, onChange }: { photo: string | null; onChange: (p: s
         accept="image/*"
         className="sr-only"
         id="photo"
+        aria-label="Photo de ton produit"
         onChange={async (e) => {
           const f = e.target.files?.[0];
           e.target.value = "";
