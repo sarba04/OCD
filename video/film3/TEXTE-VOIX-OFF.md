@@ -1,23 +1,46 @@
-# Voix off — « OCD Live V2 » (60 s)
+# Voix off — « OCD Live, nouvelle version » (50 s)
 
-Lis calmement, avec le sourire. Le film est minuté sur ce texte : chaque phrase a sa fenêtre.
-Astuce : lance la **version guide** (le texte défile en bas de l'écran) et lis en même temps que tu enregistres.
+Parle comme si tu montrais le site à un pote : tranquille, souriant, pas « lu ».
+Si un mot ne sonne pas comme toi, change-le : le film suit les temps, pas les mots exacts.
+Astuce : lance `ocd-v2-guide-lecture.mp4` (le texte s'affiche en bas) et enregistre en même temps.
 
-| Temps | À l'écran | Tu dis |
-| --- | --- | --- |
-| 0:00 – 0:07 | **Avant** — l'ancienne version, qui passe au gris | « Vous vous souvenez de la première version d'OCD Live ? On réservait son live au studio. C'est tout. » |
-| 0:07 – 0:12 | L'orange envahit l'écran, **V2** | « Boovan a demandé plus. Alors voici la V2. » |
-| 0:12 – 0:21 | **01 — Les lives, par pays** | « Un : l'annuaire des lives. Tu choisis ton pays, ton rayon, et tu vois qui vend en direct, avec la photo du produit. » |
-| 0:21 – 0:31 | **02 — Ton lien TikTok**, puis la Régie | « Deux : déjà en live sur TikTok ? Envoie ton lien. Onze mille francs par mois. L'équipe valide, et ton pays te voit. » |
-| 0:31 – 0:36 | **03 — Les Shorts OCD** | « Trois : les Shorts OCD, nos vidéos à regarder sur le site. » |
-| 0:36 – 0:43 | **04 — La Carte OCD** | « Quatre : la Carte OCD. Ton live au studio devient une carte à ton nom, prête à partager. » |
-| 0:43 – 0:50 | **05 — Mobile Money** | « Cinq : le paiement en MTN, Orange Money, Wave ou carte. Et ton reçu, à imprimer. » |
-| 0:50 – 0:55 | Récap : téléphone + ordinateur | « Sur téléphone comme sur ordinateur : c'est OCD Live V2. » |
-| 0:55 – 1:00 | Logo, lien du site | « Les opportunités, c'est dehors. » |
+## Le texte
 
-## Pour le montage (CapCut)
-1. Importe `ocd-v2-musique-basse.mp4` (ou `ocd-v2-ordinateur-musique-basse.mp4` pour la version ordinateur) (la musique est déjà baissée pour laisser la place à ta voix).
-2. Ajoute ton enregistrement, cale le début sur 0:00.
-3. Ta voix autour de 100 %, la vidéo comme elle est. Si tu préfères ta propre musique : `ocd-v2-sans-musique.mp4` (seulement les bruitages).
+**0:00 · V2**
+OCD Live a changé. Je te montre la nouvelle version.
 
-Note : le paiement du site est un simulateur (c'est écrit « Simulation » dans la fenêtre). Si on te le demande, dis-le simplement.
+**0:05 · 01 Nouveau design**
+D'abord, tout le design est nouveau. Les lives défilent comme sur TikTok, avec la photo du produit.
+
+**0:12 · 02 Les lives, par pays**
+Tu choisis ton pays, ton rayon, et tu vois direct qui vend en ce moment.
+
+**0:19 · 03 Ton lien TikTok**
+Tu fais déjà tes lives sur TikTok ? Envoie ton lien. L'abonnement, c'est onze mille par mois.
+
+**0:26 · 04 L'équipe valide**
+L'équipe vérifie, valide, et ton pays te voit.
+
+**0:31 · 05 Les Shorts OCD**
+Y'a aussi les Shorts OCD, des petites vidéos à regarder tranquille.
+
+**0:36 · 06 Le studio, toujours**
+Et le live au studio est toujours là, avec ta Carte OCD.
+
+**0:41 · Récap**
+Ça marche sur téléphone comme sur ordinateur.
+
+**0:46 · Fin**
+OCD Live. Les opportunités, c'est dehors. Le lien est juste là.
+
+## Version texte (légende TikTok)
+
+OCD Live passe en V2 🔥
+Nouveau design, les lives par pays et par rayon, envoie ton lien TikTok et l'équipe te met en avant, et les Shorts OCD.
+Le lien 👉 ocd-pi.vercel.app
+#OCDLive #HouseOfChallenge #LiveShopping #Afrique
+
+## Montage (CapCut)
+1. Importe `ocd-v2-musique-basse.mp4` (ou `ocd-v2-ordinateur-musique-basse.mp4`) : la musique est déjà baissée.
+2. Ajoute ta voix, cale-la sur 0:00, laisse-la à 100 %.
+3. Tu veux ta propre musique ? Prends `ocd-v2-sans-musique.mp4` (seulement les bruitages).

@@ -1,19 +1,17 @@
-# REVIEW — « OCD Live V2 » (avant / après, voix off)
+# REVIEW — « OCD Live, nouvelle version » (voix off)
 
-- Vertical 1080×1920 (`film3/`) et ordinateur 1920×1080 (`film3-wide/`, mêmes assets) ; 60 s, 30 fps.
-- Histoire : AVANT (la V1 qui passe au gris) → V2 → 01 Annuaire · 02 Lien TikTok + Régie · 03 Shorts · 04 Carte OCD · 05 Mobile Money → récap → fin.
-- Un seul téléphone porteur traverse les chapitres ; les fonds alternent noir / orange wax à chaque chapitre.
-- Vrais écrans : V1 capturée depuis le commit d920777 (accueil recadré sous la carte d'Afrique, réservation) ; V2 depuis le site actuel.
-- Texte de la voix off et minutage : `TEXTE-VOIX-OFF.md`. Une version « guide » affiche le texte en bas de l'écran pour enregistrer.
+- Vertical 1080×1920 (`film3/`) et ordinateur 1920×1080 (`film3-wide/`, mêmes assets) ; 50,4 s, 30 fps, scènes calées sur les mesures (100 BPM).
+- Présentation générale du site, accent sur la demande de Boovan : 01 Nouveau design · 02 Lives par pays · 03 Lien TikTok (+ abonnement) · 04 Validation par l'équipe · 05 Shorts · 06 Studio (Carte OCD) → récap → fin.
+- Paiement et reçu retirés à la demande. Pas d'avant/après.
+- Un téléphone porteur traverse les chapitres ; fonds noir / orange wax en alternance ; vrais écrans du site.
+- Voix off : `TEXTE-VOIX-OFF.md` ; version guide = texte affiché en bas (classe `guide` sur #root).
 
 ## Son (mesuré, pas écouté)
-- Rendus sans musique, puis mixage ffmpeg : bruitages −27 LUFS, musique −24 LUFS → « musique basse » ≈ −22,7 LUFS, crête −4,6 dBFS ;
-  « sans musique » ≈ −24,4 LUFS. La voix enregistrée doit sortir vers −14/−16 LUFS pour passer devant.
+- Rendu sans musique, puis mixage ffmpeg : bruitages −27 LUFS, musique −24 LUFS → « musique basse » ≈ −23,3 LUFS, crête −4,9 dBFS ; « sans musique » ≈ −27 LUFS.
 
 ## Points faibles
-- Régie (≈ 27–31 s) : texte du tableau petit sur téléphone, compensé par le zoom sur le message vert.
-- Chapitre 03 (Shorts) : un seul short disponible dans la démo, le plan est donc court et statique.
+- Régie (≈ 27–31 s) : tableau petit sur téléphone, compensé par le zoom sur le message vert.
+- Shorts : un seul short dans la démo, plan court et statique.
 
 ## Avertissements gardés
-- `nested_structure_needs_subcomposition`, `composition_file_too_large` (scènes dans un seul fichier, voulu pour la reprise rapide en 16:9).
-- Téléphone volontairement hors cadre pendant ses sorties (`data-layout-allow-overflow`).
+- `nested_structure_needs_subcomposition`, `composition_file_too_large` : scènes dans un seul fichier, voulu pour décliner vite en 16:9.

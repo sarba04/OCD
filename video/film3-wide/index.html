@@ -39,18 +39,6 @@
       #ph-screen { position: relative; width: 470px; height: 800px; border-radius: 50px; overflow: hidden; background: #111; }
       #ph-screen img { position: absolute; left: 0; top: 0; width: 470px; height: 800px; opacity: 0; }
 
-      /* A. avant */
-      #sA-tag { position: absolute; left: 90px; top: 180px; background: #2a2a2a; color: #bdbdbd; font-size: 36px; padding: 12px 26px; letter-spacing: 0.04em; }
-      #sA .tA { top: 262px; font-size: 112px; }
-      #sA .tA .v { color: #8a8a8a; }
-      #sA-sub { top: 392px; color: #bdbdbd; }
-      .old { position: absolute; overflow: hidden; border-radius: 36px; background: #fff; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55); }
-      .old img { position: absolute; left: 0; top: 0; display: block; }
-      #sA-home { left: 70px; top: 610px; width: 560px; height: 475px; }
-      #sA-home img { width: 560px; height: 475px; }
-      #sA-flow { left: 560px; top: 540px; width: 440px; height: 749px; }
-      #sA-flow img { width: 440px; height: 749px; }
-      .gray { opacity: 0; }
 
       /* B. bascule */
       #sB-logo { position: absolute; left: 330px; top: 300px; width: 420px; height: 163px; }
@@ -58,26 +46,8 @@
       #sB-v2 { position: absolute; left: 0; right: 0; top: 520px; text-align: center; font-weight: 800; font-stretch: 125%; font-size: 560px; line-height: 1; letter-spacing: -0.06em; color: var(--ink); }
       #sB .tB { top: 1150px; font-size: 68px; text-align: center; }
 
-      /* D. régie */
-      #sD-laptop { position: absolute; left: 40px; top: 520px; width: 1000px; opacity: 0; }
-      #sD-bezel { position: relative; width: 1000px; height: 620px; border-radius: 30px 30px 0 0; background: #050505; padding: 26px 26px 20px; box-shadow: 0 40px 80px rgba(60, 20, 0, 0.5), inset 0 0 0 2px #2a2a2a; }
-      #sD-screen { position: relative; width: 948px; height: 574px; overflow: hidden; background: #0e0e0e; }
-      #sD-zoom { position: absolute; left: 0; top: 0; width: 948px; height: 574px; }
-      #sD-zoom img { position: absolute; left: 0; top: 0; width: 948px; height: 533px; }
-      #sD-base { width: 1080px; margin-left: -40px; height: 34px; border-radius: 0 0 26px 26px; background: linear-gradient(#cfcfcf, #8d8d8d); }
-      #sD-cursor { position: absolute; left: 0; top: 0; width: 64px; opacity: 0; }
 
-      /* F. carte */
-      #sF-card { position: absolute; left: 240px; top: 500px; width: 600px; height: 753px; perspective: 2200px; }
-      #sF-flip { position: absolute; inset: 0; transform-style: preserve-3d; }
-      #sF-flip img { position: absolute; inset: 0; width: 600px; height: 753px; border-radius: 32px; backface-visibility: hidden; box-shadow: 0 40px 80px rgba(60, 20, 0, 0.45); }
-      #sF-back { transform: rotateY(180deg); }
 
-      /* G. paiement */
-      #sG-logos { position: absolute; left: 330px; top: 186px; display: flex; gap: 16px; }
-      #sG-logos img { width: 132px; height: 88px; border-radius: 18px; background: #fff; }
-      #sG-recu { position: absolute; left: 240px; top: 480px; width: 600px; height: 848px; overflow: hidden; border-radius: 10px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55); opacity: 0; }
-      #sG-recu img { width: 600px; display: block; }
 
       /* H. récap */
       #sH .tH { top: 186px; font-size: 112px; }
@@ -105,24 +75,31 @@
       .guide #guide { display: block; }
       #guide .g { position: absolute; left: 70px; right: 70px; top: 1440px; padding: 26px 34px; border-radius: 28px; background: rgba(0, 0, 0, 0.82); color: #fff; font-size: 44px; font-weight: 600; line-height: 1.25; opacity: 0; }
 
+      /* régie */
+      #sR-laptop { position: absolute; left: 40px; top: 520px; width: 1000px; opacity: 0; }
+      #sR-bezel { position: relative; width: 1000px; height: 620px; border-radius: 30px 30px 0 0; background: #050505; padding: 26px 26px 20px; box-shadow: 0 40px 80px rgba(60, 20, 0, 0.5), inset 0 0 0 2px #2a2a2a; }
+      #sR-screen { position: relative; width: 948px; height: 574px; overflow: hidden; background: #0e0e0e; }
+      #sR-zoom { position: absolute; left: 0; top: 0; width: 948px; height: 574px; }
+      #sR-zoom img { position: absolute; left: 0; top: 0; width: 948px; height: 533px; }
+      #sR-base { width: 1080px; margin-left: -40px; height: 34px; border-radius: 0 0 26px 26px; background: linear-gradient(#cfcfcf, #8d8d8d); }
+      #sR-cursor { position: absolute; left: 0; top: 0; width: 64px; opacity: 0; }
+
+      /* studio */
+      #sS-card { position: absolute; left: 240px; top: 500px; width: 600px; height: 753px; perspective: 2200px; }
+      #sS-flip { position: absolute; inset: 0; transform-style: preserve-3d; }
+      #sS-flip img { position: absolute; inset: 0; width: 600px; height: 753px; border-radius: 32px; backface-visibility: hidden; box-shadow: 0 40px 80px rgba(60, 20, 0, 0.45); }
+      #sS-back { transform: rotateY(180deg); }
+
       /* ── version ordinateur 1920 x 1080 ── */
       .t { left: 140px; right: 960px; }
-      .sub { left: 140px; right: 960px; }
       .num { left: 140px; top: 300px; font-size: 120px; }
       .lab { top: 440px; font-size: 100px; }
       #ph-in { left: 1180px; top: 124px; }
-      #sA-tag { left: 140px; top: 270px; }
-      #sA .tA { top: 350px; font-size: 100px; right: 820px; }
-      #sA-sub { top: 490px; }
-      #sA-home { left: 1000px; top: 360px; }
-      #sA-flow { left: 1420px; top: 170px; }
       #sB-logo { left: 750px; top: 70px; }
       #sB-v2 { top: 250px; font-size: 520px; }
       #sB .tB { top: 860px; left: 140px; right: 140px; font-size: 64px; }
-      #sD-laptop { left: 820px; top: 210px; }
-      #sF-card { left: 1160px; top: 164px; }
-      #sG-logos { left: 140px; top: 690px; }
-      #sG-recu { left: 1180px; top: 116px; }
+      #sR-laptop { left: 820px; top: 210px; }
+      #sS-card { left: 1160px; top: 164px; }
       #sH .tH { top: 150px; right: 140px; font-size: 120px; }
       #sH-laptop { left: 140px; top: 340px; }
       #sH-chips { left: 1100px; right: 140px; top: 400px; }
@@ -135,103 +112,87 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1920" data-height="1080">
-      <!-- A. avant (0 → 7,2) -->
-      <div id="sA" class="scene clip ink" data-start="0" data-duration="7.2" data-track-index="1" data-track-kind="graphics">
-        <div id="sA-tag" class="pill">AVANT</div>
-        <div class="t tA" id="sA-t"><span class="w">OCD</span> <span class="w">Live</span> <span class="w v">V1</span></div>
-        <div class="sub" id="sA-sub">Réserver un live au studio.</div>
-        <div id="sA-home" class="old">
-          <img src="assets/screens/v1-home.jpg" alt="L'accueil de la première version" />
-          <img class="gray" src="assets/screens/v1-home-g.jpg" alt="" />
-        </div>
-        <div id="sA-flow" class="old">
-          <img src="assets/screens/v1-flow.jpg" alt="La réservation de la première version" />
-          <img class="gray" src="assets/screens/v1-flow-g.jpg" alt="" />
-        </div>
-      </div>
-
-      <!-- B. bascule (7,2 → 12) -->
-      <div id="sB" class="scene clip wax" data-start="7.2" data-duration="4.8" data-track-index="2" data-track-kind="graphics">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="50.4" data-width="1920" data-height="1080">
+      <!-- ouverture (0 → 4,8) -->
+      <div id="sB" class="scene clip wax" data-start="0" data-duration="4.8" data-track-index="1" data-track-kind="graphics">
         <div id="sB-logo"><img id="sB-mark" src="assets/img/ocd-logo-ink.svg" alt="OCD" /></div>
         <div id="sB-v2">V2</div>
-        <div class="t tB" id="sB-t"><span class="w">Boovan</span> <span class="w">a</span> <span class="w">demandé</span> <span class="w">plus.</span></div>
+        <div class="t tB" id="sB-t"><span class="w">Nouvelle</span> <span class="w">version.</span></div>
       </div>
 
-      <!-- C. 01 annuaire (12 → 21,6) -->
-      <div id="sC" class="scene clip ink" data-start="12" data-duration="9.6" data-track-index="3" data-track-kind="graphics">
+      <!-- 01 design (4,8 → 12) -->
+      <div id="sC" class="scene clip ink" data-start="4.8" data-duration="7.2" data-track-index="2" data-track-kind="graphics">
         <div class="num" id="sC-n">01</div>
-        <div class="t lab" id="sC-t"><span class="w">Les</span> <span class="w">lives,</span><br /><span class="w">par</span> <span class="w">pays.</span></div>
+        <div class="t lab" id="sC-t"><span class="w">Nouveau</span><br /><span class="w">design.</span></div>
       </div>
 
-      <!-- D. 02 lien TikTok + régie (21,6 → 31,2) -->
-      <div id="sD" class="scene clip wax" data-start="21.6" data-duration="9.6" data-track-index="4" data-track-kind="graphics">
-        <div class="num" id="sD-n">02</div>
-        <div class="t lab" id="sD-t"><span class="w">Ton</span> <span class="w">lien</span><br /><span class="w">TikTok.</span></div>
-        <div class="t lab" id="sD-t2"><span class="w">L'équipe</span><br /><span class="w">valide.</span></div>
-        <div id="sD-laptop">
-          <div id="sD-bezel">
-            <div id="sD-screen">
-              <div id="sD-zoom">
-                <img id="sD-pending" src="assets/screens/r-pending.jpg" alt="La Régie : lives à valider" />
-                <img id="sD-valid" src="assets/screens/r-valid.jpg" alt="" />
-                <svg id="sD-cursor" viewBox="0 0 32 32"><path d="M4 2 L4 26 L10 20 L14 30 L18 28 L14 18 L22 18 Z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round" /></svg>
+      <!-- 02 par pays (12 → 19,2) -->
+      <div id="sP" class="scene clip wax" data-start="12" data-duration="7.2" data-track-index="3" data-track-kind="graphics">
+        <div class="num" id="sP-n">02</div>
+        <div class="t lab" id="sP-t"><span class="w">Les</span> <span class="w">lives,</span><br /><span class="w">par</span> <span class="w">pays.</span></div>
+      </div>
+
+      <!-- 03 lien TikTok (19,2 → 26,4) -->
+      <div id="sL" class="scene clip ink" data-start="19.2" data-duration="7.2" data-track-index="4" data-track-kind="graphics">
+        <div class="num" id="sL-n">03</div>
+        <div class="t lab" id="sL-t"><span class="w">Ton</span> <span class="w">lien</span><br /><span class="w">TikTok.</span></div>
+      </div>
+
+      <!-- 04 l'équipe valide (26,4 → 31,2) -->
+      <div id="sR" class="scene clip wax" data-start="26.4" data-duration="4.8" data-track-index="5" data-track-kind="graphics">
+        <div class="num" id="sR-n">04</div>
+        <div class="t lab" id="sR-t"><span class="w">L'équipe</span><br /><span class="w">valide.</span></div>
+        <div id="sR-laptop">
+          <div id="sR-bezel">
+            <div id="sR-screen">
+              <div id="sR-zoom">
+                <img id="sR-pending" src="assets/screens/r-pending.jpg" alt="La Régie : lives à valider" />
+                <img id="sR-valid" src="assets/screens/r-valid.jpg" alt="" />
+                <svg id="sR-cursor" viewBox="0 0 32 32"><path d="M4 2 L4 26 L10 20 L14 30 L18 28 L14 18 L22 18 Z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round" /></svg>
               </div>
             </div>
           </div>
-          <div id="sD-base"></div>
+          <div id="sR-base"></div>
         </div>
       </div>
 
-      <!-- E. 03 shorts (31,2 → 36) -->
-      <div id="sE" class="scene clip ink" data-start="31.2" data-duration="4.8" data-track-index="5" data-track-kind="graphics">
-        <div class="num" id="sE-n">03</div>
+      <!-- 05 shorts (31,2 → 36) -->
+      <div id="sE" class="scene clip ink" data-start="31.2" data-duration="4.8" data-track-index="6" data-track-kind="graphics">
+        <div class="num" id="sE-n">05</div>
         <div class="t lab" id="sE-t"><span class="w">Les</span> <span class="w">Shorts</span><br /><span class="w">OCD.</span></div>
       </div>
 
-      <!-- F. 04 carte (36 → 43,2) -->
-      <div id="sF" class="scene clip wax" data-start="36" data-duration="7.2" data-track-index="6" data-track-kind="graphics">
-        <div class="num" id="sF-n">04</div>
-        <div class="t lab" id="sF-t"><span class="w">La</span> <span class="w">Carte</span><br /><span class="w">OCD.</span></div>
-        <div id="sF-card">
-          <div id="sF-flip">
-            <img id="sF-front" src="assets/screens/card-front.jpg" alt="La Carte OCD, recto" />
-            <img id="sF-back" src="assets/screens/card-back.jpg" alt="La Carte OCD, verso" />
+      <!-- 06 studio (36 → 40,8) -->
+      <div id="sS" class="scene clip wax" data-start="36" data-duration="4.8" data-track-index="7" data-track-kind="graphics">
+        <div class="num" id="sS-n">06</div>
+        <div class="t lab" id="sS-t"><span class="w">Le</span> <span class="w">studio,</span><br /><span class="w">toujours.</span></div>
+        <div id="sS-card">
+          <div id="sS-flip">
+            <img id="sS-front" src="assets/screens/card-front.jpg" alt="La Carte OCD, recto" />
+            <img id="sS-back" src="assets/screens/card-back.jpg" alt="La Carte OCD, verso" />
           </div>
         </div>
       </div>
 
-      <!-- G. 05 paiement (43,2 → 50,4) -->
-      <div id="sG" class="scene clip ink" data-start="43.2" data-duration="7.2" data-track-index="7" data-track-kind="graphics">
-        <div class="num" id="sG-n">05</div>
-        <div id="sG-logos">
-          <img src="assets/pay/mtn.png" alt="MTN MoMo" />
-          <img src="assets/pay/orange.png" alt="Orange Money" />
-          <img src="assets/pay/wave.png" alt="Wave" />
-          <img src="assets/pay/card.png" alt="Carte Visa" />
-        </div>
-        <div class="t lab" id="sG-t"><span class="w">Mobile</span><br /><span class="w">Money.</span></div>
-        <div id="sG-recu"><img src="assets/screens/recu.jpg" alt="Le reçu à imprimer" /></div>
-      </div>
-
-      <!-- H. récap (50,4 → 55,2) -->
-      <div id="sH" class="scene clip ink" data-start="50.4" data-duration="4.8" data-track-index="8" data-track-kind="graphics">
+      <!-- récap (40,8 → 45,6) -->
+      <div id="sH" class="scene clip ink" data-start="40.8" data-duration="4.8" data-track-index="8" data-track-kind="graphics">
         <div class="t tH" id="sH-t"><span class="w">OCD</span> <span class="w">Live</span> <span class="w o">V2</span></div>
         <div id="sH-laptop">
           <div id="sH-lbez"><img src="assets/screens/d-rose.jpg" alt="Le site sur ordinateur" /></div>
           <div id="sH-lbase"></div>
         </div>
         <div id="sH-chips">
-          <span class="c"><b>01</b>Annuaire</span>
-          <span class="c"><b>02</b>Lien TikTok</span>
-          <span class="c"><b>03</b>Shorts</span>
-          <span class="c"><b>04</b>Carte OCD</span>
-          <span class="c"><b>05</b>Mobile Money</span>
+          <span class="c"><b>01</b>Nouveau design</span>
+          <span class="c"><b>02</b>Lives par pays</span>
+          <span class="c"><b>03</b>Lien TikTok</span>
+          <span class="c"><b>04</b>Validation</span>
+          <span class="c"><b>05</b>Shorts</span>
+          <span class="c"><b>06</b>Studio</span>
         </div>
       </div>
 
-      <!-- I. fin (55,2 → 60) -->
-      <div id="sI" class="scene clip" data-start="55.2" data-duration="4.8" data-track-index="9" data-track-kind="graphics">
+      <!-- fin (45,6 → 50,4) -->
+      <div id="sI" class="scene clip" data-start="45.6" data-duration="4.8" data-track-index="9" data-track-kind="graphics">
         <div id="sI-logo"><img id="sI-mark" src="assets/img/ocd-logo.svg" alt="OCD" /></div>
         <div id="sI-live">Live</div>
         <div id="sI-v2">V2</div>
@@ -239,66 +200,58 @@
         <div id="sI-tag">Les opportunités, c'est dehors.</div>
       </div>
 
-      <!-- téléphone porteur (12 → 55,2) -->
-      <div id="ph" class="clip" data-layout-allow-overflow data-start="12" data-duration="43.2" data-track-index="10" data-track-kind="graphics">
+      <!-- téléphone porteur (4,8 → 45,6) -->
+      <div id="ph" class="clip" data-layout-allow-overflow data-start="4.8" data-duration="40.8" data-track-index="10" data-track-kind="graphics">
         <div id="ph-in">
           <div id="ph-screen">
             <img id="p-home" src="assets/screens/m-home.jpg" alt="L'accueil de la V2" />
+            <img id="p-rose" src="assets/screens/rose.jpg" alt="Chez Mama Rose en live" />
             <img id="p-pays" src="assets/screens/pays.jpg" alt="" />
             <img id="p-feed" src="assets/screens/feed-cm.jpg" alt="" />
-            <img id="p-rose" src="assets/screens/rose.jpg" alt="Chez Mama Rose en live" />
             <img id="p-form" src="assets/screens/g2c.jpg" alt="" />
             <img id="p-sent" src="assets/screens/g3.jpg" alt="" />
             <img id="p-shorts" src="assets/screens/shorts.jpg" alt="Les Shorts OCD" />
-            <img id="p-pay1" src="assets/screens/pay-sheet.jpg" alt="" />
-            <img id="p-pay2" src="assets/screens/pay-proc.jpg" alt="" />
-            <img id="p-pay3" src="assets/screens/pay-ok.jpg" alt="" />
             <div class="touch" id="touch"></div>
           </div>
         </div>
       </div>
 
       <!-- guide de lecture -->
-      <div id="guide" class="clip" data-start="0" data-duration="60" data-track-index="11" data-track-kind="graphics">
-        <div class="g" id="g1">Vous vous souvenez de la première version d'OCD Live ? On réservait son live au studio. C'est tout.</div>
-        <div class="g" id="g2">Boovan a demandé plus. Alors voici la V2.</div>
-        <div class="g" id="g3">Un : l'annuaire des lives. Tu choisis ton pays, ton rayon, et tu vois qui vend en direct, avec la photo du produit.</div>
-        <div class="g" id="g4">Deux : déjà en live sur TikTok ? Envoie ton lien. Onze mille francs par mois. L'équipe valide, et ton pays te voit.</div>
-        <div class="g" id="g5">Trois : les Shorts OCD, nos vidéos à regarder sur le site.</div>
-        <div class="g" id="g6">Quatre : la Carte OCD. Ton live au studio devient une carte à ton nom, prête à partager.</div>
-        <div class="g" id="g7">Cinq : le paiement en MTN, Orange Money, Wave ou carte. Et ton reçu, à imprimer.</div>
-        <div class="g" id="g8">Sur téléphone comme sur ordinateur : c'est OCD Live V2.</div>
-        <div class="g" id="g9">Les opportunités, c'est dehors.</div>
+      <div id="guide" class="clip" data-start="0" data-duration="50.4" data-track-index="11" data-track-kind="graphics">
+        <div class="g" id="g1">OCD Live a changé. Je te montre la nouvelle version.</div>
+        <div class="g" id="g2">D'abord, tout le design est nouveau. Les lives défilent comme sur TikTok, avec la photo du produit.</div>
+        <div class="g" id="g3">Tu choisis ton pays, ton rayon, et tu vois direct qui vend en ce moment.</div>
+        <div class="g" id="g4">Tu fais déjà tes lives sur TikTok ? Envoie ton lien. L'abonnement, c'est onze mille par mois.</div>
+        <div class="g" id="g5">L'équipe vérifie, valide, et ton pays te voit.</div>
+        <div class="g" id="g6">Y'a aussi les Shorts OCD, des petites vidéos à regarder tranquille.</div>
+        <div class="g" id="g7">Et le live au studio est toujours là, avec ta Carte OCD.</div>
+        <div class="g" id="g8">Ça marche sur téléphone comme sur ordinateur.</div>
+        <div class="g" id="g9">OCD Live. Les opportunités, c'est dehors. Le lien est juste là.</div>
       </div>
 
       <!-- son -->
-      <audio id="a-music" src="assets/audio/music.wav" data-start="0" data-duration="60" data-volume="0.55" data-fade-out="1.8"></audio>
-      <audio id="a-w0" src="assets/audio/whoosh2.wav" data-start="5.25" data-duration="1.2" data-volume="0.35"></audio>
-      <audio id="a-riser" src="assets/audio/riser.wav" data-start="4.95" data-duration="2.3" data-volume="0.45"></audio>
-      <audio id="a-imp1" src="assets/audio/impact.wav" data-start="7.25" data-duration="2" data-volume="0.7"></audio>
-      <audio id="a-w1" src="assets/audio/whoosh1.wav" data-start="11.55" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-t1" src="assets/audio/tap.wav" data-start="13.4" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-t2" src="assets/audio/tap.wav" data-start="15.2" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-t3" src="assets/audio/tap.wav" data-start="16.8" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-w2" src="assets/audio/whoosh2.wav" data-start="17.1" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-w3" src="assets/audio/whoosh1.wav" data-start="21.45" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-t4" src="assets/audio/tap.wav" data-start="22.8" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-t5" src="assets/audio/tap.wav" data-start="23.9" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-p1" src="assets/audio/pop.wav" data-start="24.15" data-duration="0.8" data-volume="0.7"></audio>
-      <audio id="a-w4" src="assets/audio/whoosh2.wav" data-start="26.2" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-t6" src="assets/audio/tap.wav" data-start="28.55" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-p2" src="assets/audio/ping.wav" data-start="28.7" data-duration="0.72" data-volume="0.55"></audio>
-      <audio id="a-w5" src="assets/audio/whoosh1.wav" data-start="31.05" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-music" src="assets/audio/music.wav" data-start="0" data-duration="50.4" data-volume="0.55" data-fade-out="1.8"></audio>
+      <audio id="a-imp1" src="assets/audio/impact.wav" data-start="0.05" data-duration="2" data-volume="0.7"></audio>
+      <audio id="a-w1" src="assets/audio/whoosh1.wav" data-start="4.35" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-t1" src="assets/audio/tap.wav" data-start="7.6" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-w2" src="assets/audio/whoosh2.wav" data-start="7.75" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-w3" src="assets/audio/whoosh1.wav" data-start="11.85" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-t2" src="assets/audio/tap.wav" data-start="13" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-t3" src="assets/audio/tap.wav" data-start="15" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-w4" src="assets/audio/whoosh1.wav" data-start="19.05" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-t4" src="assets/audio/tap.wav" data-start="20.4" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-t5" src="assets/audio/tap.wav" data-start="21.8" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-p1" src="assets/audio/pop.wav" data-start="22.05" data-duration="0.8" data-volume="0.7"></audio>
+      <audio id="a-w5" src="assets/audio/whoosh2.wav" data-start="26.1" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-t6" src="assets/audio/tap.wav" data-start="28.35" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-p2" src="assets/audio/ping.wav" data-start="28.5" data-duration="0.72" data-volume="0.55"></audio>
+      <audio id="a-w6" src="assets/audio/whoosh1.wav" data-start="31.05" data-duration="1.2" data-volume="0.55"></audio>
       <audio id="a-t7" src="assets/audio/tap.wav" data-start="33.6" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-w6" src="assets/audio/whoosh2.wav" data-start="35.85" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-w7" src="assets/audio/whoosh1.wav" data-start="37.9" data-duration="1.2" data-volume="0.4"></audio>
-      <audio id="a-w8" src="assets/audio/whoosh1.wav" data-start="43.05" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-t8" src="assets/audio/tap.wav" data-start="44.6" data-duration="0.24" data-volume="0.8"></audio>
-      <audio id="a-p3" src="assets/audio/ping.wav" data-start="46.0" data-duration="0.72" data-volume="0.55"></audio>
-      <audio id="a-w9" src="assets/audio/whoosh2.wav" data-start="47.1" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-w10" src="assets/audio/whoosh1.wav" data-start="50.25" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-p4" src="assets/audio/pop.wav" data-start="52.3" data-duration="0.8" data-volume="0.5"></audio>
-      <audio id="a-imp2" src="assets/audio/impact.wav" data-start="55.25" data-duration="2" data-volume="0.7"></audio>
+      <audio id="a-w7" src="assets/audio/whoosh2.wav" data-start="35.85" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-w8" src="assets/audio/whoosh1.wav" data-start="37.5" data-duration="1.2" data-volume="0.4"></audio>
+      <audio id="a-w9" src="assets/audio/whoosh1.wav" data-start="40.65" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-p3" src="assets/audio/pop.wav" data-start="42.2" data-duration="0.8" data-volume="0.5"></audio>
+      <audio id="a-imp2" src="assets/audio/impact.wav" data-start="45.65" data-duration="2" data-volume="0.7"></audio>
     </div>
 
     <script>
@@ -308,7 +261,7 @@
         tl.fromTo(sel + " .w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, stagger: gap, ease: "power2.out" }, t);
       const wordsOut = (sel, t) => tl.to(sel + " .w", { opacity: 0, filter: "blur(6px)", duration: 0.14, stagger: 0.03, ease: "power2.in" }, t);
       const num = (sel, t) => tl.fromTo(sel, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: E.in }, t);
-      /* écran du téléphone : 390 px CSS de capture → 470 px */
+      const chapter = (id, tin, tout) => { num(id + "-n", tin); words(id + "-t", tin + 0.1); tl.to(id + "-n", { opacity: 0, duration: 0.15 }, tout); wordsOut(id + "-t", tout); };
       const k = 470 / 390;
       const tap = (x, y, t) => {
         tl.set("#touch", { x: x * k + 120, y: y * k + 180 }, t - 0.5);
@@ -321,146 +274,103 @@
       const show = (id, t, d = 0.18) => tl.to(id, { opacity: 1, duration: d }, t);
       const hide = (id, t) => tl.set(id, { opacity: 0 }, t);
 
-      /* ───── A. avant (0 → 7,2) ───── */
-      tl.fromTo("#sA-sub", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25 }, 1.0);
-      tl.fromTo("#sA-flow", { y: 260, rotation: 0, opacity: 0 }, { y: 0, rotation: 4, opacity: 1, duration: 0.8, ease: E.in }, 0.5);
-      tl.fromTo("#sA-home", { y: 300, rotation: 0, opacity: 0 }, { y: 0, rotation: -5, opacity: 1, duration: 0.8, ease: E.in }, 0.75);
-      tl.to("#sA-flow", { y: -24, duration: 4.4, ease: "none" }, 1.3);
-      tl.to("#sA-home", { y: -40, duration: 4.4, ease: "none" }, 1.55);
-      /* « C'est tout. » : la V1 passe au gris */
-      tl.to("#sA .gray", { opacity: 1, duration: 0.9, ease: "power1.inOut" }, 4.6);
-      tl.to(["#sA-tag", "#sA-t", "#sA-sub"], { opacity: 0.35, duration: 0.9 }, 4.6);
-      tl.to(["#sA-home", "#sA-flow"], { scale: 0.86, duration: 1.4, ease: "power2.in" }, 5.6);
-      tl.to(["#sA-home", "#sA-flow"], { y: 520, opacity: 0, duration: 0.35, ease: E.out }, 6.85);
-      tl.to(["#sA-tag", "#sA-t", "#sA-sub"], { opacity: 0, duration: 0.2 }, 6.9);
+      /* ───── ouverture (0 → 4,8) : V2 déjà à l'écran ───── */
+      words("#sB-t", 0.3, 0.1);
+      tl.to("#sB-v2", { scale: 1.06, duration: 2.8, ease: "power1.inOut" }, 0);
+      tl.to("#sB-t .w", { opacity: 0, duration: 0.15 }, 3.0);
+      tl.to(["#sB-logo"], { y: -60, opacity: 0, duration: 0.35, ease: E.out }, 3.1);
+      tl.to("#sB-v2", { scale: 9, opacity: 0, transformOrigin: "50% 45%", duration: 0.5, ease: E.out }, 4.3);
 
-      /* ───── B. bascule (7,2 → 12) ───── */
-      tl.fromTo("#sB", { clipPath: "circle(0% at 50% 60%)" }, { clipPath: "circle(120% at 50% 60%)", duration: 0.7, ease: "power3.out" }, 7.2);
-      tl.fromTo("#sB-v2", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: E.in }, 7.3);
-      tl.fromTo("#sB-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.out" }, 7.9);
-      words("#sB-t", 8.0, 0.1);
-      tl.to("#sB-t .w", { opacity: 0, duration: 0.15 }, 10.2);
-      tl.to(["#sB-logo"], { y: -60, opacity: 0, duration: 0.35, ease: E.out }, 10.3);
-      tl.to("#sB-v2", { scale: 1.08, duration: 1.2, ease: "power1.inOut" }, 10.2);
-      tl.to("#sB-v2", { scale: 9, opacity: 0, transformOrigin: "50% 45%", duration: 0.5, ease: E.out }, 11.5);
+      /* ───── 01 nouveau design (4,8 → 12) ───── */
+      tl.set("#p-home", { opacity: 1 }, 4.8);
+      tl.fromTo("#ph-in", { y: 360, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: E.in }, 4.8);
+      chapter("#sC", 4.95, 11.7);
+      tl.fromTo("#p-home", { scale: 1 }, { scale: 1.08, transformOrigin: "20% 45%", duration: 2.6, ease: "power1.inOut" }, 4.9);
+      tap(104, 513, 7.6);
+      tl.set("#p-rose", { y: 800, opacity: 1 }, 7.75);
+      tl.to("#p-home", { y: -800, duration: 0.75, ease: "power3.inOut" }, 7.8);
+      tl.to("#p-rose", { y: 0, duration: 0.75, ease: "power3.inOut" }, 7.8);
+      tl.fromTo("#p-rose", { scale: 1 }, { scale: 1.08, transformOrigin: "50% 40%", duration: 2.8, ease: "power1.inOut", immediateRender: false }, 8.7);
 
-      /* ───── C. 01 annuaire (12 → 21,6) ───── */
-      tl.set("#p-home", { opacity: 1 }, 12);
-      tl.fromTo("#ph-in", { y: 360, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: E.in }, 12.0);
-      num("#sC-n", 12.2);
-      words("#sC-t", 12.3);
-      tap(197, 34, 13.4);
-      show("#p-pays", 13.55);
-      tap(120, 268, 15.2);
-      show("#p-feed", 15.35);
-      hide("#p-pays", 15.6);
-      hide("#p-home", 15.6);
-      tap(153, 87, 16.8);
-      tl.set("#p-rose", { y: 800, opacity: 1 }, 17.0);
-      tl.to("#p-feed", { y: -800, duration: 0.75, ease: "power3.inOut" }, 17.1);
-      tl.to("#p-rose", { y: 0, duration: 0.75, ease: "power3.inOut" }, 17.1);
-      tl.to("#p-rose", { scale: 1.1, transformOrigin: "50% 40%", duration: 2.4, ease: "power2.inOut" }, 18.2);
-      tl.to(["#sC-n"], { opacity: 0, duration: 0.15 }, 21.3);
-      wordsOut("#sC-t", 21.3);
+      /* ───── 02 par pays (12 → 19,2) ───── */
+      tl.fromTo("#sP", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: E.move }, 12);
+      tl.to("#p-rose", { scale: 1, duration: 0.4, ease: E.move }, 11.9);
+      chapter("#sP", 12.2, 18.9);
+      tap(190, 33, 13.0);
+      show("#p-pays", 13.15);
+      tap(120, 268, 15.0);
+      show("#p-feed", 15.15);
+      hide(["#p-pays", "#p-home"], 15.4);
+      tl.set("#p-rose", { y: 800, scale: 1 }, 15.4);
+      tl.to("#p-feed", { y: -800, duration: 0.75, ease: "power3.inOut" }, 16.4);
+      tl.to("#p-rose", { y: 0, duration: 0.75, ease: "power3.inOut" }, 16.4);
 
-      /* ───── D. 02 lien TikTok (21,6 → 31,2) ───── */
-      tl.fromTo("#sD", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: E.move }, 21.6);
-      tl.set("#p-form", { opacity: 1 }, 21.8);
-      tl.set(["#p-feed", "#p-rose"], { opacity: 0 }, 21.85);
-      tl.fromTo("#ph-screen", { scale: 0.96 }, { scale: 1, duration: 0.4, ease: E.in }, 21.8);
-      num("#sD-n", 21.9);
-      words("#sD-t", 22.0);
-      tap(319, 344, 22.8);
-      tap(195, 605, 23.9);
-      show("#p-sent", 24.1, 0.2);
-      tl.fromTo("#p-sent", { scale: 1.04 }, { scale: 1, transformOrigin: "50% 20%", duration: 0.5, ease: E.in }, 24.1);
-      /* l'abonnement : 11 000 F pour 30 jours */
-      tl.to("#p-sent", { scale: 1.15, transformOrigin: "50% 62%", duration: 0.7, ease: E.move }, 24.6);
-      /* la régie valide */
-      tl.to("#ph-in", { x: 900, rotation: 6, duration: 0.5, ease: E.out }, 26.2);
-      wordsOut("#sD-t", 26.2);
-      words("#sD-t2", 26.5);
-      tl.fromTo("#sD-laptop", { y: 160, scale: 0.92, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.6, ease: E.in }, 26.3);
+      /* ───── 03 lien TikTok (19,2 → 26,4) ───── */
+      tl.set("#p-form", { opacity: 1 }, 19.3);
+      hide(["#p-feed", "#p-rose"], 19.35);
+      tl.fromTo("#ph-screen", { scale: 0.96 }, { scale: 1, duration: 0.4, ease: E.in }, 19.3);
+      chapter("#sL", 19.4, 26.0);
+      tap(319, 344, 20.4);
+      tap(195, 605, 21.8);
+      show("#p-sent", 22.0, 0.2);
+      tl.fromTo("#p-sent", { scale: 1.04 }, { scale: 1, transformOrigin: "50% 20%", duration: 0.5, ease: E.in }, 22.0);
+      tl.to("#p-sent", { scale: 1.15, transformOrigin: "50% 62%", duration: 0.7, ease: E.move }, 23.0);
+      tl.to("#ph-in", { x: 900, rotation: 6, duration: 0.5, ease: E.out }, 26.1);
+
+      /* ───── 04 l'équipe valide (26,4 → 31,2) ───── */
+      chapter("#sR", 26.5, 30.85);
+      tl.fromTo("#sR-laptop", { y: 160, scale: 0.92, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.6, ease: E.in }, 26.4);
       const kk = 948 / 2880;
-      tl.set("#sD-valid", { opacity: 0 }, 21.6);
-      tl.fromTo("#sD-zoom", { scale: 1, x: 0, y: 0 }, { scale: 1.5, x: -237, y: -91, transformOrigin: "0 0", duration: 0.9, ease: E.move }, 26.9);
-      tl.set("#sD-cursor", { x: 520, y: 470 }, 27.3);
-      tl.to("#sD-cursor", { opacity: 1, duration: 0.1 }, 27.3);
-      tl.to("#sD-cursor", { x: 2205 * kk, y: 765 * kk, duration: 0.8, ease: "power3.out" }, 27.5);
-      tl.to("#sD-cursor", { scale: 0.85, duration: 0.07 }, 28.55);
-      tl.to("#sD-cursor", { scale: 1, duration: 0.15 }, 28.62);
-      tl.to("#sD-valid", { opacity: 1, duration: 0.12 }, 28.6);
-      tl.to("#sD-zoom", { scale: 2.4, x: -661, y: -935, duration: 0.8, ease: E.move }, 29.0);
-      tl.to("#sD-cursor", { opacity: 0, duration: 0.2 }, 29.0);
-      tl.to("#sD-laptop", { scale: 2.4, opacity: 0, transformOrigin: "70% 50%", duration: 0.4, ease: E.out }, 30.75);
-      tl.to("#sD-n", { opacity: 0, duration: 0.15 }, 30.85);
-      wordsOut("#sD-t2", 30.85);
+      tl.set("#sR-valid", { opacity: 0 }, 26.4);
+      tl.fromTo("#sR-zoom", { scale: 1, x: 0, y: 0 }, { scale: 1.5, x: -237, y: -91, transformOrigin: "0 0", duration: 0.9, ease: E.move }, 26.9);
+      tl.set("#sR-cursor", { x: 520, y: 470 }, 27.25);
+      tl.to("#sR-cursor", { opacity: 1, duration: 0.1 }, 27.25);
+      tl.to("#sR-cursor", { x: 2205 * kk, y: 765 * kk, duration: 0.8, ease: "power3.out" }, 27.4);
+      tl.to("#sR-cursor", { scale: 0.85, duration: 0.07 }, 28.35);
+      tl.to("#sR-cursor", { scale: 1, duration: 0.15 }, 28.42);
+      tl.to("#sR-valid", { opacity: 1, duration: 0.12 }, 28.4);
+      tl.to("#sR-zoom", { scale: 2.4, x: -661, y: -935, duration: 0.8, ease: E.move }, 28.9);
+      tl.to("#sR-cursor", { opacity: 0, duration: 0.2 }, 28.9);
+      tl.to("#sR-laptop", { scale: 2.4, opacity: 0, transformOrigin: "70% 50%", duration: 0.4, ease: E.out }, 30.75);
 
-      /* ───── E. 03 shorts (31,2 → 36) ───── */
-      tl.set(["#p-form", "#p-sent"], { opacity: 0 }, 31.0);
+      /* ───── 05 shorts (31,2 → 36) ───── */
+      hide(["#p-form", "#p-sent"], 31.0);
       tl.set("#p-shorts", { opacity: 1 }, 31.0);
       tl.set("#ph-in", { x: 760, rotation: 6 }, 31.0);
       tl.to("#ph-in", { x: 0, rotation: 0, duration: 0.7, ease: E.in }, 31.2);
-      num("#sE-n", 31.35);
-      words("#sE-t", 31.45);
+      chapter("#sE", 31.35, 35.7);
       tl.fromTo("#p-shorts", { scale: 1.12 }, { scale: 1, transformOrigin: "50% 40%", duration: 3.4, ease: "power1.out" }, 31.2);
       tap(330, 623, 33.6);
       tl.to("#ph-in", { y: 1500, rotation: 4, duration: 0.5, ease: E.out }, 35.6);
       tl.set("#ph-in", { opacity: 0 }, 36.1);
-      tl.to("#sE-n", { opacity: 0, duration: 0.15 }, 35.7);
-      wordsOut("#sE-t", 35.7);
 
-      /* ───── F. 04 carte OCD (36 → 43,2) ───── */
-      tl.fromTo("#sF", { clipPath: "circle(0% at 50% 100%)" }, { clipPath: "circle(150% at 50% 100%)", duration: 0.6, ease: "power3.out" }, 35.95);
-      num("#sF-n", 36.2);
-      words("#sF-t", 36.3);
-      tl.fromTo("#sF-card", { y: 360, opacity: 0, scale: 0.9, rotation: -4 }, { y: 0, opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: E.in }, 36.3);
-      tl.fromTo("#sF-flip", { rotationY: 0 }, { rotationY: 180, duration: 0.9, ease: E.move }, 38.0);
-      tl.to("#sF-flip", { rotationY: 360, duration: 0.9, ease: E.move }, 40.4);
-      tl.to("#sF-card", { scale: 0.7, y: -120, opacity: 0, duration: 0.4, ease: E.out }, 42.75);
-      tl.to("#sF-n", { opacity: 0, duration: 0.15 }, 42.85);
-      wordsOut("#sF-t", 42.85);
+      /* ───── 06 studio (36 → 40,8) ───── */
+      tl.fromTo("#sS", { clipPath: "circle(0% at 50% 100%)" }, { clipPath: "circle(150% at 50% 100%)", duration: 0.6, ease: "power3.out" }, 36);
+      chapter("#sS", 36.2, 40.45);
+      tl.fromTo("#sS-card", { y: 360, opacity: 0, scale: 0.9, rotation: -4 }, { y: 0, opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: E.in }, 36.3);
+      tl.fromTo("#sS-flip", { rotationY: 0 }, { rotationY: 180, duration: 0.9, ease: E.move }, 37.6);
+      tl.to("#sS-card", { scale: 0.7, y: -120, opacity: 0, duration: 0.4, ease: E.out }, 40.35);
 
-      /* ───── G. 05 paiement (43,2 → 50,4) ───── */
-      tl.set("#p-shorts", { opacity: 0 }, 43.0);
-      tl.set("#p-pay1", { opacity: 1 }, 43.0);
-      tl.set("#ph-in", { y: 360, x: 0, rotation: 0, scale: 0.9, opacity: 0 }, 43.0);
-      tl.to("#ph-in", { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: E.in }, 43.25);
-      num("#sG-n", 43.35);
-      tl.fromTo("#sG-logos img", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.12, ease: E.in }, 43.5);
-      words("#sG-t", 43.6);
-      tap(195, 599, 44.6);
-      show("#p-pay2", 44.75, 0.15);
-      show("#p-pay3", 46.0, 0.15);
-      tl.fromTo("#p-pay3", { scale: 1.04 }, { scale: 1, duration: 0.4, ease: E.in }, 46.0);
-      /* le reçu */
-      tl.to("#ph-in", { x: 900, rotation: 6, duration: 0.5, ease: E.out }, 47.1);
-      tl.fromTo("#sG-recu", { y: 500, opacity: 0, rotation: 3 }, { y: 0, opacity: 1, rotation: 0, duration: 0.7, ease: E.in }, 47.25);
-      tl.to("#sG-recu img", { y: -240, duration: 1.4, ease: "power2.inOut" }, 48.2);
-      tl.to("#sG-recu", { y: -200, opacity: 0, duration: 0.4, ease: E.out }, 49.95);
-      tl.to(["#sG-n", "#sG-logos"], { opacity: 0, duration: 0.15 }, 50.05);
-      wordsOut("#sG-t", 50.05);
+      /* ───── récap (40,8 → 45,6) ───── */
+      hide("#p-shorts", 40.7);
+      tl.set("#p-rose", { opacity: 1, y: 0, scale: 1 }, 40.7);
+      words("#sH-t", 40.9, 0.1);
+      tl.fromTo("#sH-laptop", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: E.in }, 40.9);
+      tl.set("#ph-in", { x: 0, y: 0, rotation: 0, transformOrigin: "0 0", opacity: 1 }, 40.7);
+      tl.fromTo("#ph-in", { x: 300, y: 396, scale: 0.5 }, { x: -380, y: 396, scale: 0.5, duration: 0.7, ease: E.in, immediateRender: false }, 41.0);
+      tl.fromTo("#sH-chips .c", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.12, ease: E.in }, 41.9);
+      tl.to(["#sH-laptop", "#sH-chips", "#sH-t"], { opacity: 0, duration: 0.3, ease: E.out }, 45.25);
+      tl.to("#ph-in", { opacity: 0, duration: 0.3, ease: E.out }, 45.25);
 
-      /* ───── H. récap (50,4 → 55,2) ───── */
-      tl.set(["#p-pay1", "#p-pay2", "#p-pay3"], { opacity: 0 }, 50.3);
-      tl.set("#p-rose", { opacity: 1, y: 0 }, 50.3);
-      words("#sH-t", 50.5, 0.1);
-      tl.fromTo("#sH-laptop", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: E.in }, 50.5);
-      tl.set("#ph-in", { x: 0, rotation: 0, transformOrigin: "0 0" }, 50.3);
-      tl.fromTo("#ph-in", { x: 300, y: 396, scale: 0.5 }, { x: -380, y: 396, scale: 0.5, duration: 0.7, ease: E.in, immediateRender: false }, 50.6);
-      tl.fromTo("#sH-chips .c", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.14, ease: E.in }, 51.6);
-      tl.to(["#sH-laptop", "#sH-chips", "#sH-t"], { opacity: 0, duration: 0.3, ease: E.out }, 54.85);
-      tl.to("#ph-in", { opacity: 0, duration: 0.3, ease: E.out }, 54.85);
-
-      /* ───── I. fin (55,2 → 60) ───── */
-      tl.fromTo("#sI-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 55.25);
-      tl.fromTo("#sI-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 55.85);
-      tl.fromTo("#sI-v2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: E.in }, 56.25);
-      tl.fromTo("#sI-url", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 56.6);
-      tl.fromTo("#sI-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 57.0);
+      /* ───── fin (45,6 → 50,4) ───── */
+      tl.fromTo("#sI-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 45.65);
+      tl.fromTo("#sI-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 46.25);
+      tl.fromTo("#sI-v2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: E.in }, 46.65);
+      tl.fromTo("#sI-url", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 47.0);
+      tl.fromTo("#sI-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 47.4);
 
       /* ───── guide de lecture ───── */
-      [[0.3, 6.9], [7.3, 11.8], [12.1, 21.4], [21.7, 31.0], [31.3, 35.8], [36.1, 43.0], [43.3, 50.2], [50.5, 55.0], [55.3, 59.8]].forEach(([a, b], i) => {
+      [[0.3, 4.6], [4.9, 11.8], [12.1, 19.0], [19.3, 26.2], [26.5, 31.0], [31.3, 35.8], [36.1, 40.6], [40.9, 45.4], [45.7, 50.2]].forEach(([a, b], i) => {
         tl.fromTo("#g" + (i + 1), { opacity: 0 }, { opacity: 1, duration: 0.15 }, a);
         tl.to("#g" + (i + 1), { opacity: 0, duration: 0.15 }, b);
       });
