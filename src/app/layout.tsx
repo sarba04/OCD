@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "OCD Live : passe en live, place ton produit",
     description: "Au studio à Lomé ou à distance, partout en Afrique. Choisis ton jour, ton heure, ton pack : c'est réservé.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "OCD Live" }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "OCD Live : le marché, en live. Vends en live devant toute l'Afrique." }],
     locale: "fr_FR",
     type: "website",
   },
