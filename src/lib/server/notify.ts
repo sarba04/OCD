@@ -1,5 +1,5 @@
 import "server-only";
-import { BRAND, PAYMENT_METHODS } from "../config";
+import { BRAND, PAYMENT_LABEL } from "../config";
 import { getCountry } from "../countries";
 import { fcfa } from "../format";
 import { formatDay, formatTime } from "../schedule";
@@ -23,7 +23,7 @@ export function bookingSentence(b: Booking) {
 }
 
 function lines(b: Booking) {
-  const pay = PAYMENT_METHODS.find((p) => p.id === b.paymentMethod)?.label ?? b.paymentMethod;
+  const pay = PAYMENT_LABEL[b.paymentMethod] ?? b.paymentMethod;
   const c = getCountry(b.country);
   const out = [
     `Ce qu'il/elle présente : « ${b.business.pitch} »`,

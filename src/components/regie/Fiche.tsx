@@ -2,7 +2,7 @@
 "use client";
 import { Copy, ExternalLink, LoaderCircle, MapPin, MessageCircle, Phone, Truck, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { PAYMENT_METHODS } from "@/lib/config";
+import { PAYMENT_LABEL } from "@/lib/config";
 import { getCountry } from "@/lib/countries";
 import { fcfa, waLink } from "@/lib/format";
 import { formatDay, formatTime } from "@/lib/schedule";
@@ -74,7 +74,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
   }
 
   const c = b ? getCountry(b.country) : null;
-  const pay = b ? PAYMENT_METHODS.find((p) => p.id === b.paymentMethod)?.label : "";
+  const pay = b ? PAYMENT_LABEL[b.paymentMethod] : "";
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label="Fiche vendeur">

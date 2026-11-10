@@ -107,7 +107,7 @@ function seed(): Data {
         sessions,
         business: { name, category, pitch, priceHint: "", displayPhone: phone, address, delivers: rand() < 0.6, social: "" },
         contact: { fullName, phone, email: "" },
-        paymentMethod: (["flooz", "mixx", "cash", "flooz"] as const)[i % 4],
+        paymentMethod: (["mtn", "orange", "wave", "card"] as const)[i % 4],
         photo: null,
         demo: true,
       });

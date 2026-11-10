@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { CalendarPlus, Check, Download, LoaderCircle, MessageCircle, Share2 } from "lucide-react";
+import { CalendarPlus, Check, Download, FileText, LoaderCircle, MessageCircle, Printer, Share2 } from "lucide-react";
+import { downloadReceipt } from "@/lib/client/receipt";
 import { useEffect, useState } from "react";
 import { BRAND, PAYMENT_METHODS } from "@/lib/config";
 import { getCountry } from "@/lib/countries";
@@ -75,7 +76,7 @@ export function StepDone({
   ].join("\n");
   const teamLink = BRAND.whatsapp ? waLink(BRAND.whatsapp, teamMsg) : `https://wa.me/?text=${encodeURIComponent(teamMsg)}`;
 
-  const payNumber = b.paymentMethod === "flooz" ? BRAND.payFlooz : b.paymentMethod === "mixx" ? BRAND.payMixx : "";
+  const [receipt, setReceipt] = useState<"idle" | "busy" | "done" | "error">("idle");
 
   return (
     <div className="animate-rise grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
@@ -130,32 +131,50 @@ export function StepDone({
       </div>
 
       <div className="grid content-start gap-10">
-        {/* 1. Payer */}
+        {/* 1. Le paiement et le reçu à garder */}
         <section className="border-t-2 border-ink pt-5">
-          <h2 className="text-[22px] font-bold tracking-[-0.015em]">
-            {b.paymentMethod === "cash" ? "Tu paies au studio" : b.paymentMethod === "later" ? "L'équipe te contacte" : `Paie ${fcfa(b.price)} par ${pay?.label}`}
-          </h2>
-          <div className="mt-2 text-[15.5px] leading-relaxed text-ink-2">
-            {b.paymentMethod === "cash" && <p>Le jour J, avant ton live. Ta place reste bloquée : l&apos;équipe te confirme tout sur WhatsApp.</p>}
-            {b.paymentMethod === "later" && <p>Sous 24 h sur WhatsApp, pour trouver le moyen de paiement qui t&apos;arrange (Wave, transfert, carte…).</p>}
-            {(b.paymentMethod === "flooz" || b.paymentMethod === "mixx") && (
-              <ol className="grid gap-1.5">
-                <li>
-                  1. Envoie <strong className="tabular font-semibold text-ink">{fcfa(b.price)}</strong>{" "}
-                  {payNumber ? (
-                    <>
-                      au <strong className="tabular font-semibold text-ink">{payNumber}</strong>
-                    </>
-                  ) : (
-                    "au numéro que l'équipe t'envoie sur WhatsApp"
-                  )}
-                  .
-                </li>
-                <li>
-                  2. Mets la référence <strong className="tabular font-bold tracking-[0.02em] text-ink">{b.ref}</strong> en motif.
-                </li>
-                <li>3. Ta place est confirmée dès réception. Tu as 24 h.</li>
-              </ol>
+          <div className="flex items-center gap-3">
+            {pay && <img src={`/pay/${pay.id}.svg`} alt="" width={96} height={64} className="h-10 w-auto rounded-md ring-1 ring-line" />}
+            <div className="min-w-0">
+              <h2 className="text-[22px] font-bold tracking-[-0.015em]">{pay ? "Paiement confirmé" : "Paiement à faire"}</h2>
+              <p className="tabular text-[14.5px] text-ink-2">
+                {fcfa(b.price)}
+                {pay ? ` · ${pay.label} · simulation, aucun débit` : ""}
+              </p>
+            </div>
+          </div>
+          <div className="mt-5 rounded-3xl bg-paper-2 p-4 sm:p-5">
+            <p className="flex items-center gap-2 text-[17px] font-bold">
+              <FileText className="size-5 text-orange-ink" aria-hidden /> Ton reçu
+            </p>
+            <p className="mt-1 text-[14.5px] text-ink-2">À garder ou à imprimer : la référence {b.ref}, tes dates, le montant et le QR à montrer à la régie.</p>
+            <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+              <PrimaryButton
+                onClick={async () => {
+                  setReceipt("busy");
+                  try {
+                    await downloadReceipt(b);
+                    setReceipt("done");
+                  } catch {
+                    setReceipt("error");
+                  }
+                }}
+                disabled={receipt === "busy"}
+                loading={receipt === "busy"}
+                className="w-full"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <Download className="size-5" aria-hidden /> {receipt === "done" ? "Reçu téléchargé" : "Télécharger le reçu (PDF)"}
+                </span>
+              </PrimaryButton>
+              <InkButton onClick={() => downloadReceipt(b, "print").catch(() => setReceipt("error"))} className="h-14 w-full">
+                <Printer className="size-5" aria-hidden /> Imprimer
+              </InkButton>
+            </div>
+            {receipt === "error" && (
+              <p role="alert" className="mt-2 text-[14px] font-medium text-danger">
+                Le reçu n&apos;a pas pu être créé sur ce téléphone. Utilise « Imprimer », ou fais une capture d&apos;écran de ta carte.
+              </p>
             )}
           </div>
         </section>

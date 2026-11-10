@@ -645,3 +645,6 @@ html:has(.sticky-preview) {
   50%, 95% { transform: translateY(-110%); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
 }
+/* Paiement confirmé : la coche arrive avec un rebond. */
+.pay-ok { animation: pay-ok 600ms var(--ease-spring) both; }
+@keyframes pay-ok { from { transform: scale(0.3); opacity: 0; } to { transform: none; opacity: 1; } }

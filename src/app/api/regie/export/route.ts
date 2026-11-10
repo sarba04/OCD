@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PAYMENT_METHODS } from "@/lib/config";
+import { PAYMENT_LABEL } from "@/lib/config";
 import { getCountry } from "@/lib/countries";
 import { formatDay, formatTime } from "@/lib/schedule";
 import { isAdmin } from "@/lib/server/auth";
@@ -20,7 +20,7 @@ export async function GET() {
     const s = b.sessions[0];
     return [b.ref, STATUS_LABEL[b.status], b.mode === "studio" ? "Studio Lomé" : "À distance", getCountry(b.country)?.name ?? b.country,
       formatDay(s.start.slice(0, 10)), formatTime(s.start), formatTime(s.end), b.sessions.length, b.packName, b.price,
-      PAYMENT_METHODS.find((p) => p.id === b.paymentMethod)?.label ?? b.paymentMethod, b.business.name, b.business.category,
+      PAYMENT_LABEL[b.paymentMethod] ?? b.paymentMethod, b.business.name, b.business.category,
       b.business.pitch, b.business.displayPhone, b.business.address, b.business.delivers ? "oui" : "non", b.business.social,
       b.contact.fullName, b.contact.phone, b.contact.email, new Date(b.createdAt).toLocaleString("fr-FR", { timeZone: "Africa/Lome" })];
   });
