@@ -16,7 +16,7 @@ export function StructuredData() {
         description:
           "Studio de lives à Lomé : réserve un live au studio ou à distance pour présenter ton produit, ton numéro et ton adresse en direct sur House of Challenge.",
         url: SITE,
-        image: `${SITE}/og.png`,
+        image: `${SITE}/og.jpg`,
         logo: `${SITE}/brand/ocd-logo.svg`,
         address: { "@type": "PostalAddress", addressLocality: "Lomé", addressCountry: "TG" },
         areaServed: [{ "@type": "Continent", name: "Afrique" }, { "@type": "Country", name: "Togo" }],
