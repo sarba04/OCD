@@ -629,3 +629,19 @@ html:has(.sticky-preview) {
     repeating-linear-gradient(135deg, rgb(255 255 255 / 0.07) 0 1px, transparent 1px 9px),
     linear-gradient(170deg, var(--c), color-mix(in srgb, var(--c) 72%, #000));
 }
+
+/* Carte OCD sans photo : l'orange OCD, une lumière et une trame fine. */
+.card-cover {
+  background:
+    radial-gradient(90% 60% at 80% 0%, rgb(255 255 255 / 0.28), transparent 60%),
+    repeating-linear-gradient(135deg, rgb(255 255 255 / 0.08) 0 1px, transparent 1px 10px),
+    linear-gradient(165deg, #f47a1c, #b34a00 85%);
+}
+/* Incrustation : l'adresse et la livraison alternent toutes les 5 s. */
+.overlay-swap > span { animation: swap 10s var(--ease-out) infinite; }
+.overlay-swap > span:nth-child(2) { animation-delay: -5s; }
+@keyframes swap {
+  0%, 45% { transform: translateY(0); opacity: 1; }
+  50%, 95% { transform: translateY(-110%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}

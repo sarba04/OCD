@@ -128,7 +128,7 @@ export function Fiche({ id, onClose, onChanged }: { id: string; onClose: () => v
               {b.business.social && <p className="mt-1 text-[14px] text-night-ink-2">{b.business.social}</p>}
               <div className="mt-4 flex flex-wrap gap-2">
                 <a href={overlay} target="_blank" rel="noopener" className="inline-flex h-10 items-center gap-2 bg-night-orange px-3 text-[14px] font-bold text-ink">
-                  <ExternalLink className="size-4" aria-hidden /> Bandeau du live
+                  <ExternalLink className="size-4" aria-hidden /> Carte à incruster
                 </a>
                 <button
                   onClick={async () => {

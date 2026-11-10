@@ -10,7 +10,7 @@ import type { PublicBooking } from "@/lib/types";
 import { bookingIcs, download } from "@/lib/client/ics";
 import { drawPoster } from "@/lib/client/poster";
 import { GhostButton, InkButton, PrimaryButton } from "@/components/ui/kit";
-import { PassCard } from "./PassCard";
+import { OcdCard } from "./OcdCard";
 
 export function StepDone({
   booking: b,
@@ -97,26 +97,22 @@ export function StepDone({
           {b.mode === "remote" && c && c.tz !== "Africa/Lome" ? ` (heure de ${c.city})` : ""}. L&apos;équipe OCD vient de recevoir ta fiche.
         </p>
 
-        {/* la fente de l'imprimante à tickets */}
-        <div aria-hidden className="relative z-10 mx-auto mt-8 h-4 w-[min(100%,500px)] rounded-full bg-ink shadow-[0_6px_14px_-6px_rgb(0_0_0/0.5)]">
-          <span className="absolute inset-x-5 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-black" />
-        </div>
-        <div className="-mx-4 -mt-2 overflow-hidden px-4 pb-10">
-          <div className="print-out">
-          <PassCard
-            stamped
-            data={{
+        {/* la carte OCD passe « Programmé » : recto le produit, verso le live et le QR pour la régie */}
+        <div className="animate-rise mt-8">
+          <OcdCard
+            status="scheduled"
+            d={{ ...b.business, phone: b.business.displayPhone, photo }}
+            meta={{
               ref: b.ref,
-              mode: b.mode,
-              country: b.country,
-              sessions: b.sessions,
               packName: b.packName,
               price: b.price,
-              businessName: b.business.name,
-              fullName: b.contact.fullName,
+              mode: b.mode,
+              start: first.start,
+              end: first.end,
+              sessions: b.sessions.length,
+              localTime: b.mode === "remote" && c && c.tz !== "Africa/Lome" ? `${formatTime(first.start, c.tz)} à ${c.city}` : null,
             }}
           />
-          </div>
         </div>
         <div className="mx-auto mt-6 grid max-w-[460px] gap-2.5 sm:grid-cols-2">
           <GhostButton onClick={() => download(`ocd-live-${b.ref}.ics`, new Blob([bookingIcs(b)], { type: "text/calendar" }))}>
@@ -134,22 +130,6 @@ export function StepDone({
       </div>
 
       <div className="grid content-start gap-10">
-        <figure className="chamfer-lg relative overflow-hidden bg-night">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/media/studio-night-640.webp"
-            srcSet="/media/studio-night-640.webp 640w, /media/studio-night-1200.webp 1200w"
-            sizes="(min-width: 1024px) 560px, 100vw"
-            width={1200}
-            height={1313}
-            decoding="async"
-            alt="Le studio OCD Live, mur Afrique allumé, prêt pour le live"
-            className="block aspect-[16/10] h-auto w-full object-cover object-[50%_40%]"
-          />
-          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-5 pt-10 pb-4 text-[17px] font-bold text-white">
-            {b.mode === "studio" ? "Le studio t'attend." : "La régie t'attend, ton animatrice aussi."}
-          </figcaption>
-        </figure>
         {/* 1. Payer */}
         <section className="border-t-2 border-ink pt-5">
           <h2 className="text-[22px] font-bold tracking-[-0.015em]">

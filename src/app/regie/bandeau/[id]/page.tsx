@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LowerThird } from "@/components/flow/LivePreview";
+import { OverlayCard } from "@/components/flow/OverlayCard";
 import { checkOverlayToken } from "@/lib/server/auth";
 import { getStore } from "@/lib/server/store";
 
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Bandeau d'incrustation pour la régie : à ajouter comme « source navigateur » dans OBS ou TikTok LIVE Studio.
- * Fond transparent, format vertical 1080×1920 (le bandeau se cale en bas).
+ * Fond transparent, format vertical 1080×1920 : une carte flottante en bas, avec la photo du produit.
  */
 export default async function Bandeau({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ t?: string }> }) {
   const { id } = await params;
@@ -21,8 +21,8 @@ export default async function Bandeau({ params, searchParams }: { params: Promis
     <>
       <style>{`html,body{background:transparent!important}`}</style>
       <div className="flex min-h-dvh items-end justify-center p-[4vw]">
-        <div className="w-full max-w-[1000px] text-[2.2vw] [zoom:2.4] sm:[zoom:1.6] lg:[zoom:2]">
-          <LowerThird
+        <div className="w-full max-w-[1000px] text-[3.6vw]">
+          <OverlayCard
             d={{
               name: b.business.name,
               pitch: b.business.pitch,
@@ -30,7 +30,7 @@ export default async function Bandeau({ params, searchParams }: { params: Promis
               address: b.business.address,
               delivers: b.business.delivers,
               priceHint: b.business.priceHint,
-              photo: null,
+              photo: b.photo,
             }}
           />
         </div>
