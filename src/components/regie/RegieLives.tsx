@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getCountry } from "@/lib/countries";
 import { LIVE_PASS, LIVE_SESSIONS, LIVE_TEST_MODE, getCategory, type LiveEntry } from "@/lib/lives";
 import { Flag } from "@/components/ui/Flag";
-import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { CategoryArt } from "@/components/ui/CategoryArt";
 import { fcfa } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
@@ -114,8 +114,8 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
                       <img src={`/api/lives/${l.id}/photo`} alt="" className="size-16 rounded-xl object-cover ring-1 ring-night-line" />
                     </a>
                   ) : (
-                    <span className="grid size-12 shrink-0 place-items-center rounded-full text-white" style={{ background: cat.color }} aria-hidden>
-                      <CategoryIcon id={cat.id} className="size-6" />
+                    <span className="tint grid size-16 shrink-0 place-items-center rounded-xl" style={{ ["--c" as string]: cat.color }} aria-hidden>
+                      <CategoryArt id={cat.id} small className="size-12" />
                     </span>
                   )}
                   <div className="min-w-0">

@@ -3,9 +3,9 @@ import { ArrowUpRight, Globe, MoonStar, RotateCcw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getCountry } from "@/lib/countries";
 import { LIVE_CATEGORIES, getCategory, type PublicLive } from "@/lib/lives";
-import { initials } from "@/lib/format";
 import { Flag } from "@/components/ui/Flag";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { CategoryArt } from "@/components/ui/CategoryArt";
 import { cn } from "@/lib/cn";
 import { haptic } from "@/components/ui/kit";
 import { untilLabel, type LivesState } from "./useLives";
@@ -67,11 +67,11 @@ export function Directory({ data, error, onRetry, onSell }: { data: LivesState |
                 className="group flex w-[76px] shrink-0 flex-col items-center gap-1.5"
               >
                 <span
-                  className={cn("grid size-16 place-items-center rounded-full text-white transition-transform duration-200 group-active:scale-95", on ? "ring-4 ring-ink ring-offset-2 ring-offset-paper" : "")}
-                  style={{ background: c.color }}
+                  className={cn("tint grid size-16 place-items-center rounded-full transition-transform duration-200 group-active:scale-95", on ? "ring-4 ring-ink ring-offset-2 ring-offset-paper" : "")}
+                  style={{ ["--c" as string]: c.color }}
                   aria-hidden
                 >
-                  <CategoryIcon id={c.id} className="size-7" />
+                  <CategoryArt id={c.id} small className="size-12" />
                 </span>
                 <span className={cn("text-center text-[12.5px] leading-tight", on ? "font-bold text-ink" : "font-medium text-ink-2")}>
                   {c.label} <span className="text-ink-3">{c.n}</span>
@@ -145,7 +145,7 @@ function LiveCard({ l, i }: { l: PublicLive; i: number }) {
         href={l.url}
         target="_blank"
         rel="noopener"
-        className="cover group relative flex aspect-[4/5] flex-col overflow-hidden rounded-[22px] text-white transition-transform duration-200 active:scale-[0.98]"
+        className={cn("group relative flex aspect-[4/5] flex-col overflow-hidden rounded-[22px] text-white transition-transform duration-200 active:scale-[0.98]", l.hasPhoto ? "bg-ink" : "tint")}
         style={{ ["--c" as string]: c.color }}
         aria-label={`${l.name}, ${c.label}, ${country?.name ?? ""} : regarder son live sur TikTok`}
       >
@@ -170,10 +170,9 @@ function LiveCard({ l, i }: { l: PublicLive; i: number }) {
             <span className="flex-1" />
           </>
         ) : (
-          <span className="relative flex flex-1 items-end px-3.5 pb-2 sm:px-4" aria-hidden>
-            <span className="display text-[64px] leading-[0.85] tracking-[-0.06em] text-white/95 transition-transform duration-300 group-hover:-translate-y-1 sm:text-[80px]">
-              {initials(l.name)}
-            </span>
+          <span className="relative flex flex-1 items-center justify-center px-4" aria-hidden>
+            {/* pas de photo : l'objet du rayon, en grand */}
+            <CategoryArt id={c.id} className="w-[78%] transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-2" />
           </span>
         )}
         <span className="relative z-10 m-2 rounded-2xl bg-white px-3 py-2.5 text-ink shadow-[0_6px_16px_-8px_rgb(0_0_0/0.4)]">

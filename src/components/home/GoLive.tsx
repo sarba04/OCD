@@ -9,6 +9,7 @@ import { fcfa, prettyPhone, waLink } from "@/lib/format";
 import { LIVE_CATEGORIES, LIVE_PASS, LIVE_SESSIONS, getCategory, isTikTokUrl } from "@/lib/lives";
 import { Flag } from "@/components/ui/Flag";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { CategoryArt } from "@/components/ui/CategoryArt";
 import { cn } from "@/lib/cn";
 import { haptic, inputClass } from "@/components/ui/kit";
 import { untilLabel, useLives } from "./useLives";
@@ -233,8 +234,8 @@ export function GoLive() {
               {LIVE_CATEGORIES.map((c) => (
                 <li key={c.id}>
                   <Pick on={f.category === c.id} onClick={() => (set({ category: c.id }), go(2))} tall>
-                    <span className="grid size-16 place-items-center rounded-full text-white" style={{ background: c.color }} aria-hidden>
-                      <CategoryIcon id={c.id} className="size-8" />
+                    <span className="tint grid size-20 place-items-center rounded-full" style={{ ["--c" as string]: c.color }} aria-hidden>
+                      <CategoryArt id={c.id} small className="size-16" />
                     </span>
                     <span className="text-[16px] font-semibold">{c.label}</span>
                   </Pick>

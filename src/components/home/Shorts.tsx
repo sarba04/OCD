@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { getCountry } from "@/lib/countries";
 import { getCategory } from "@/lib/lives";
 import { Flag } from "@/components/ui/Flag";
-import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { CategoryArt } from "@/components/ui/CategoryArt";
 
 interface Short {
   id: string;
@@ -122,8 +122,8 @@ function TikTokShort({ s }: { s: Short }) {
           className="h-full w-full max-w-[min(100vw,56.25dvh)] border-0"
         />
       ) : (
-        <span className="grid size-20 place-items-center rounded-full text-white" style={{ background: c.color }} aria-hidden>
-          <CategoryIcon id={c.id} className="size-10" />
+        <span className="tint grid size-40 place-items-center rounded-full" style={{ ["--c" as string]: c.color }} aria-hidden>
+          <CategoryArt id={c.id} className="size-32" />
         </span>
       )}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto flex max-w-[min(100vw,56.25dvh)] items-end justify-between gap-3 p-4">

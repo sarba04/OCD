@@ -648,3 +648,10 @@ html:has(.sticky-preview) {
 /* Paiement confirmé : la coche arrive avec un rebond. */
 .pay-ok { animation: pay-ok 600ms var(--ease-spring) both; }
 @keyframes pay-ok { from { transform: scale(0.3); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Fond d'un objet de rayon : une teinte claire de la couleur du rayon, avec une lumière douce en haut. */
+.tint {
+  background:
+    radial-gradient(90% 70% at 50% 15%, rgb(255 255 255 / 0.7), transparent 70%),
+    color-mix(in srgb, var(--c) 26%, #fbf7f1);
+}
