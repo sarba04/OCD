@@ -149,18 +149,34 @@ function LiveCard({ l, i }: { l: PublicLive; i: number }) {
         style={{ ["--c" as string]: c.color }}
         aria-label={`${l.name}, ${c.label}, ${country?.name ?? ""} : regarder son live sur TikTok`}
       >
-        <span className="relative flex items-center justify-between p-3 sm:p-3.5">
+        <span className="relative z-10 flex items-center justify-between p-3 sm:p-3.5">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-live px-2.5 py-1 text-[11px] font-extrabold tracking-[0.08em]">
             <span className="size-1.5 rounded-full bg-white motion-safe:animate-pulse" aria-hidden /> LIVE
           </span>
           <Flag code={l.country} className="w-7" />
         </span>
-        <span className="relative flex flex-1 items-end px-3.5 pb-2 sm:px-4" aria-hidden>
-          <span className="display text-[64px] leading-[0.85] tracking-[-0.06em] text-white/95 transition-transform duration-300 group-hover:-translate-y-1 sm:text-[80px]">
-            {initials(l.name)}
+        {l.hasPhoto ? (
+          <>
+            {/* la photo du produit remplit la carte ; un voile en haut garde le badge LIVE lisible */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/api/lives/${l.id}/photo`}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <span aria-hidden className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/45 to-transparent" />
+            <span className="flex-1" />
+          </>
+        ) : (
+          <span className="relative flex flex-1 items-end px-3.5 pb-2 sm:px-4" aria-hidden>
+            <span className="display text-[64px] leading-[0.85] tracking-[-0.06em] text-white/95 transition-transform duration-300 group-hover:-translate-y-1 sm:text-[80px]">
+              {initials(l.name)}
+            </span>
           </span>
-        </span>
-        <span className="relative m-2 rounded-2xl bg-white px-3 py-2.5 text-ink">
+        )}
+        <span className="relative z-10 m-2 rounded-2xl bg-white px-3 py-2.5 text-ink shadow-[0_6px_16px_-8px_rgb(0_0_0/0.4)]">
           <span className="block truncate text-[15px] leading-tight font-bold">{l.name}</span>
           <span className="mt-1 flex items-center justify-between gap-2 text-[12.5px] text-ink-2">
             <span className="inline-flex min-w-0 items-center gap-1.5">

@@ -64,10 +64,15 @@ export interface LiveEntry {
   reviewedAt: string | null;
   /** Abonnement actif au moment de l'envoi. */
   subscribed: boolean;
+  /** Une photo du produit a été envoyée (servie par /api/lives/[id]/photo). */
+  hasPhoto: boolean;
 }
 
 /** Ce que le public voit. */
-export type PublicLive = Pick<LiveEntry, "id" | "name" | "country" | "category" | "url" | "shortUrl" | "reviewedAt">;
+export type PublicLive = Pick<LiveEntry, "id" | "name" | "country" | "category" | "url" | "shortUrl" | "reviewedAt" | "hasPhoto">;
+
+/** Photo produit acceptée : JPEG en data URL (réduite sur le téléphone), 600 Ko maximum. */
+export const isPhotoDataUrl = (s: unknown): s is string => typeof s === "string" && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s) && s.length < 800_000;
 
 export interface Seller {
   phone: string;

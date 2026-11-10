@@ -108,9 +108,16 @@ export function RegieLives({ onToast }: { onToast: (s: string) => void }) {
             return (
               <li key={l.id} className="grid gap-3 bg-night-2 p-4 ring-1 ring-night-line sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-full text-white" style={{ background: cat.color }} aria-hidden>
-                    <CategoryIcon id={cat.id} className="size-6" />
-                  </span>
+                  {l.hasPhoto ? (
+                    <a href={`/api/lives/${l.id}/photo`} target="_blank" rel="noopener" className="shrink-0" aria-label={`Voir la photo de ${l.name}`}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`/api/lives/${l.id}/photo`} alt="" className="size-16 rounded-xl object-cover ring-1 ring-night-line" />
+                    </a>
+                  ) : (
+                    <span className="grid size-12 shrink-0 place-items-center rounded-full text-white" style={{ background: cat.color }} aria-hidden>
+                      <CategoryIcon id={cat.id} className="size-6" />
+                    </span>
+                  )}
                   <div className="min-w-0">
                     <p className="truncate text-[16px] font-bold">{l.name}</p>
                     <p className="truncate text-[13.5px] text-night-ink-2">

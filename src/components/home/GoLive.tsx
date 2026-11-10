@@ -1,5 +1,6 @@
 "use client";
-import { ArrowLeft, Check, ClipboardPaste, Clock, Copy, LoaderCircle, MessageCircle, Share2, Smartphone } from "lucide-react";
+import { ArrowLeft, Camera, Check, ClipboardPaste, Clock, Copy, LoaderCircle, MessageCircle, Share2, Smartphone, X } from "lucide-react";
+import { compressImage } from "@/lib/client/image";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { BRAND } from "@/lib/config";
@@ -21,8 +22,9 @@ interface Form {
   local: string;
   url: string;
   shortUrl: string;
+  photo: string | null;
 }
-const EMPTY: Form = { step: 0, country: "", category: "", name: "", local: "", url: "", shortUrl: "" };
+const EMPTY: Form = { step: 0, country: "", category: "", name: "", local: "", url: "", shortUrl: "", photo: null };
 
 /**
  * « Je suis en live » : trois écrans, une question par écran, de grandes cibles.
@@ -43,7 +45,7 @@ export function GoLive() {
     try {
       saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
     } catch {}
-    setF(saved ?? { ...EMPTY, country: guessCountry()?.code ?? "" });
+    setF(saved ? { ...EMPTY, ...saved } : { ...EMPTY, country: guessCountry()?.code ?? "" });
     setReady(true);
   }, []);
   useEffect(() => {
@@ -88,7 +90,8 @@ export function GoLive() {
       const r = await fetch("/api/lives", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name: f.name, country: f.country, category: f.category, url: f.url, shortUrl: f.shortUrl, phone }),
+        body: JSON.stringify({ name: f.name, country: f.country, category: f.category, url: f.url, shortUrl: f.shortUrl, phone, photo: f.photo }),
+        signal: AbortSignal.timeout(20000),
       });
       const j = await r.json().catch(() => ({}));
       if (r.ok) {
@@ -97,9 +100,10 @@ export function GoLive() {
         window.scrollTo({ top: 0 });
       } else if (r.status === 400 && j.errors) {
         setErrors({ ...j.errors, local: j.errors.phone });
+        if (j.errors.photo) setMessage(j.errors.photo);
       } else setMessage(j.message || "Une erreur est survenue. Réessaie.");
     } catch {
-      setMessage("Connexion perdue. Réessaie.");
+      setMessage("Le serveur met trop de temps à répondre. Appuie encore sur « Envoyer mon live » : si c'était déjà parti, il ne sera pas compté deux fois.");
     } finally {
       setSending(false);
     }
@@ -183,7 +187,7 @@ export function GoLive() {
               <button
                 onClick={() => {
                   setDone(null);
-                  set({ step: 2, url: "", shortUrl: "" });
+                  set({ step: 2, url: "", shortUrl: "", photo: null });
                 }}
                 className="h-12 text-[15px] font-semibold text-ink-2 underline underline-offset-4"
               >
@@ -253,6 +257,7 @@ export function GoLive() {
             </p>
 
             <div className="mt-7 grid gap-5">
+              <PhotoPick photo={f.photo} onChange={(photo) => set({ photo })} />
               <Field id="name" label="Ton nom ou ta boutique" error={errors.name}>
                 <input id="name" value={f.name} maxLength={50} onChange={(e) => set({ name: e.target.value })} autoComplete="organization" className={inputClass} placeholder="Ex. : Mama Rose Cuisine" />
               </Field>
@@ -347,6 +352,66 @@ function Field({ id, label, error, children }: { id: string; label: string; erro
       {error && (
         <p role="alert" className="text-[14px] font-medium text-danger">
           {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** La photo du produit : un gros bouton qui ouvre l'appareil photo ou la galerie ; la photo est réduite sur le téléphone. */
+function PhotoPick({ photo, onChange }: { photo: string | null; onChange: (p: string | null) => void }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  return (
+    <div>
+      <input
+        id="live-photo"
+        type="file"
+        accept="image/*"
+        className="peer sr-only"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          e.target.value = "";
+          if (!file) return;
+          setBusy(true);
+          setErr(null);
+          try {
+            onChange(await compressImage(file, 800, 0.78));
+          } catch {
+            setErr("Cette photo n'a pas pu être lue. Essaie une autre.");
+          } finally {
+            setBusy(false);
+          }
+        }}
+      />
+      {photo ? (
+        <div className="relative overflow-hidden rounded-3xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photo} alt="La photo de ton produit" className="aspect-[4/3] w-full object-cover" />
+          <div className="absolute inset-x-3 bottom-3 flex gap-2">
+            <label htmlFor="live-photo" className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-white px-4 text-[14px] font-bold text-ink shadow">
+              <Camera className="size-4" aria-hidden /> Changer
+            </label>
+            <button type="button" onClick={() => onChange(null)} className="inline-flex h-11 items-center gap-2 rounded-full bg-black/60 px-4 text-[14px] font-bold text-white backdrop-blur">
+              <X className="size-4" aria-hidden /> Retirer
+            </button>
+          </div>
+        </div>
+      ) : (
+        <label
+          htmlFor="live-photo"
+          className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-line-2 bg-card px-4 py-7 text-center transition-colors hover:border-ink/40 peer-focus-visible:outline-3 peer-focus-visible:outline-orange"
+        >
+          <span className="grid size-14 place-items-center rounded-full bg-orange text-ink" aria-hidden>
+            {busy ? <LoaderCircle className="size-6 animate-spin" /> : <Camera className="size-6" />}
+          </span>
+          <span className="text-[17px] font-bold">{busy ? "Préparation…" : "Photo de ton produit"}</span>
+          <span className="text-[14px] text-ink-2">Elle s&apos;affiche sur ta carte. Les acheteurs voient tout de suite ce que tu vends.</span>
+        </label>
+      )}
+      {err && (
+        <p role="alert" className="mt-2 text-[14px] font-medium text-danger">
+          {err}
         </p>
       )}
     </div>
