@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Archivo";
+        src: url("assets/fonts/archivo-latin-wdth.woff2") format("woff2");
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+      }
+      :root {
+        --orange: #f16903;
+        --ink: #111111;
+        --paper: #fafafa;
+        --wax: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.2' stroke-width='3'%3E%3Ccircle cx='0' cy='0' r='20'/%3E%3Ccircle cx='0' cy='0' r='32'/%3E%3Ccircle cx='0' cy='0' r='44'/%3E%3Ccircle cx='96' cy='96' r='20'/%3E%3Ccircle cx='96' cy='96' r='32'/%3E%3Ccircle cx='96' cy='96' r='44'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='.12'%3E%3Ccircle cx='48' cy='48' r='9'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='.14'%3E%3Ccircle cx='48' cy='30' r='2.4'/%3E%3Ccircle cx='48' cy='66' r='2.4'/%3E%3Ccircle cx='30' cy='48' r='2.4'/%3E%3Ccircle cx='66' cy='48' r='2.4'/%3E%3Ccircle cx='35' cy='35' r='2.4'/%3E%3Ccircle cx='61' cy='61' r='2.4'/%3E%3Ccircle cx='61' cy='35' r='2.4'/%3E%3Ccircle cx='35' cy='61' r='2.4'/%3E%3C/g%3E%3C/svg%3E");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Archivo", sans-serif; color: #fff; background: var(--ink); }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .wax { background-color: var(--orange); background-image: var(--wax); background-size: 144px 144px; color: var(--ink); }
+      .w { display: inline-block; }
+
+      /* intro */
+      #in-logo { position: absolute; left: 240px; top: 560px; width: 600px; height: 232px; }
+      #in-logo img { width: 600px; height: 232px; }
+      #in-live { position: absolute; left: 640px; top: 800px; font-size: 104px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; }
+      #in-t { position: absolute; left: 90px; right: 90px; top: 1040px; text-align: center; font-size: 84px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.025em; line-height: 0.98; }
+
+      /* cartes de chapitre */
+      .card { z-index: 8; }
+      .card .n { position: absolute; left: 80px; top: 470px; font-size: 380px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.06em; line-height: 1; }
+      .card .ti { position: absolute; left: 90px; right: 90px; top: 880px; font-size: 112px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; }
+
+      /* en-têtes de chapitre */
+      .hd { z-index: 4; }
+      .hd .tag { position: absolute; left: 90px; top: 150px; display: inline-flex; align-items: center; gap: 12px; background: var(--orange); color: var(--ink); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; padding: 10px 22px; border-radius: 99px; }
+      .hd .st { position: absolute; left: 90px; right: 90px; top: 220px; font-size: 68px; font-weight: 800; font-stretch: 112%; letter-spacing: -0.02em; line-height: 1; opacity: 0; }
+
+      /* téléphone */
+      #ph-in { position: absolute; left: 224px; top: 380px; width: 632px; height: 1054px; border-radius: 70px; background: #050505; padding: 16px; box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2c2c2c; opacity: 0; z-index: 3; }
+      #ph-screen { position: relative; width: 600px; height: 1022px; border-radius: 56px; overflow: hidden; background: #111; }
+      
+
+      /* ordinateurs */
+      .lap { position: absolute; left: 40px; top: 560px; width: 1000px; z-index: 3; }
+      .lap .bez { position: relative; width: 1000px; height: 640px; border-radius: 30px 30px 0 0; background: #050505; padding: 26px 26px 20px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2a2a2a; }
+      .lap .scr { position: relative; width: 948px; height: 594px; overflow: hidden; background: #0e0e0e; }
+      .lap .base { width: 1080px; margin-left: -40px; height: 34px; border-radius: 0 0 26px 26px; background: linear-gradient(#cfcfcf, #8d8d8d); }
+      
+      /* fin */
+      #end { background: var(--paper); color: var(--ink); }
+      #end-logo { position: absolute; left: 190px; top: 560px; width: 700px; height: 271px; }
+      #end-logo img { width: 700px; height: 271px; }
+      #end-live { position: absolute; left: 660px; top: 842px; font-size: 118px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; }
+      #end-url { position: absolute; left: 0; right: 0; top: 1070px; text-align: center; }
+      #end-url span { display: inline-block; background: var(--ink); color: #fff; font-size: 52px; font-weight: 700; padding: 22px 40px; border-radius: 99px; }
+      #end-tag { position: absolute; left: 0; right: 0; top: 1220px; text-align: center; font-size: 46px; font-weight: 600; color: #444; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="110.8" data-width="1080" data-height="1920">
+      <!-- intro (0 → 3) -->
+      <div id="intro" class="scene clip wax" data-start="0" data-duration="3.1" data-track-index="1" data-track-kind="graphics">
+        <div id="in-logo"><img id="in-mark" src="assets/img/ocd-logo-ink.svg" alt="OCD" /></div>
+        <div id="in-live">Live</div>
+        <div id="in-t"><span class="w">Le</span> <span class="w">tour</span> <span class="w">complet</span><br /><span class="w">du</span> <span class="w">site.</span></div>
+      </div>
+
+      <!-- cartes de chapitre -->
+      <div id="c1" class="scene clip wax card" data-start="3" data-duration="1.6" data-track-index="2" data-track-kind="graphics"><div class="n">01</div><div class="ti"><span class="w">L'accueil.</span></div></div>
+      <div id="c2" class="scene clip wax card" data-start="26.8" data-duration="1.6" data-track-index="2" data-track-kind="graphics"><div class="n">02</div><div class="ti"><span class="w">Je</span> <span class="w">suis</span><br /><span class="w">en</span> <span class="w">live.</span></div></div>
+      <div id="c3" class="scene clip wax card" data-start="45.7" data-duration="1.6" data-track-index="2" data-track-kind="graphics"><div class="n">03</div><div class="ti"><span class="w">L'équipe</span><br /><span class="w">valide.</span></div></div>
+      <div id="c4" class="scene clip wax card" data-start="67" data-duration="1.6" data-track-index="2" data-track-kind="graphics"><div class="n">04</div><div class="ti"><span class="w">Les</span> <span class="w">Shorts</span><br /><span class="w">OCD.</span></div></div>
+      <div id="c5" class="scene clip wax card" data-start="73.5" data-duration="1.6" data-track-index="2" data-track-kind="graphics"><div class="n">05</div><div class="ti"><span class="w">Live</span> <span class="w">au</span><br /><span class="w">studio.</span></div></div>
+      <div id="c6" class="scene clip wax card" data-start="96.45" data-duration="1.6" data-track-index="2" data-track-kind="graphics"><div class="n">06</div><div class="ti"><span class="w">Sur</span><br /><span class="w">ordinateur.</span></div></div>
+
+      <!-- en-têtes : chapitre + étape en cours -->
+      <div id="h1" class="scene clip hd" data-start="4.4" data-duration="22.5" data-track-index="3" data-track-kind="graphics">
+        <div class="tag">01 · L'ACCUEIL</div>
+        <div class="st" id="h1a">Le marché, en direct.</div>
+        <div class="st" id="h1b">Le fil des lives.</div>
+        <div class="st" id="h1c">Choisis ton pays.</div>
+        <div class="st" id="h1d">Choisis ton rayon.</div>
+        <div class="st" id="h1e">Qui est en live, maintenant.</div>
+        <div class="st" id="h1f">Je veux vendre.</div>
+      </div>
+      <div id="h2" class="scene clip hd" data-start="28.2" data-duration="17.6" data-track-index="3" data-track-kind="graphics">
+        <div class="tag">02 · JE SUIS EN LIVE</div>
+        <div class="st" id="h2a">Ton pays.</div>
+        <div class="st" id="h2b">Ton rayon.</div>
+        <div class="st" id="h2c">La photo du produit.</div>
+        <div class="st" id="h2d">Ton nom, ton WhatsApp, ton lien.</div>
+        <div class="st" id="h2e">C'est envoyé !</div>
+      </div>
+      <div id="h3" class="scene clip hd" data-start="47.1" data-duration="20" data-track-index="3" data-track-kind="graphics">
+        <div class="tag">03 · L'ÉQUIPE VALIDE</div>
+        <div class="st" id="h3a">La Régie de l'équipe.</div>
+        <div class="st" id="h3b">Les lives à valider.</div>
+        <div class="st" id="h3c">Un clic : en ligne.</div>
+        <div class="st" id="h3d">Et la voilà sur le site.</div>
+      </div>
+      <div id="h4" class="scene clip hd" data-start="68.4" data-duration="5.2" data-track-index="3" data-track-kind="graphics">
+        <div class="tag">04 · SHORTS OCD</div>
+        <div class="st" id="h4a">Les vidéos OCD.</div>
+      </div>
+      <div id="h5" class="scene clip hd" data-start="74.9" data-duration="21.6" data-track-index="3" data-track-kind="graphics">
+        <div class="tag">05 · LIVE AU STUDIO</div>
+        <div class="st" id="h5a">Passer en live avec OCD.</div>
+        <div class="st" id="h5b">Le jour.</div>
+        <div class="st" id="h5c">L'heure.</div>
+        <div class="st" id="h5d">Le pack.</div>
+        <div class="st" id="h5e">Ton business.</div>
+        <div class="st" id="h5f">Le récap.</div>
+        <div class="st" id="h5g">Ta Carte OCD.</div>
+      </div>
+      <div id="h6" class="scene clip hd" data-start="97.85" data-duration="8" data-track-index="3" data-track-kind="graphics">
+        <div class="tag">06 · SUR ORDINATEUR</div>
+        <div class="st" id="h6a">Le même site, en grand.</div>
+      </div>
+
+      <!-- téléphone et ses vidéos (vrais parcours filmés sur le site) -->
+      <div id="ph-in" data-layout-allow-overflow>
+        <div id="ph-screen">
+          <video id="v-home" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/home.mp4" muted playsinline data-start="4.4" data-duration="22.5" data-track-index="4"></video>
+          <video id="v-golive" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/golive.mp4" muted playsinline data-start="28.2" data-duration="17.63" data-track-index="4"></video>
+          <video id="v-retour" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/retour.mp4" muted playsinline data-start="56.6" data-duration="10.5" data-track-index="4"></video>
+          <video id="v-shorts" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/shorts.mp4" muted playsinline data-start="68.4" data-duration="5.2" data-track-index="4"></video>
+          <video id="v-studio" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/studio.mp4" muted playsinline data-start="74.9" data-duration="21.63" data-track-index="4"></video>
+        </div>
+      </div>
+
+      <!-- régie (ordinateur) -->
+      <div id="rg" class="lap">
+        <div class="bez"><div class="scr">
+          <video id="v-regie" class="clip" style="position:absolute;left:0;top:0;width:948px;height:594px;object-fit:cover" src="assets/rec/regie.mp4" muted playsinline data-start="47.1" data-duration="9.5" data-track-index="5"></video>
+        </div></div>
+        <div class="base"></div>
+      </div>
+
+      <!-- le site sur ordinateur -->
+      <div id="dk" class="lap">
+        <div class="bez"><div class="scr">
+          <video id="v-desk" class="clip" style="position:absolute;left:0;top:0;width:948px;height:594px;object-fit:cover" src="assets/rec/desk.mp4" muted playsinline data-start="97.85" data-duration="8" data-track-index="5"></video>
+        </div></div>
+        <div class="base"></div>
+      </div>
+
+      <!-- fin -->
+      <div id="end" class="scene clip" data-start="105.8" data-duration="5" data-track-index="6" data-track-kind="graphics">
+        <div id="end-logo"><img id="end-mark" src="assets/img/ocd-logo.svg" alt="OCD" /></div>
+        <div id="end-live">Live</div>
+        <div id="end-url"><span>ocd-pi.vercel.app</span></div>
+        <div id="end-tag">Les opportunités, c'est dehors.</div>
+      </div>
+
+      <!-- son -->
+      <audio id="a-music" src="assets/audio/music-long.wav" data-start="0" data-duration="110.8" data-volume="0.55" data-fade-out="2"></audio>
+      <audio id="a-imp1" src="assets/audio/impact.wav" data-start="0.05" data-duration="2" data-volume="0.6"></audio>
+      <audio id="a-c1" src="assets/audio/whoosh1.wav" data-start="2.9" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-c2" src="assets/audio/whoosh2.wav" data-start="26.7" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-ok" src="assets/audio/pop.wav" data-start="41.3" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-c3" src="assets/audio/whoosh1.wav" data-start="45.6" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-val" src="assets/audio/ping.wav" data-start="51.6" data-duration="0.72" data-volume="0.55"></audio>
+      <audio id="a-sw" src="assets/audio/whoosh2.wav" data-start="56.35" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-awa" src="assets/audio/pop.wav" data-start="62.1" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-c4" src="assets/audio/whoosh2.wav" data-start="66.9" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-c5" src="assets/audio/whoosh1.wav" data-start="73.4" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-card" src="assets/audio/pop.wav" data-start="93.55" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-c6" src="assets/audio/whoosh2.wav" data-start="96.35" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-imp2" src="assets/audio/impact.wav" data-start="105.85" data-duration="2" data-volume="0.6"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const E = { in: "expo.out", move: "power3.inOut", out: "power3.in" };
+      const words = (sel, t, gap = 0.07) =>
+        tl.fromTo(sel + " .w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, stagger: gap, ease: "power2.out" }, t);
+      const card = (id, t) => {
+        tl.fromTo(id, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: E.move }, t);
+        tl.fromTo(id + " .n", { x: -160, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: E.in }, t + 0.15);
+        words(id + " .ti", t + 0.3, 0.08);
+        tl.to(id, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.35, ease: E.move }, t + 1.22);
+      };
+      const steps = (list, end) => list.forEach(([id, t], i) => {
+        tl.fromTo(id, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, ease: E.in }, t);
+        const next = i + 1 < list.length ? list[i + 1][1] : end;
+        tl.to(id, { opacity: 0, y: -18, duration: 0.2, ease: E.out }, next - 0.22);
+      });
+      const tagIn = (id, t) => tl.fromTo(id + " .tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: E.in }, t);
+      const punch = (el, a, b, s, o) => {
+        tl.to(el, { scale: s, transformOrigin: o, duration: 0.55, ease: E.move }, a);
+        tl.to(el, { scale: 1, duration: 0.55, ease: E.move }, b);
+      };
+
+      /* intro */
+      words("#in-t", 0.35, 0.09);
+      tl.to(["#in-logo", "#in-live"], { scale: 1.04, duration: 2.8, ease: "power1.inOut" }, 0);
+
+      card("#c1", 3.0); card("#c2", 26.8); card("#c3", 45.7); card("#c4", 67.0); card("#c5", 73.5); card("#c6", 96.45);
+
+      /* qui est à l'écran */
+      tl.set(["#rg", "#dk"], { opacity: 0 }, 0);
+      tl.set("#ph-in", { opacity: 1 }, 3.4);
+      tl.set("#ph-in", { opacity: 0 }, 46.1);
+      tl.set("#rg", { opacity: 1 }, 46.1);
+      tl.to("#rg", { x: -1150, duration: 0.45, ease: E.out }, 56.4);
+      tl.set("#ph-in", { opacity: 1, x: 900 }, 56.5);
+      tl.to("#ph-in", { x: 0, duration: 0.6, ease: E.in }, 56.55);
+      tl.set("#rg", { opacity: 0 }, 56.9);
+      tl.set("#ph-in", { opacity: 0 }, 96.85);
+      tl.set("#dk", { opacity: 1 }, 96.85);
+      tl.set("#dk", { opacity: 0 }, 105.8);
+
+      /* 01 accueil */
+      tagIn("#h1", 4.6);
+      steps([["#h1a", 4.6], ["#h1b", 6.9], ["#h1c", 13.6], ["#h1d", 17.7], ["#h1e", 20.2], ["#h1f", 24.4]], 26.9);
+      punch("#ph-in", 13.8, 16.0, 1.08, "50% 25%");
+
+      /* 02 je suis en live */
+      tagIn("#h2", 28.4);
+      steps([["#h2a", 28.4], ["#h2b", 31.0], ["#h2c", 33.0], ["#h2d", 37.5], ["#h2e", 41.3]], 45.8);
+      punch("#ph-in", 41.5, 44.6, 1.1, "50% 30%");
+
+      /* 03 l'équipe valide, puis retour sur le site */
+      tagIn("#h3", 47.3);
+      steps([["#h3a", 47.3], ["#h3b", 48.8], ["#h3c", 51.6], ["#h3d", 56.8]], 67.1);
+      punch("#rg", 52.0, 55.6, 1.35, "55% 92%");
+      punch("#ph-in", 62.3, 65.6, 1.08, "50% 75%");
+
+      /* 04 shorts */
+      tagIn("#h4", 68.6);
+      steps([["#h4a", 68.6]], 73.6);
+
+      /* 05 studio */
+      tagIn("#h5", 75.1);
+      steps([["#h5a", 75.1], ["#h5b", 76.9], ["#h5c", 78.72], ["#h5d", 82.35], ["#h5e", 85.54], ["#h5f", 91.15], ["#h5g", 93.55]], 96.55);
+      punch("#ph-in", 93.7, 96.0, 1.08, "50% 45%");
+
+      /* 06 ordinateur */
+      tagIn("#h6", 98.05);
+      steps([["#h6a", 98.05]], 105.85);
+      tl.fromTo("#dk", { scale: 1 }, { scale: 1.05, transformOrigin: "50% 50%", duration: 7.8, ease: "power1.inOut", immediateRender: false }, 97.85);
+
+      /* fin */
+      tl.fromTo("#end-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 105.85);
+      tl.fromTo("#end-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 106.45);
+      tl.fromTo("#end-url", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 107.0);
+      tl.fromTo("#end-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 107.4);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
