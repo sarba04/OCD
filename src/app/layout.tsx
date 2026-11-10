@@ -3,10 +3,11 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 
-const bricolage = localFont({
-  src: "../fonts/bricolage-latin-wght.woff2",
-  variable: "--font-bricolage",
-  weight: "200 800",
+/* Archivo à largeur variable : étroite pour le texte, très large pour les titres (la signature OCD Live). */
+const archivo = localFont({
+  src: "../fonts/archivo-latin-wdth.woff2",
+  variable: "--font-archivo",
+  weight: "100 900",
   display: "swap",
   fallback: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
 });
@@ -36,12 +37,12 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#fbf8f3",
+  themeColor: "#141846",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={bricolage.variable} suppressHydrationWarning>
+    <html lang="fr" className={archivo.variable} suppressHydrationWarning>
       <head>
         {/* active les apparitions au défilement seulement si le JavaScript tourne */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js');try{if(sessionStorage.getItem('ocd-intro'))document.documentElement.dataset.introSeen=''}catch(e){}" }} />

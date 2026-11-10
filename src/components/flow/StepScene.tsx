@@ -1,232 +1,426 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import { ArrowRight, Clapperboard, Eye, Megaphone } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUp, ArrowUpRight, Check, ChevronDown, Clapperboard, Globe, Megaphone, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { PACKS } from "@/lib/config";
+import { getCountry } from "@/lib/countries";
 import { fcfa } from "@/lib/format";
-import { LIVE_PASS } from "@/lib/lives";
+import { LIVE_CATEGORIES, LIVE_PASS, getCategory, type PublicLive } from "@/lib/lives";
 import type { Mode } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { haptic } from "@/components/ui/kit";
+import { Flag } from "@/components/ui/Flag";
+import { CategoryArt } from "@/components/ui/CategoryArt";
 import type { Availability } from "./BookingApp";
 import { CinemaIntro } from "@/components/story/CinemaIntro";
-import { Directory } from "@/components/home/Directory";
-import { untilLabel, useLives } from "@/components/home/useLives";
+import { untilLabel, useLives, type LivesState } from "@/components/home/useLives";
 
 const MIN_PRICE = Math.min(...PACKS.map((p) => p.price));
-type Door = "watch" | "sell";
 
 /**
- * L'accueil : deux portes. « Je regarde » : les vendeurs en live, par pays et par rayon.
- * « Je vends » : trois façons de passer en live avec OCD. Peu de texte, de grandes actions.
+ * L'accueil d'OCD Live est un fil : un vendeur en live par écran, on glisse au suivant.
+ * Le pays et le rayon se choisissent d'un geste ; « Vendre » ouvre les trois façons de passer en live.
+ * Sur ordinateur : un panneau wax à gauche, le fil à droite.
  */
 export function StepScene({ selected, onPick }: { avail: Availability | null; selected: Mode | null; onPick: (m: Mode) => void }) {
   const { data, error, reload } = useLives();
-  const [door, setDoor] = useState<Door>("watch");
+  const [country, setCountry] = useState<string | null>(null);
+  const [cat, setCat] = useState<string | null>(null);
+  const [sheet, setSheet] = useState<null | "country" | "sell">(null);
+  const feed = useRef<HTMLDivElement>(null);
 
-  // la porte choisie est gardée si on recharge ou si on revient en arrière
   useEffect(() => {
-    try {
-      const d = sessionStorage.getItem("ocd-door") as Door | null;
-      if (d === "sell" || location.hash === "#vendre") setDoor("sell");
-    } catch {}
+    if (location.hash === "#vendre") setSheet("sell");
   }, []);
-  const open = (d: Door) => {
+
+  const all = useMemo(() => data?.lives ?? [], [data]);
+  const countries = useMemo(() => {
+    const m = new Map<string, number>();
+    all.forEach((l) => m.set(l.country, (m.get(l.country) ?? 0) + 1));
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  }, [all]);
+  const inCountry = country ? all.filter((l) => l.country === country) : all;
+  const cats = LIVE_CATEGORIES.map((c) => ({ ...c, n: inCountry.filter((l) => l.category === c.id).length })).filter((c) => c.n > 0);
+  const shown = cat ? inCountry.filter((l) => l.category === cat) : inCountry;
+
+  const toTop = () => feed.current?.scrollTo({ top: 0 });
+  const pickCountry = (c: string | null) => {
     haptic();
-    setDoor(d);
-    try {
-      sessionStorage.setItem("ocd-door", d);
-    } catch {}
+    setCountry(c);
+    setCat(null);
+    setSheet(null);
+    toTop();
   };
+  const pickCat = (c: string | null) => {
+    haptic();
+    setCat(c);
+    toTop();
+  };
+  const next = () => feed.current?.scrollBy({ top: feed.current.clientHeight, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+
+  const countryLabel = country ? getCountry(country)?.name ?? country : "Toute l'Afrique";
+
+  const Filters = ({ panel }: { panel?: boolean }) => (
+    <div role="group" aria-label="Ce qu'on cherche" className={cn("chip-row flex gap-2 overflow-x-auto", panel ? "flex-wrap overflow-visible" : "px-4 pb-1")}>
+      <button
+        type="button"
+        aria-pressed={!cat}
+        onClick={() => pickCat(null)}
+        className={cn("inline-flex h-11 shrink-0 items-center rounded-full px-4 text-[14px] font-semibold", !cat ? "bg-sun text-ink" : "bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-md")}
+      >
+        Tout
+      </button>
+      {cats.map((c) => (
+        <button
+          key={c.id}
+          type="button"
+          aria-pressed={cat === c.id}
+          onClick={() => pickCat(cat === c.id ? null : c.id)}
+          className={cn(
+            "inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full pr-4 pl-1.5 text-[14px] font-semibold",
+            cat === c.id ? "bg-sun text-ink" : "bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-md",
+          )}
+        >
+          <CategoryArt id={c.id} small className="size-8 drop-shadow-none" />
+          {c.label}
+          <span className="tabular text-[12px] opacity-70">{c.n}</span>
+        </button>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="relative min-h-dvh overflow-x-clip">
+    <div className="relative h-dvh overflow-hidden bg-indigo-2 text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,520px)]">
       <CinemaIntro />
 
-      <header role="banner" className="mx-auto flex max-w-6xl items-center justify-between px-4 pt-4 sm:px-8 sm:pt-6">
-        <Logo size={26} className="[view-transition-name:ocd-logo]" />
-        <a href="/shorts" className="inline-flex h-11 items-center gap-2 rounded-full bg-ink px-4 text-[14.5px] font-bold text-paper">
-          <Clapperboard className="size-4" aria-hidden /> Shorts
-        </a>
-      </header>
-
-      <main className="mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-8 sm:pt-10">
-        {/* l'état de l'antenne : la première info, toujours visible */}
-        <p className="fade-up flex flex-wrap items-center gap-2 text-[14.5px] font-semibold" style={{ ["--d" as string]: 60 }} aria-live="polite">
-          {data?.session ? (
-            <span className="inline-flex items-center gap-2 rounded-full bg-live px-3.5 py-2 text-white">
-              <span className="size-2 rounded-full bg-white motion-safe:animate-pulse" aria-hidden />
-              En direct · {data.lives.length} vendeur{data.lives.length > 1 ? "s" : ""}
-              {!data.testMode && <> · jusqu&apos;à {data.session.end.replace(":00", "h")}</>}
-            </span>
-          ) : data ? (
-            <span className="inline-flex items-center gap-2 rounded-full bg-card px-3.5 py-2 ring-1 ring-line">
-              <span className="size-2 rounded-full bg-ink-3" aria-hidden />
-              Prochaine session {data.next.start.replace(":00", "h")}–{data.next.end.replace(":00", "h")}, {untilLabel(data.next.at, new Date(data.now).getTime())}
-            </span>
-          ) : (
-            <span className="h-9 w-64 animate-pulse rounded-full bg-paper-2" />
-          )}
-          {(data?.demo || data?.testMode) && <span className="text-[12.5px] font-medium text-ink-3">{data?.testMode ? "mode test" : "démo"}</span>}
-        </p>
-
-        <h1 className="display mt-5 text-[clamp(40px,11vw,96px)]">
-          <span className="reveal-line">
-            <span style={{ ["--d" as string]: 140 }}>Le marché,</span>
-          </span>
-          <span className="reveal-line">
-            <span style={{ ["--d" as string]: 240 }}>en live.</span>
-          </span>
+      {/* ───── Ordinateur : le panneau wax ───── */}
+      <aside className="wax hidden h-dvh flex-col overflow-y-auto p-10 lg:flex xl:p-14">
+        <div className="flex items-center justify-between">
+          <Logo size={26} tone="white" className="[view-transition-name:ocd-logo]" />
+          <a href="/shorts" className="inline-flex h-11 items-center gap-2 rounded-full bg-white/10 px-4 text-[14px] font-semibold ring-1 ring-white/20 hover:bg-white/20">
+            <Clapperboard className="size-4" aria-hidden /> Shorts
+          </a>
+        </div>
+        <Status data={data} className="mt-12" />
+        <h1 className="display mt-5 text-[clamp(52px,5.4vw,92px)] leading-[0.9]">
+          Le marché,
+          <br />
+          en direct.
         </h1>
+        <p className="mt-5 max-w-[34ch] text-[18px] leading-relaxed text-white/75">Les vendeurs d&apos;Afrique en live, pays par pays. Choisis, regarde, achète.</p>
 
-        {/* les deux portes */}
-        <div role="tablist" aria-label="Que veux-tu faire ?" className="fade-up mt-7 grid grid-cols-2 gap-1.5 rounded-full bg-paper-2 p-1.5 sm:max-w-[560px]" style={{ ["--d" as string]: 380 }}>
-          {(
-            [
-              ["watch", <Eye key="w" className="size-5" strokeWidth={2.2} />, "Je regarde"],
-              ["sell", <Megaphone key="s" className="size-5" strokeWidth={2.2} />, "Je vends"],
-            ] as const
-          ).map(([k, icon, label]) => (
-            <button
-              key={k}
-              role="tab"
-              aria-selected={door === k}
-              aria-controls={`porte-${k}`}
-              onClick={() => open(k)}
-              className={cn(
-                "inline-flex h-14 items-center justify-center gap-2 rounded-full text-[17px] font-bold transition-[background-color,color,box-shadow] duration-200 sm:h-16 sm:text-[19px]",
-                door === k ? "bg-ink text-paper shadow-[0_10px_24px_-12px_rgb(22_18_14/0.6)]" : "text-ink-2 hover:text-ink",
-              )}
-            >
-              <span aria-hidden>{icon}</span>
-              {label}
-            </button>
+        <p className="mt-10 text-[13px] font-semibold tracking-wide text-white/60 uppercase">Pays</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <CountryChip on={!country} onClick={() => pickCountry(null)} label="Toute l'Afrique" n={all.length} />
+          {countries.map(([code, n]) => (
+            <CountryChip key={code} code={code} on={country === code} onClick={() => pickCountry(code)} label={getCountry(code)?.name ?? code} n={n} />
           ))}
         </div>
-
-        <section id="porte-watch" role="tabpanel" aria-label="Les vendeurs en live" hidden={door !== "watch"} className="mt-8">
-          <Directory data={data} error={error} onRetry={reload} onSell={() => open("sell")} />
-        </section>
-
-        <section id="porte-sell" role="tabpanel" aria-label="Passer en live avec OCD" hidden={door !== "sell"} className="mt-8">
-          <div className="cascade-auto grid gap-3 lg:grid-cols-3">
-            <SellTile
-              href="/en-live"
-              photo={{ src: "/media/live-seller-480.webp", pos: "50% 78%" }}
-              title="Je suis en live"
-              text="Envoie ton lien. On te montre à toute l'Afrique."
-              price={`${fcfa(LIVE_PASS.price)} / mois`}
-            />
-            <SellTile
-              id="choix-studio"
-              photo={{ src: "/media/studio-night-640.webp", pos: "50% 88%" }}
-              title="Live au studio"
-              text="À Lomé, avec la régie et la lumière."
-              price={`dès ${fcfa(MIN_PRICE)}`}
-              selected={selected === "studio"}
-              onClick={() => onPick("studio")}
-            />
-            <SellTile
-              photo={{ src: "/media/animatrice-760.webp", pos: "62% 92%" }}
-              title="Live depuis chez toi"
-              text="Une animatrice OCD te prend en duplex."
-              price={`dès ${fcfa(MIN_PRICE)}`}
-              selected={selected === "remote"}
-              onClick={() => onPick("remote")}
-            />
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-[14px] text-ink-2 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <span className="inline-flex items-center gap-3">
-            <Logo size={18} />
-            <span>Les opportunités, c&apos;est dehors.</span>
-          </span>
-          <nav aria-label="Liens secondaires" className="flex flex-wrap gap-x-6 gap-y-2">
-            <a href="/shorts" className="font-semibold text-ink">
-              Shorts OCD
-            </a>
-            <a href="/animatrice" className="font-semibold text-ink">
-              Deviens animatrice
-            </a>
-            <a href="/regie" className="hover:text-ink">
-              Régie
-            </a>
-          </nav>
+        {cats.length > 1 && (
+          <>
+            <p className="mt-8 text-[13px] font-semibold tracking-wide text-white/60 uppercase">Rayon</p>
+            <div className="mt-3">
+              <Filters panel />
+            </div>
+          </>
+        )}
+        <div className="mt-auto pt-12">
+          <SellOptions selected={selected} onPick={onPick} compact />
+          <FooterLinks className="mt-8" />
         </div>
-      </footer>
+      </aside>
+
+      {/* ───── Le fil ───── */}
+      <div className="relative h-dvh">
+        {/* barre du haut (mobile) */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 bg-gradient-to-b from-black/55 to-transparent pb-6 lg:hidden">
+          <div className="pointer-events-auto flex items-center gap-2 px-4 pt-[max(12px,env(safe-area-inset-top))]">
+            <Logo size={20} tone="white" />
+            <button
+              type="button"
+              onClick={() => setSheet("country")}
+              className="ml-auto inline-flex h-11 min-w-0 items-center gap-2 rounded-full bg-white/14 pr-3 pl-2.5 text-[14px] font-semibold ring-1 ring-white/25 backdrop-blur-md"
+            >
+              {country ? <Flag code={country} className="w-6" /> : <Globe className="size-5" aria-hidden />}
+              <span className="max-w-[9rem] truncate">{countryLabel}</span>
+              <ChevronDown className="size-4 shrink-0" aria-hidden />
+            </button>
+            <button type="button" onClick={() => setSheet("sell")} className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-sun px-4 text-[14px] font-bold text-ink">
+              <Megaphone className="size-4" aria-hidden /> Vendre
+            </button>
+          </div>
+          {cats.length > 1 && (
+            <div className="pointer-events-auto mt-3">
+              <Filters />
+            </div>
+          )}
+        </div>
+
+        <div ref={feed} className="feed h-dvh snap-y snap-mandatory overflow-y-auto" aria-label="Les vendeurs en live" role="region" aria-busy={!data}>
+          {/* 1. l'ouverture */}
+          <section aria-labelledby="ouverture" className="wax relative flex h-dvh snap-start flex-col justify-end px-6 pt-36 pb-10 lg:hidden">
+            <Status data={data} />
+            <h1 id="ouverture" className="display mt-4 text-[clamp(48px,14vw,76px)] leading-[0.9]">
+              Le marché,
+              <br />
+              en direct.
+            </h1>
+            <p className="mt-4 max-w-[30ch] text-[17px] leading-relaxed text-white/80">Les vendeurs d&apos;Afrique en live. Glisse pour les voir.</p>
+            <div className="mt-8 grid grid-cols-2 gap-2.5">
+              <button type="button" onClick={next} className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-sun text-[16px] font-bold text-ink">
+                <ArrowUp className="size-5" aria-hidden /> Regarder
+              </button>
+              <button type="button" onClick={() => setSheet("sell")} className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white/12 text-[16px] font-bold ring-1 ring-white/30">
+                Je vends
+              </button>
+            </div>
+            <FooterLinks className="mt-8" />
+          </section>
+
+          {error && !data && (
+            <section className="grid h-dvh snap-start place-items-center px-8 text-center">
+              <div>
+                <p className="text-[20px] font-bold">Connexion perdue.</p>
+                <button onClick={reload} className="mt-5 inline-flex h-12 items-center rounded-full bg-sun px-6 font-bold text-ink">
+                  Réessayer
+                </button>
+              </div>
+            </section>
+          )}
+
+          {!data && !error && <section className="h-dvh snap-start animate-pulse bg-white/5" aria-hidden />}
+
+          {/* 2. les vendeurs en live */}
+          {shown.map((l, i) => (
+            <LiveSlide key={l.id} l={l} i={i} total={shown.length} />
+          ))}
+
+          {/* 3. la fin du fil */}
+          {data && (
+            <section className="wax flex h-dvh snap-start flex-col items-center justify-center px-8 text-center [--wax-bg:var(--color-indigo-2)]">
+              <p className="display text-[clamp(34px,9vw,52px)] leading-[0.95]">{shown.length ? "Tu as tout vu." : data.session ? "Personne en live ici." : "Pas de session en ce moment."}</p>
+              <p className="mt-4 max-w-[30ch] text-[16px] text-white/75">
+                {shown.length
+                  ? "Reviens tout à l'heure : de nouveaux vendeurs passent en live toute la journée."
+                  : data.testMode
+                    ? "Change de pays ou de rayon, ou reviens un peu plus tard."
+                    : `Prochaine session à ${data.next.start.replace(":00", "h")}, ${untilLabel(data.next.at, new Date(data.now).getTime())}.`}
+              </p>
+              <div className="mt-8 grid w-full max-w-[340px] gap-2.5">
+                <a href="/en-live" className="inline-flex h-14 items-center justify-center rounded-full bg-sun text-[16px] font-bold text-ink">
+                  Je suis en live : je m&apos;affiche
+                </a>
+                {(country || cat) && (
+                  <button type="button" onClick={() => (setCountry(null), setCat(null), toTop())} className="h-12 text-[15px] font-semibold text-white/85 underline underline-offset-4">
+                    Voir toute l&apos;Afrique
+                  </button>
+                )}
+              </div>
+            </section>
+          )}
+        </div>
+      </div>
+
+      {/* ───── Feuilles ───── */}
+      {sheet && (
+        <Sheet title={sheet === "country" ? "Quel pays ?" : "Passer en live avec OCD"} onClose={() => setSheet(null)}>
+          {sheet === "country" ? (
+            <ul className="grid gap-1.5">
+              <li>
+                <CountryRow on={!country} onClick={() => pickCountry(null)} label="Toute l'Afrique" n={all.length} />
+              </li>
+              {countries.map(([code, n]) => (
+                <li key={code}>
+                  <CountryRow code={code} on={country === code} onClick={() => pickCountry(code)} label={getCountry(code)?.name ?? code} n={n} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <SellOptions selected={selected} onPick={onPick} />
+          )}
+        </Sheet>
+      )}
     </div>
   );
 }
 
-function SellTile({
-  id,
-  href,
-  photo,
-  title,
-  text,
-  price,
-  selected,
-  onClick,
-}: {
-  id?: string;
-  href?: string;
-  photo: { src: string; pos: string };
-  title: string;
-  text: string;
-  price: string;
-  selected?: boolean;
-  onClick?: () => void;
-}) {
-  const body = (
-    <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={photo.src}
-        alt=""
-        width={480}
-        height={480}
-        loading="lazy"
-        decoding="async"
-        style={{ objectPosition: photo.pos }}
-        className="size-20 shrink-0 rounded-2xl object-cover sm:size-24 lg:aspect-[4/3] lg:h-auto lg:w-full"
-      />
-      <span className="min-w-0 flex-1 lg:mt-5">
-        <span className="block text-[20px] leading-tight font-bold tracking-[-0.015em] lg:text-[24px]">{title}</span>
-        <span className="mt-1 block text-[14.5px] leading-snug text-ink-2">{text}</span>
-        <span className="tabular mt-2 block text-[14px] font-bold text-orange-ink">{price}</span>
-      </span>
-      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform duration-200 group-hover:translate-x-0.5 lg:mt-4 lg:self-end" aria-hidden>
-        <ArrowRight className="size-5" strokeWidth={2.4} />
-      </span>
-    </>
-  );
-  const cls = cn(
-    "group flex w-full items-center gap-4 rounded-3xl bg-card p-4 text-left ring-1 transition-[box-shadow,transform] duration-200 active:scale-[0.99] sm:p-5 lg:h-full lg:flex-col lg:items-start lg:p-7",
-    selected ? "ring-2 ring-orange" : "ring-line hover:ring-ink/30 hover:shadow-[0_18px_36px_-22px_rgb(22_18_14/0.4)]",
-  );
+function Status({ data, className }: { data: LivesState | null; className?: string }) {
+  if (!data) return <span className={cn("block h-9 w-56 animate-pulse rounded-full bg-white/10", className)} />;
   return (
-    <div>
-      {href ? (
-        <a href={href} className={cls}>
-          {body}
-        </a>
+    <p className={cn("inline-flex w-fit items-center gap-2.5 rounded-full bg-sun py-2 pr-4 pl-3.5 text-[14px] font-bold text-ink", className)} aria-live="polite">
+      <span className="sun-dot" aria-hidden />
+      {data.session ? `${data.lives.length} vendeur${data.lives.length > 1 ? "s" : ""} en live` : `Prochaine session ${data.next.start.replace(":00", "h")}`}
+      {data.demo && <span className="font-medium opacity-70">· démo</span>}
+    </p>
+  );
+}
+
+/** Un vendeur en live, plein écran : son produit, son nom en très large, un seul bouton. */
+function LiveSlide({ l, i, total }: { l: PublicLive; i: number; total: number }) {
+  const c = getCategory(l.category);
+  const country = getCountry(l.country);
+  return (
+    <article aria-label={`${l.name}, ${c.label}, ${country?.name ?? ""}`} className="relative flex h-dvh snap-start flex-col justify-end overflow-hidden">
+      {l.hasPhoto ? (
+        <img src={`/api/lives/${l.id}/photo`} alt="" loading={i < 2 ? "eager" : "lazy"} decoding="async" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
-        <button
-          id={id}
-          type="button"
-          className={cls}
-          onClick={(e) => {
-            haptic();
-            e.currentTarget.style.setProperty("view-transition-name", "dock");
-            onClick?.();
-          }}
-        >
-          {body}
-        </button>
+        <div className="wax absolute inset-0 grid place-items-center pb-44" style={{ ["--wax-bg" as string]: `color-mix(in srgb, ${c.color} 72%, #141846)` }} aria-hidden>
+          <CategoryArt id={c.id} className="w-[min(78%,420px)]" />
+        </div>
       )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 via-45% to-black/30" aria-hidden />
+
+      <span className="tabular absolute top-[max(76px,calc(env(safe-area-inset-top)+64px))] right-4 rounded-full bg-black/40 px-3 py-1 text-[12.5px] font-semibold backdrop-blur-md lg:top-6">
+        {i + 1} / {total}
+      </span>
+
+      <div className="relative px-5 pb-[max(28px,env(safe-area-inset-bottom))] sm:px-7">
+        <p className="flex flex-wrap items-center gap-2 text-[14px] font-semibold">
+          <span className="inline-flex items-center gap-2 rounded-full bg-sun py-1.5 pr-3 pl-3 text-ink">
+            <span className="sun-dot" aria-hidden /> EN LIVE
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 py-1.5 pr-3 pl-2 backdrop-blur-md">
+            <Flag code={l.country} className="w-5" /> {country?.name}
+          </span>
+          <span className="rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-md">{c.label}</span>
+        </p>
+        <h2 className="display mt-4 text-[clamp(34px,10vw,56px)] leading-[0.92] [text-wrap:balance]">{l.name}</h2>
+        <a
+          href={l.url}
+          target="_blank"
+          rel="noopener"
+          className="mt-6 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white text-[16px] font-bold text-ink active:scale-[0.99] sm:w-auto sm:px-8"
+        >
+          Voir son live sur TikTok <ArrowUpRight className="size-5" aria-hidden />
+        </a>
+      </div>
+    </article>
+  );
+}
+
+function SellOptions({ selected, onPick, compact }: { selected: Mode | null; onPick: (m: Mode) => void; compact?: boolean }) {
+  const opts = [
+    { key: "golive", href: "/en-live", photo: "/media/live-seller-480.webp", pos: "50% 22%", title: "Je suis en live", text: "Envoie ton lien, on t'affiche.", price: `${fcfa(LIVE_PASS.price)} / mois` },
+    { key: "studio", mode: "studio" as Mode, id: "choix-studio", photo: "/media/products-760.webp", pos: "50% 50%", title: "Live au studio", text: "À Lomé, avec la régie.", price: `dès ${fcfa(MIN_PRICE)}` },
+    { key: "remote", mode: "remote" as Mode, photo: "/media/animatrice-760.webp", pos: "30% 30%", title: "Live depuis chez toi", text: "Une animatrice OCD en duplex.", price: `dès ${fcfa(MIN_PRICE)}` },
+  ];
+  return (
+    <ul className={cn("grid gap-2.5", compact && "xl:grid-cols-3")}>
+      {opts.map((o) => {
+        const on = !!o.mode && selected === o.mode;
+        const inner = (
+          <>
+            <img src={o.photo} alt="" width={160} height={160} loading="lazy" style={{ objectPosition: o.pos }} className={cn("shrink-0 rounded-2xl object-cover", compact ? "size-14 xl:aspect-[4/3] xl:h-auto xl:w-full" : "size-16")} />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[16.5px] leading-tight font-bold">{o.title}</span>
+              <span className="block text-[13.5px] text-current/70">{o.text}</span>
+              <span className="tabular mt-0.5 block text-[13px] font-bold text-sun">{o.price}</span>
+            </span>
+            {on ? <Check className="size-5 shrink-0" aria-hidden /> : <ArrowUpRight className="size-5 shrink-0 opacity-70" aria-hidden />}
+          </>
+        );
+        const cls = cn(
+          "flex w-full items-center gap-3.5 rounded-3xl p-3 text-left transition-colors",
+          compact ? "bg-white/8 ring-1 ring-white/15 hover:bg-white/14 xl:flex-col xl:items-start" : "bg-white/8 ring-1 ring-white/15 hover:bg-white/14",
+          on && "ring-2 ring-sun",
+        );
+        return (
+          <li key={o.key}>
+            {o.href ? (
+              <a href={o.href} className={cls}>
+                {inner}
+              </a>
+            ) : (
+              <button
+                id={o.id}
+                type="button"
+                className={cls}
+                onClick={(e) => {
+                  haptic();
+                  e.currentTarget.style.setProperty("view-transition-name", "dock");
+                  onPick(o.mode!);
+                }}
+              >
+                {inner}
+              </button>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function CountryChip({ code, on, onClick, label, n }: { code?: string; on: boolean; onClick: () => void; label: string; n: number }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className={cn("inline-flex h-11 items-center gap-2 rounded-full pr-3 pl-2.5 text-[14px] font-semibold", on ? "bg-white text-ink" : "bg-white/10 ring-1 ring-white/20 hover:bg-white/18")}
+    >
+      {code ? <Flag code={code} className="w-6" /> : <Globe className="size-5" aria-hidden />}
+      {label}
+      <span className="tabular text-[12.5px] opacity-60">{n}</span>
+    </button>
+  );
+}
+
+function CountryRow({ code, on, onClick, label, n }: { code?: string; on: boolean; onClick: () => void; label: string; n: number }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className={cn("flex h-14 w-full items-center gap-3 rounded-2xl px-4 text-left text-[16px] font-semibold", on ? "bg-sun text-ink" : "bg-white/6 hover:bg-white/12")}
+    >
+      {code ? <Flag code={code} className="w-8" /> : <Globe className="size-6" aria-hidden />}
+      <span className="flex-1">{label}</span>
+      <span className="tabular text-[14px] opacity-70">
+        {n} en live
+      </span>
+    </button>
+  );
+}
+
+function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    ref.current?.querySelector<HTMLElement>("button, a")?.focus();
+    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    addEventListener("keydown", k);
+    return () => removeEventListener("keydown", k);
+  }, [onClose]);
+  return (
+    <div className="fixed inset-0 z-[60] flex items-end justify-center lg:items-center" role="dialog" aria-modal="true" aria-label={title}>
+      <button aria-label="Fermer" onClick={onClose} className="animate-fade absolute inset-0 bg-black/60" />
+      <div ref={ref} className="animate-sheet relative max-h-[85dvh] w-full max-w-[480px] overflow-y-auto rounded-t-[28px] bg-indigo-2 p-5 pb-[max(20px,env(safe-area-inset-bottom))] text-white ring-1 ring-white/10 lg:rounded-[28px]">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <p className="display text-[24px]">{title}</p>
+          <button onClick={onClose} aria-label="Fermer" className="grid size-11 place-items-center rounded-full bg-white/10">
+            <X className="size-5" aria-hidden />
+          </button>
+        </div>
+        {children}
+      </div>
     </div>
+  );
+}
+
+function FooterLinks({ className }: { className?: string }) {
+  return (
+    <nav aria-label="Liens secondaires" className={cn("flex flex-wrap gap-x-5 gap-y-2 text-[14px] text-white/70", className)}>
+      <a href="/shorts" className="font-semibold text-white underline decoration-sun decoration-2 underline-offset-4 lg:hidden">
+        Shorts OCD
+      </a>
+      <a href="/animatrice" className="hover:text-white">
+        Deviens animatrice
+      </a>
+      <a href="/regie" className="hover:text-white">
+        Régie
+      </a>
+      <span>Les opportunités, c&apos;est dehors.</span>
+    </nav>
   );
 }
