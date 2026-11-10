@@ -24,7 +24,7 @@ export function PrimaryButton({
     >
       <span
         aria-hidden
-        className="chamfer-sm absolute inset-0 bg-indigo transition-colors duration-200 group-hover:bg-[#262d8f] group-disabled:bg-line"
+        className="chamfer-sm absolute inset-0 bg-coal transition-colors duration-200 group-hover:bg-[#2b2b2b] group-disabled:bg-line"
       />
       <span className="relative truncate">{children}</span>
       {loading ? (
