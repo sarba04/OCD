@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Archivo";
+        src: url("assets/fonts/archivo-latin-wdth.woff2") format("woff2");
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+      }
+      :root {
+        --orange: #f16903;
+        --ink: #111111;
+        --white: #ffffff;
+        --paper: #fafafa;
+        --wax: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.2' stroke-width='3'%3E%3Ccircle cx='0' cy='0' r='20'/%3E%3Ccircle cx='0' cy='0' r='32'/%3E%3Ccircle cx='0' cy='0' r='44'/%3E%3Ccircle cx='96' cy='96' r='20'/%3E%3Ccircle cx='96' cy='96' r='32'/%3E%3Ccircle cx='96' cy='96' r='44'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='.12'%3E%3Ccircle cx='48' cy='48' r='9'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='.14'%3E%3Ccircle cx='48' cy='30' r='2.4'/%3E%3Ccircle cx='48' cy='66' r='2.4'/%3E%3Ccircle cx='30' cy='48' r='2.4'/%3E%3Ccircle cx='66' cy='48' r='2.4'/%3E%3Ccircle cx='35' cy='35' r='2.4'/%3E%3Ccircle cx='61' cy='61' r='2.4'/%3E%3Ccircle cx='61' cy='35' r='2.4'/%3E%3Ccircle cx='35' cy='61' r='2.4'/%3E%3C/g%3E%3C/svg%3E");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Archivo", sans-serif; color: var(--ink); background: var(--ink); }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .wax { background-color: var(--orange); background-image: var(--wax); background-size: 144px 144px; }
+      .t { position: absolute; left: 90px; right: 150px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.025em; line-height: 0.95; }
+      .t .w { display: inline-block; }
+      .sub { position: absolute; left: 90px; right: 150px; font-weight: 600; font-size: 52px; line-height: 1.15; }
+      .win { position: absolute; overflow: hidden; border-radius: 44px; background: #fff; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45); }
+      .win img { position: absolute; left: 0; top: 0; display: block; }
+      .touch { position: absolute; width: 74px; height: 74px; margin: -37px 0 0 -37px; border-radius: 50%; background: rgba(255, 255, 255, 0.92); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); opacity: 0; }
+      .pill { display: inline-flex; align-items: center; gap: 14px; border-radius: 99px; font-weight: 800; }
+      .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--orange); }
+
+      /* 1. accroche */
+      #s1 .t1 { top: 200px; font-size: 104px; }
+      #s1 .s1 { top: 318px; font-size: 56px; }
+      #s1-card { position: absolute; left: 164px; top: 430px; width: 752px; height: 900px; border-radius: 44px; overflow: hidden; box-shadow: 0 50px 90px rgba(60, 20, 0, 0.45); }
+      #s1-card img { position: absolute; left: 0; top: 0; width: 752px; height: 940px; object-fit: cover; }
+      #s1-live { position: absolute; left: 34px; top: 34px; background: #fff; padding: 14px 26px; font-size: 36px; letter-spacing: 0.04em; }
+      #s1-dim { position: absolute; inset: 0; background: #000; opacity: 0; }
+
+      /* 2. tension */
+      #s2-flood { position: absolute; inset: 0; background: var(--ink); }
+      #s2-t { top: 1040px; font-size: 118px; color: #fff; z-index: 3; }
+      #s2-t .w { color: #5a5a5a; }
+
+      /* 3. révélation */
+      #s3-logo { position: absolute; left: 240px; top: 560px; width: 600px; height: 232px; }
+      #s3-logo img { position: absolute; inset: 0; width: 600px; height: 232px; }
+      #s3-live { position: absolute; left: 640px; top: 800px; font-size: 104px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; color: var(--ink); }
+      #s3 .t3 { top: 1060px; font-size: 92px; text-align: center; left: 90px; right: 90px; }
+
+      /* 4. preuve */
+      #s4 { background: var(--ink); }
+      #s4 .t4 { top: 196px; font-size: 96px; color: #fff; }
+      #s4-win { left: 90px; top: 330px; width: 900px; height: 1000px; }
+      #s4-win img { width: 900px; }
+
+      /* 5. régie */
+      #s5 { background: #1c1c1c; }
+      #s5 .t5 { top: 196px; font-size: 96px; color: #fff; }
+      #s5-laptop { position: absolute; left: 40px; top: 470px; width: 1000px; }
+      #s5-bezel { position: relative; width: 1000px; height: 620px; border-radius: 30px 30px 0 0; background: #050505; padding: 26px 26px 20px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2a2a2a; }
+      #s5-screen { position: relative; width: 948px; height: 574px; overflow: hidden; background: #0e0e0e; }
+      #s5-zoom { position: absolute; left: 0; top: 0; width: 948px; height: 574px; }
+      #s5-zoom img { position: absolute; left: 0; top: 0; width: 948px; height: 533px; }
+      #s5-base { width: 1080px; margin-left: -40px; height: 34px; border-radius: 0 0 26px 26px; background: linear-gradient(#cfcfcf, #8d8d8d); }
+      #s5-cursor { position: absolute; left: 0; top: 0; width: 64px; }
+
+      /* 6. récompense */
+      #s6 { background: var(--ink); }
+      #s6-phone { position: absolute; left: 50px; top: 330px; width: 520px; height: 863px; border-radius: 64px; background: #050505; padding: 16px; box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2c2c2c; }
+      #s6-screen { position: relative; width: 488px; height: 831px; border-radius: 50px; overflow: hidden; background: #111; }
+      #s6-strip { position: absolute; left: 0; top: 0; width: 488px; }
+      #s6-strip img { display: block; width: 488px; height: 831px; }
+      #s6 .t6 { top: 520px; left: 600px; right: 110px; font-size: 68px; font-stretch: 110%; color: #fff; }
+      #s6 .t6 .w { display: block; }
+      #s6-laptop { position: absolute; left: 90px; top: 400px; width: 900px; opacity: 0; }
+      #s6-lbez { width: 900px; height: 530px; border-radius: 26px 26px 0 0; background: #050505; padding: 20px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2a2a2a; }
+      #s6-lbez img { width: 860px; height: 484px; display: block; }
+      #s6-lbase { width: 960px; margin-left: -30px; height: 28px; border-radius: 0 0 22px 22px; background: linear-gradient(#cfcfcf, #8d8d8d); }
+      #s6 .t6b { top: 196px; font-size: 92px; color: #fff; opacity: 0; }
+
+      /* 7. studio */
+      #s7 .t7 { top: 196px; font-size: 92px; }
+      #s7-card { position: absolute; left: 220px; top: 410px; width: 640px; height: 803px; perspective: 2200px; }
+      #s7-flip { position: absolute; inset: 0; transform-style: preserve-3d; }
+      #s7-flip img { position: absolute; inset: 0; width: 640px; height: 803px; border-radius: 34px; backface-visibility: hidden; box-shadow: 0 40px 80px rgba(60, 20, 0, 0.45); }
+      #s7-back { transform: rotateY(180deg); }
+      #s7-pay { left: 90px; top: 420px; width: 900px; height: 900px; opacity: 0; }
+      #s7-pay img { width: 900px; }
+      #s7-recu { position: absolute; left: 200px; top: 420px; width: 680px; height: 961px; overflow: hidden; border-radius: 10px; box-shadow: 0 40px 80px rgba(60, 20, 0, 0.45); opacity: 0; }
+      #s7-recu img { width: 680px; display: block; }
+
+      /* 8. phrase */
+      #s8 { background: var(--ink); }
+      #s8 .t8 { top: 640px; font-size: 136px; color: #fff; }
+      #s8 .t8 .w.o { color: var(--orange); }
+
+      /* 9. fin */
+      #s9 { background: var(--paper); }
+      #s9-logo { position: absolute; left: 190px; top: 560px; width: 700px; height: 271px; }
+      #s9-logo img { position: absolute; inset: 0; width: 700px; height: 271px; }
+      #s9-live { position: absolute; left: 660px; top: 842px; font-size: 118px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; color: var(--ink); }
+      #s9-url { position: absolute; left: 0; right: 0; top: 1070px; text-align: center; }
+      #s9-url span { display: inline-block; background: var(--ink); color: #fff; font-size: 52px; font-weight: 700; padding: 22px 40px; border-radius: 99px; }
+      #s9-tag { position: absolute; left: 0; right: 0; top: 1220px; text-align: center; font-size: 46px; font-weight: 600; color: #444; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="46.8" data-width="1080" data-height="1920">
+      <!-- 1. accroche -->
+      <div id="s1" class="scene clip wax" data-start="0" data-duration="7.2" data-track-index="1" data-track-kind="graphics">
+        <div id="s1-card">
+          <img id="s1-photo" src="assets/screens/rose-photo.jpg" alt="La marmite de Mama Rose" />
+          <div id="s1-live" class="pill"><span class="dot"></span>LIVE</div>
+          <div id="s1-dim"></div>
+        </div>
+        <div class="t t1"><span class="w">18h,</span> <span class="w">Douala.</span></div>
+        <div class="sub s1" id="s1-sub">Mama Rose passe en live.</div>
+        <div id="s2-flood"></div>
+        <div class="t t2" id="s2-t"><span class="w">Personne</span> <span class="w">ne</span> <span class="w">la</span> <span class="w">trouve.</span></div>
+      </div>
+
+      <!-- 3. révélation -->
+      <div id="s3" class="scene clip wax" data-start="7.2" data-duration="2.4" data-track-index="2" data-track-kind="graphics">
+        <div id="s3-logo"><img id="s3-mark" src="assets/img/ocd-logo-ink.svg" alt="OCD" /></div>
+        <div id="s3-live">Live</div>
+        <div class="t t3"><span class="w">Le</span> <span class="w">marché,</span><br /><span class="w">en</span> <span class="w">direct.</span></div>
+      </div>
+
+      <!-- 4. preuve -->
+      <div id="s4" class="scene clip" data-start="9.6" data-duration="9.6" data-track-index="3" data-track-kind="graphics">
+        <div class="t t4" id="s4-a"><span class="w">Son</span> <span class="w">pays.</span></div>
+        <div class="t t4" id="s4-b"><span class="w">Son</span> <span class="w">rayon.</span></div>
+        <div class="t t4" id="s4-c"><span class="w">Photo</span> <span class="w">et</span> <span class="w">lien.</span></div>
+        <div class="t t4" id="s4-d"><span class="w">Envoyé.</span></div>
+        <div id="s4-win" class="win">
+          <img id="s4-g0" src="assets/screens/g0.jpg" alt="" />
+          <img id="s4-g1" src="assets/screens/g1.jpg" alt="" />
+          <img id="s4-g2b" src="assets/screens/g2b.jpg" alt="" />
+          <img id="s4-g2c" src="assets/screens/g2c.jpg" alt="" />
+          <img id="s4-g3" src="assets/screens/g3.jpg" alt="" />
+          <div class="touch" id="s4-touch"></div>
+        </div>
+      </div>
+
+      <!-- 5. régie -->
+      <div id="s5" class="scene clip" data-start="19.2" data-duration="4.8" data-track-index="4" data-track-kind="graphics">
+        <div class="t t5"><span class="w">L'équipe</span> <span class="w">valide.</span></div>
+        <div id="s5-laptop">
+          <div id="s5-bezel">
+            <div id="s5-screen">
+              <div id="s5-zoom">
+                <img id="s5-pending" src="assets/screens/r-pending.jpg" alt="" />
+                <img id="s5-valid" src="assets/screens/r-valid.jpg" alt="" />
+                <svg id="s5-cursor" viewBox="0 0 32 32"><path d="M4 2 L4 26 L10 20 L14 30 L18 28 L14 18 L22 18 Z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round" /></svg>
+              </div>
+            </div>
+          </div>
+          <div id="s5-base"></div>
+        </div>
+      </div>
+
+      <!-- 6. récompense -->
+      <div id="s6" class="scene clip" data-start="24" data-duration="7.2" data-track-index="5" data-track-kind="graphics">
+        <div id="s6-phone">
+          <div id="s6-screen">
+            <div id="s6-strip">
+              <img src="assets/screens/feed-cm.jpg" alt="" />
+              <img src="assets/screens/rose.jpg" alt="Chez Mama Rose en live dans le fil du Cameroun" />
+            </div>
+            <div class="touch" id="s6-touch"></div>
+          </div>
+        </div>
+        <div class="t t6" id="s6-t"><span class="w">Le</span> <span class="w">Cameroun</span> <span class="w">la</span> <span class="w">voit.</span></div>
+        <div class="t t6b" id="s6-t2"><span class="w">Téléphone</span> <span class="w">et</span> <span class="w">ordinateur.</span></div>
+        <div id="s6-laptop">
+          <div id="s6-lbez"><img src="assets/screens/d-rose.jpg" alt="Le site sur ordinateur" /></div>
+          <div id="s6-lbase"></div>
+        </div>
+      </div>
+
+      <!-- 7. studio -->
+      <div id="s7" class="scene clip wax" data-start="31.2" data-duration="7.2" data-track-index="6" data-track-kind="graphics">
+        <div class="t t7" id="s7-a"><span class="w">Ou</span> <span class="w">réserve</span> <span class="w">le</span> <span class="w">studio.</span></div>
+        <div class="t t7" id="s7-b"><span class="w">Paie</span> <span class="w">en</span> <span class="w">Mobile</span> <span class="w">Money.</span></div>
+        <div class="t t7" id="s7-c"><span class="w">Garde</span> <span class="w">ton</span> <span class="w">reçu.</span></div>
+        <div id="s7-card">
+          <div id="s7-flip">
+            <img id="s7-front" src="assets/screens/card-front.jpg" alt="La Carte OCD de Chez Mama Rose" />
+            <img id="s7-back" src="assets/screens/card-back.jpg" alt="Le verso de la Carte OCD" />
+          </div>
+        </div>
+        <div id="s7-pay" class="win">
+          <img id="s7-p1" src="assets/screens/pay-sheet.jpg" alt="" />
+          <img id="s7-p2" src="assets/screens/pay-proc.jpg" alt="" />
+          <img id="s7-p3" src="assets/screens/pay-ok.jpg" alt="" />
+        </div>
+        <div id="s7-recu"><img src="assets/screens/recu.jpg" alt="Le reçu de réservation" /></div>
+      </div>
+
+      <!-- 8. phrase -->
+      <div id="s8" class="scene clip" data-start="38.4" data-duration="3.4" data-track-index="7" data-track-kind="graphics">
+        <div class="t t8"><span class="w">Ton</span> <span class="w">pays</span><br /><span class="w">te</span> <span class="w">voit</span> <span class="w o">vendre.</span></div>
+      </div>
+
+      <!-- 9. fin -->
+      <div id="s9" class="scene clip" data-start="41.8" data-duration="5" data-track-index="8" data-track-kind="graphics">
+        <div id="s9-logo"><img id="s9-mark" src="assets/img/ocd-logo.svg" alt="OCD" /></div>
+        <div id="s9-live">Live</div>
+        <div id="s9-url"><span>ocd-pi.vercel.app</span></div>
+        <div id="s9-tag">Les opportunités, c'est dehors.</div>
+      </div>
+
+      <!-- son -->
+      <audio id="a-music" src="assets/audio/music.wav" data-start="0" data-duration="46.8" data-volume="0.55" data-fade-out="1.6"></audio>
+      <audio id="a-w1" src="assets/audio/whoosh1.wav" data-start="4.62" data-duration="1.2" data-volume="0.6"></audio>
+      <audio id="a-w2" src="assets/audio/whoosh2.wav" data-start="7.05" data-duration="1.2" data-volume="0.6"></audio>
+      <audio id="a-t1" src="assets/audio/tap.wav" data-start="11.05" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-t2" src="assets/audio/tap.wav" data-start="13.25" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-t3" src="assets/audio/tap.wav" data-start="15.65" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-t4" src="assets/audio/tap.wav" data-start="17.45" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-p1" src="assets/audio/pop.wav" data-start="17.85" data-duration="0.8" data-volume="0.7"></audio>
+      <audio id="a-w3" src="assets/audio/whoosh1.wav" data-start="19.05" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-t5" src="assets/audio/tap.wav" data-start="21.75" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-p2" src="assets/audio/ping.wav" data-start="21.9" data-duration="0.72" data-volume="0.55"></audio>
+      <audio id="a-w4" src="assets/audio/whoosh2.wav" data-start="23.85" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-p3" src="assets/audio/pop.wav" data-start="26.45" data-duration="0.8" data-volume="0.7"></audio>
+      <audio id="a-t6" src="assets/audio/tap.wav" data-start="27.85" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-w5" src="assets/audio/whoosh1.wav" data-start="31.05" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-w6" src="assets/audio/whoosh2.wav" data-start="32.45" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-t7" src="assets/audio/tap.wav" data-start="34.85" data-duration="0.24" data-volume="0.8"></audio>
+      <audio id="a-p4" src="assets/audio/ping.wav" data-start="35.75" data-duration="0.72" data-volume="0.55"></audio>
+      <audio id="a-riser" src="assets/audio/riser.wav" data-start="39.6" data-duration="2.3" data-volume="0.5"></audio>
+      <audio id="a-impact" src="assets/audio/impact.wav" data-start="41.82" data-duration="2" data-volume="0.75"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const E = { in: "expo.out", move: "power3.inOut", out: "power3.in" };
+      const words = (sel, t, gap = 0.07) =>
+        tl.fromTo(sel + " .w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, stagger: gap, ease: "power2.out" }, t);
+      const wordsOut = (sel, t) => tl.to(sel + " .w", { opacity: 0, filter: "blur(6px)", duration: 0.14, stagger: 0.03, ease: "power2.in" }, t);
+      const tap = (sel, x, y, t, from) => {
+        tl.set(sel, { x: from ? from[0] : x + 160, y: from ? from[1] : y + 220 }, t - 0.5);
+        tl.to(sel, { opacity: 1, duration: 0.15 }, t - 0.5);
+        tl.to(sel, { x, y, duration: 0.42, ease: "power3.out" }, t - 0.45);
+        tl.to(sel, { scale: 0.72, duration: 0.08, ease: "power2.in" }, t);
+        tl.to(sel, { scale: 1, duration: 0.18, ease: "power2.out" }, t + 0.08);
+        tl.to(sel, { opacity: 0, duration: 0.2 }, t + 0.3);
+      };
+
+      /* ───── 1. accroche (0 → 4,8) ───── */
+      tl.fromTo("#s1-card", { clipPath: "inset(8% 8% 8% 8% round 44px)", scale: 1.06 }, { clipPath: "inset(0% 0% 0% 0% round 44px)", scale: 1, duration: 0.9, ease: E.in }, 0);
+      tl.fromTo("#s1-photo", { scale: 1.08 }, { scale: 1, duration: 4.6, ease: "power1.out" }, 0);
+      tl.fromTo("#s1-live", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: E.in }, 0.5);
+      words("#s1 .t1", 0.15, 0.09);
+      tl.fromTo("#s1-sub", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 1.4);
+
+      /* ───── 2. tension (4,8 → 7,2) : le fond vire au noir, la photo s'éteint ───── */
+      tl.fromTo("#s2-flood", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.inOut" }, 4.8);
+      tl.to(["#s1 .t1", "#s1-sub"], { opacity: 0, duration: 0.2 }, 4.8);
+      tl.set("#s1-card", { zIndex: 2 }, 4.8);
+      tl.set("#s2-t", { zIndex: 3 }, 4.8);
+      tl.to("#s1-card", { scale: 0.5, y: -210, duration: 0.7, ease: E.move }, 4.8);
+      tl.to("#s1-dim", { opacity: 0.6, duration: 0.8 }, 5.0);
+      tl.to("#s1-live", { opacity: 0, duration: 0.3 }, 5.0);
+      tl.fromTo("#s2-t .w", { opacity: 0 }, { opacity: 1, duration: 0.12, stagger: 0.1 }, 5.4);
+      tl.to("#s2-t .w", { color: "#ffffff", duration: 0.2, stagger: 0.1 }, 5.55);
+      tl.to("#s1-card", { scale: 0.08, y: -420, opacity: 0, duration: 0.4, ease: E.out }, 6.85);
+      tl.to("#s2-t .w", { opacity: 0, filter: "blur(8px)", duration: 0.18, stagger: 0.03 }, 6.95);
+
+      /* ───── 3. révélation (7,2 → 9,6) ───── */
+      tl.fromTo("#s3-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power3.out" }, 7.3);
+      tl.fromTo("#s3-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 7.85);
+      words("#s3 .t3", 8.1, 0.08);
+      tl.to(["#s3-logo", "#s3-live", "#s3 .t3"], { scale: 1.6, opacity: 0, duration: 0.35, ease: E.out }, 9.28);
+
+      /* ───── 4. preuve (9,6 → 19,2) : un téléphone, quatre gestes ───── */
+      const s = 900 / 1170; /* 1 px de capture → pixels de la fenêtre */
+      tl.fromTo("#s4-win", { y: 120, scale: 0.94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.6, ease: E.in }, 9.6);
+      ["#s4-g1", "#s4-g2b", "#s4-g2c", "#s4-g3"].forEach((id) => tl.set(id, { x: 900 }, 9.6));
+      words("#s4-a", 9.8);
+      tap("#s4-touch", 286 * 3 * s, 249 * 3 * s, 11.1);
+      tl.to("#s4-g0", { x: -260, duration: 0.5, ease: E.move }, 11.35);
+      tl.to("#s4-g1", { x: 0, duration: 0.5, ease: E.move }, 11.35);
+      wordsOut("#s4-a", 11.3);
+      words("#s4-b", 11.7);
+      tap("#s4-touch", 104 * 3 * s, 236 * 3 * s, 13.3);
+      tl.to("#s4-g1", { x: -260, duration: 0.5, ease: E.move }, 13.55);
+      tl.to("#s4-g2b", { x: 0, duration: 0.5, ease: E.move }, 13.55);
+      wordsOut("#s4-b", 13.5);
+      words("#s4-c", 13.9);
+      tl.set("#s4-g2c", { x: 0, opacity: 0 }, 14.6);
+      tl.to("#s4-g2b", { y: -120, duration: 0.6, ease: E.move }, 14.6);
+      tl.to("#s4-g2c", { opacity: 1, duration: 0.3 }, 14.9);
+      tap("#s4-touch", 320 * 3 * s, 353 * 3 * s, 15.7);
+      tl.to("#s4-win", { scale: 1.12, transformOrigin: "70% 82%", duration: 0.5, ease: E.move }, 15.9);
+      tl.to("#s4-g2c", { y: -540, duration: 0.6, ease: E.move }, 16.6);
+      tl.to("#s4-win", { scale: 1, duration: 0.5, ease: E.move }, 16.6);
+      wordsOut("#s4-c", 16.9);
+      tap("#s4-touch", 190 * 3 * s, 623 * 3 * s - 540, 17.5, [500, 900]);
+      tl.set("#s4-g3", { x: 0, opacity: 0, y: 0 }, 17.6);
+      tl.to("#s4-g3", { opacity: 1, duration: 0.25 }, 17.65);
+      tl.fromTo("#s4-g3", { scale: 1.04 }, { scale: 1, transformOrigin: "50% 20%", duration: 0.5, ease: E.in }, 17.65);
+      words("#s4-d", 17.8);
+      tl.to("#s4-win", { scale: 0.62, y: 200, opacity: 0, duration: 0.4, ease: E.out }, 18.85);
+      wordsOut("#s4-d", 18.9);
+
+      /* ───── 5. régie (19,2 → 24) : l'équipe valide sur ordinateur ───── */
+      const k = 948 / 2880;
+      tl.fromTo("#s5-laptop", { y: 160, scale: 0.92, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.6, ease: E.in }, 19.2);
+      words("#s5 .t5", 19.4);
+      tl.set("#s5-valid", { opacity: 0 }, 19.2);
+      tl.fromTo("#s5-zoom", { scale: 1, x: 0, y: 0 }, { scale: 1.5, x: -237, y: -91, transformOrigin: "0 0", duration: 0.9, ease: E.move }, 20.0);
+      tl.set("#s5-cursor", { x: 520, y: 470, opacity: 1 }, 19.9);
+      tl.to("#s5-cursor", { x: 2205 * k, y: 765 * k, duration: 0.8, ease: "power3.out" }, 20.6);
+      tl.to("#s5-cursor", { scale: 0.85, duration: 0.07 }, 21.75);
+      tl.to("#s5-cursor", { scale: 1, duration: 0.15 }, 21.82);
+      tl.to("#s5-valid", { opacity: 1, duration: 0.12 }, 21.8);
+      tl.to("#s5-zoom", { scale: 2.4, x: -661, y: -935, duration: 0.8, ease: E.move }, 22.2);
+      tl.to("#s5-cursor", { opacity: 0, duration: 0.2 }, 22.2);
+      tl.to("#s5-laptop", { scale: 2.6, opacity: 0, transformOrigin: "70% 50%", duration: 0.4, ease: E.out }, 23.65);
+      tl.to("#s5 .t5", { opacity: 0, duration: 0.15 }, 23.6);
+
+      /* ───── 6. récompense (24 → 31,2) : le fil du Cameroun, puis téléphone + ordinateur ───── */
+      tl.fromTo("#s6-phone", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: E.in }, 24.0);
+      tl.fromTo("#s6-strip", { y: 0 }, { y: -831, duration: 0.75, ease: "power3.inOut" }, 25.6);
+      words("#s6-t", 26.4, 0.1);
+      tap("#s6-touch", 194 * (488 / 390), 607 * (488 / 390), 27.9);
+      /* téléphone et ordinateur */
+      tl.to("#s6-t .w", { opacity: 0, duration: 0.15, stagger: 0.03 }, 28.6);
+      tl.to("#s6-phone", { scale: 0.46, x: 520, y: 470, transformOrigin: "0 0", duration: 0.7, ease: E.move }, 28.75);
+      tl.to("#s6-laptop", { opacity: 1, duration: 0.3 }, 28.85);
+      tl.fromTo("#s6-laptop", { x: -120 }, { x: -40, duration: 0.7, ease: E.in }, 28.85);
+      tl.set("#s6-phone", { zIndex: 3 }, 28.75);
+      tl.set("#s6-t2", { opacity: 1 }, 29.0);
+      words("#s6-t2", 29.0);
+      tl.to(["#s6-laptop", "#s6-phone", "#s6-t2"], { opacity: 0, duration: 0.3, ease: E.out }, 30.85);
+
+      /* ───── 7. studio (31,2 → 38,4) ───── */
+      words("#s7-a", 31.35);
+      tl.fromTo("#s7-card", { y: 260, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: E.in }, 31.3);
+      tl.fromTo("#s7-flip", { rotationY: 0 }, { rotationY: 180, duration: 0.8, ease: E.move }, 32.5);
+      wordsOut("#s7-a", 33.7);
+      tl.to("#s7-card", { x: -700, opacity: 0, duration: 0.45, ease: E.out }, 33.75);
+      words("#s7-b", 34.0);
+      tl.set("#s7-p1", { y: -1092 * s }, 33.9);
+      tl.set(["#s7-p2", "#s7-p3"], { y: -1092 * s, opacity: 0 }, 33.9);
+      tl.fromTo("#s7-pay", { opacity: 0, y: 200 }, { opacity: 1, y: 0, duration: 0.5, ease: E.in }, 33.95);
+      tl.to("#s7-p2", { opacity: 1, duration: 0.15 }, 34.9);
+      tl.to("#s7-p3", { opacity: 1, duration: 0.15 }, 35.75);
+      tl.set("#s7-p2", { opacity: 0 }, 35.9);
+      wordsOut("#s7-b", 36.3);
+      tl.to("#s7-pay", { y: -120, opacity: 0, duration: 0.4, ease: E.out }, 36.35);
+      words("#s7-c", 36.6);
+      tl.fromTo("#s7-recu", { y: 420, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: E.in }, 36.5);
+      tl.to("#s7-recu img", { y: -280, duration: 1.2, ease: "power2.inOut" }, 37.1);
+
+      /* ───── 8. phrase (38,4 → 41,8) ───── */
+      words("#s8 .t8", 38.55, 0.12);
+
+      /* ───── 9. fin (41,8 → 46,8) ───── */
+      tl.fromTo("#s9-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 41.85);
+      tl.fromTo("#s9-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 42.45);
+      tl.fromTo("#s9-url", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 43.0);
+      tl.fromTo("#s9-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 43.4);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
