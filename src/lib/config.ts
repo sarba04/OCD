@@ -12,8 +12,6 @@ export const BRAND = {
     process.env.NEXT_PUBLIC_STUDIO_ADDRESS || "Studio OCD Live, Lomé (adresse exacte envoyée sur WhatsApp)",
   /** Numéro WhatsApp de l'équipe, format international sans + ni espaces (ex : 22890000000). */
   whatsapp: (process.env.NEXT_PUBLIC_OCD_WHATSAPP || "").replace(/\D/g, ""),
-  payFlooz: process.env.NEXT_PUBLIC_PAY_FLOOZ || "",
-  payMixx: process.env.NEXT_PUBLIC_PAY_MIXX || "",
 } as const;
 
 /** Lomé vit à l'heure GMT toute l'année (pas d'heure d'été) : heure de Lomé = UTC. */
@@ -192,12 +190,25 @@ export const FORBIDDEN = [
   "Tout produit illégal au Togo ou dans ton pays",
 ];
 
+/**
+ * Moyens de paiement proposés. Le paiement est pour l'instant SIMULÉ (aucun argent n'est débité) :
+ * l'équipe confirme le vrai paiement ; à brancher plus tard sur un agrégateur (CinetPay, FedaPay, PayDunya…).
+ */
 export const PAYMENT_METHODS = [
-  { id: "flooz", label: "Flooz", hint: "Moov Africa", modes: ["studio", "remote"] },
-  { id: "mixx", label: "Mixx by Yas", hint: "ex-T-Money", modes: ["studio", "remote"] },
-  { id: "cash", label: "Espèces au studio", hint: "Le jour J, avant ton live", modes: ["studio"] },
-  { id: "later", label: "L'équipe me contacte", hint: "Wave, transfert, carte…", modes: ["studio", "remote"] },
+  { id: "mtn", label: "MTN MoMo", hint: "Mobile Money", kind: "mobile", modes: ["studio", "remote"] },
+  { id: "orange", label: "Orange Money", hint: "Mobile Money", kind: "mobile", modes: ["studio", "remote"] },
+  { id: "wave", label: "Wave", hint: "Mobile Money", kind: "mobile", modes: ["studio", "remote"] },
+  { id: "card", label: "Carte bancaire", hint: "Visa, Mastercard", kind: "card", modes: ["studio", "remote"] },
 ] as const;
+
+/** Libellés, y compris ceux des anciennes réservations. */
+export const PAYMENT_LABEL: Record<string, string> = {
+  ...Object.fromEntries(PAYMENT_METHODS.map((m) => [m.id, m.label])),
+  flooz: "Flooz",
+  mixx: "Mixx by Yas",
+  cash: "Espèces au studio",
+  later: "L'équipe me contacte",
+};
 
 export type PaymentMethodId = (typeof PAYMENT_METHODS)[number]["id"];
 

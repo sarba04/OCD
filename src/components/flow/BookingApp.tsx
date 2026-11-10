@@ -10,13 +10,14 @@ import { formatDay, formatTime, offsetFromStudio, toISO, type Interval } from "@
 import type { PublicBooking } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { ChainProgress } from "./ChainProgress";
-import { EMPTY, FLOW, STEP_LABEL, STEP_PARAM, businessErrors, countryOf, firstIncomplete, stepFromParam, toInput, type Draft, type Step } from "./state";
+import { EMPTY, FLOW, STEP_LABEL, STEP_PARAM, businessErrors, contactPhone, countryOf, firstIncomplete, stepFromParam, toInput, type Draft, type Step } from "./state";
 import { StepScene } from "./StepScene";
 import { StepWhen } from "./StepWhen";
 import { StepPack } from "./StepPack";
 import { StepBusiness } from "./StepBusiness";
 import { StepReview, type Conflict } from "./StepReview";
 import { StepDone } from "./StepDone";
+import { PaySheet } from "./PaySheet";
 
 export interface Availability {
   busy: Interval[];
@@ -75,6 +76,7 @@ export function BookingApp() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [conflict, setConflict] = useState<Conflict | null>(null);
+  const [paying, setPaying] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -169,8 +171,9 @@ export function BookingApp() {
   const country = countryOf(draft);
   const errors = useMemo(() => ({ ...businessErrors(draft), ...serverErrors }), [draft, serverErrors]);
 
-  async function submit() {
-    if (!draft.paymentMethod) return;
+  /** Enregistre la réservation. `stay` : on reste sur place (le simulateur de paiement affiche d'abord « Paiement confirmé »). */
+  async function submit(stay = false): Promise<boolean> {
+    if (!draft.paymentMethod) return false;
     setSubmitting(true);
     setSubmitError(null);
     setConflict(null);
@@ -186,7 +189,8 @@ export function BookingApp() {
         setDone(j.booking);
         write(DONE_KEY, j.booking);
         write(DRAFT_KEY, null);
-        go("done", { replace: true });
+        if (!stay) go("done", { replace: true });
+        return true;
       } else if (r.status === 409) {
         setConflict({ message: j.message, alternatives: j.alternatives || [] });
         refresh();
@@ -202,6 +206,7 @@ export function BookingApp() {
     } finally {
       setSubmitting(false);
     }
+    return false;
   }
 
   function restart() {
@@ -271,9 +276,9 @@ export function BookingApp() {
         };
       default:
         return {
-          cta: "Réserver mon live",
+          cta: pack ? `Payer ${fcfa(pack.price)}` : "Payer",
           disabled: !draft.paymentMethod || !!conflict,
-          onClick: submit,
+          onClick: () => setPaying(true),
         };
     }
   }
@@ -320,6 +325,20 @@ export function BookingApp() {
           </div>
         </div>
       </main>
+
+      {paying && pack && draft.paymentMethod && (
+        <PaySheet
+          method={draft.paymentMethod}
+          amount={pack.price}
+          phone={contactPhone(draft)}
+          onClose={() => setPaying(false)}
+          onPay={() => submit(true)}
+          onDone={() => {
+            setPaying(false);
+            go("done", { replace: true });
+          }}
+        />
+      )}
 
       {/* Le « talon de billet » : il se remplit au fil des choix. */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper shadow-[0_-12px_32px_-18px_rgb(22_18_14/0.25)] [view-transition-name:dock] safe-bottom">

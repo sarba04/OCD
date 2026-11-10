@@ -1,9 +1,10 @@
 "use client";
-import { Banknote, CircleAlert, Clock, Phone, Smartphone } from "lucide-react";
+import { Check, CircleAlert, Clock } from "lucide-react";
+import { cn } from "@/lib/cn";
 import { getPack, PAYMENT_METHODS } from "@/lib/config";
 import { eur, fcfa } from "@/lib/format";
 import { packSessions } from "@/lib/schedule";
-import { ChoiceCard, haptic } from "@/components/ui/kit";
+import { haptic } from "@/components/ui/kit";
 import { OcdCard } from "./OcdCard";
 import { formatTime, offsetFromStudio } from "@/lib/schedule";
 import { countryOf, displayPhone, type Draft, type Step } from "./state";
@@ -13,12 +14,6 @@ export interface Conflict {
   alternatives: { day: string; time: string; label: string }[];
 }
 
-const ICON: Record<string, React.ReactNode> = {
-  flooz: <Smartphone className="size-5" aria-hidden />,
-  mixx: <Smartphone className="size-5" aria-hidden />,
-  cash: <Banknote className="size-5" aria-hidden />,
-  later: <Phone className="size-5" aria-hidden />,
-};
 
 export function StepReview({
   draft,
@@ -98,33 +93,37 @@ export function StepReview({
         )}
 
         <h2 className="display text-[26px]">Comment veux-tu payer&nbsp;?</h2>
-        <p className="mt-1.5 text-[15px] text-ink-2">
-          Rien n&apos;est débité maintenant. Ta place est bloquée <strong className="font-semibold text-ink">24 h</strong> le temps de payer.
-        </p>
-        <div role="radiogroup" aria-label="Moyen de paiement" className="cascade-auto mt-5 grid gap-2.5 sm:grid-cols-2">
+        <p className="mt-1.5 text-[15px] text-ink-2">Choisis, puis appuie sur « Payer ». Pour l&apos;instant le paiement est simulé : rien n&apos;est débité.</p>
+        <div role="radiogroup" aria-label="Moyen de paiement" className="cascade-auto mt-5 grid grid-cols-2 gap-2.5">
           {methods.map((m) => {
             const on = draft.paymentMethod === m.id;
             return (
-              <ChoiceCard
+              <button
                 key={m.id}
-                cut="sm"
+                type="button"
                 role="radio"
                 aria-checked={on}
-                selected={on}
                 onClick={() => {
                   haptic();
                   setDraft({ paymentMethod: m.id });
                 }}
-                className="px-4 py-3.5"
+                className={cn(
+                  "flex flex-col items-start gap-3 rounded-2xl bg-card p-3.5 text-left ring-1 transition-[box-shadow,transform] duration-150 active:scale-[0.98]",
+                  on ? "ring-2 ring-ink shadow-[0_12px_24px_-16px_rgb(22_18_14/0.5)]" : "ring-line hover:ring-ink/30",
+                )}
               >
-                <span className="flex items-center gap-3">
-                  <span className={on ? "text-orange-ink" : "text-ink-3"}>{ICON[m.id]}</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`/pay/${m.id}.webp`} alt="" width={96} height={64} className="h-10 w-auto rounded-md ring-1 ring-black/5" />
+                <span className="flex w-full items-end justify-between gap-2">
                   <span>
-                    <span className="block text-[16px] font-bold">{m.label}</span>
-                    <span className="block text-[13px] text-ink-3">{m.hint}</span>
+                    <span className="block text-[15.5px] leading-tight font-bold">{m.label}</span>
+                    <span className="block text-[12.5px] text-ink-3">{m.hint}</span>
+                  </span>
+                  <span className={cn("grid size-6 shrink-0 place-items-center rounded-full ring-2", on ? "bg-ink text-paper ring-ink" : "ring-line-2")} aria-hidden>
+                    {on && <Check className="size-3.5" strokeWidth={3.5} />}
                   </span>
                 </span>
-              </ChoiceCard>
+              </button>
             );
           })}
         </div>
