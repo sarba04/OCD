@@ -26,10 +26,13 @@
       em { font-style: normal; color: var(--orange); }
 
       /* ouverture */
-      #op-logo { position: absolute; left: 330px; top: 300px; width: 420px; height: 163px; }
-      #op-logo img { width: 420px; height: 163px; }
-      #op-v2 { position: absolute; left: 0; right: 0; top: 520px; text-align: center; font-weight: 800; font-stretch: 125%; font-size: 560px; line-height: 1; letter-spacing: -0.06em; color: var(--ink); }
-      #op-t { position: absolute; left: 90px; right: 90px; top: 1150px; text-align: center; font-size: 76px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.025em; }
+      #op-photo { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #op-shade { position: absolute; inset: 0; background: var(--ink); opacity: 0; }
+      #op-logo { position: absolute; left: 90px; top: 270px; width: 250px; height: 97px; }
+      #op-logo img { width: 250px; height: 97px; }
+      #op-ep { position: absolute; right: 90px; top: 282px; background: var(--ink); color: #fff; font-size: 36px; font-weight: 800; letter-spacing: 0.06em; padding: 13px 26px; border-radius: 99px; }
+      #op-v2 { position: absolute; left: 0; right: 0; top: 360px; text-align: center; font-weight: 800; font-stretch: 125%; font-size: 400px; line-height: 1; letter-spacing: -0.06em; color: var(--orange); }
+      #op-t { position: absolute; left: 0; right: 0; top: 770px; text-align: center; font-size: 72px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
 
       /* nouveau design */
       .bar { position: absolute; top: 470px; width: 280px; height: 860px; border-radius: 30px; }
@@ -94,10 +97,13 @@
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="105.2" data-width="1080" data-height="1920">
       <!-- ouverture -->
-      <div id="op" class="scene clip wax" data-start="0" data-duration="2.8" data-track-index="1" data-track-kind="graphics">
+      <div id="op" class="scene clip" data-start="0" data-duration="2.8" data-track-index="1" data-track-kind="graphics" style="background:#ece6df">
+        <img id="op-photo" src="assets/img/photo.png" alt="sarba abidine, pensif" />
+        <div id="op-shade"></div>
         <div id="op-logo"><img src="assets/img/ocd-logo-ink.svg" alt="OCD" /></div>
+        <div id="op-ep">ÉPISODE 2</div>
         <div id="op-v2">V2</div>
-        <div id="op-t"><span class="w">Nouvelle</span> <span class="w">version.</span></div>
+        <div id="op-t">Tout le site a changé.</div>
       </div>
 
       <!-- nouveau design -->
@@ -268,8 +274,11 @@
       const dip = (t) => { tl.to("#ph-in", { scale: 0.93, duration: 0.14, ease: "power2.in" }, t - 0.14); tl.to("#ph-in", { scale: 1, duration: 0.3, ease: E.in }, t); };
 
       /* ouverture : V2 déjà à l'écran */
-      words("#op-t", 0.25, 0.1);
+      /* ouverture : la couverture, animée (image 0 = la couverture) */
+      tl.to("#op-photo", { scale: 1.06, transformOrigin: "50% 70%", duration: 2.8, ease: "power1.inOut" }, 0);
       tl.to("#op-v2", { scale: 1.05, duration: 2.2, ease: "power1.inOut" }, 0);
+      tl.to(["#op-logo", "#op-ep", "#op-t"], { opacity: 0, y: -30, duration: 0.3, stagger: 0.04, ease: E.out }, 2.0);
+      tl.to("#op-shade", { opacity: 1, duration: 0.45, ease: "power2.in" }, 2.3);
       tl.to("#op-v2", { scale: 7, opacity: 0, transformOrigin: "50% 45%", duration: 0.45, ease: E.out }, 2.3);
 
       /* nouveau design : seulement l'image, sans légende */
