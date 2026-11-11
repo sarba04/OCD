@@ -36,6 +36,7 @@
       #bar1 { left: 90px; background: var(--orange); }
       #bar2 { left: 400px; background: #0a0a0a; box-shadow: inset 0 0 0 2px #3a3a3a; }
       #bar3 { left: 710px; background: #fff; }
+      #dz-t { position: absolute; left: 90px; right: 90px; top: 190px; font-size: 104px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; color: #fff; }
       .bar span { position: absolute; left: 26px; bottom: 30px; font-size: 34px; font-weight: 700; line-height: 1.15; }
       #bar1 span { color: var(--ink); } #bar2 span { color: #fff; } #bar3 span { color: var(--ink); }
       #ft-word { position: absolute; left: 0; right: 0; top: 730px; text-align: center; font-size: 158px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variation-settings: "wdth" 62; }
@@ -80,10 +81,18 @@
       #end-live { position: absolute; left: 440px; top: 882px; font-size: 118px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; }
       #end-v2 { position: absolute; left: 770px; top: 898px; background: var(--orange); color: #fff; font-size: 64px; font-weight: 800; font-stretch: 125%; padding: 10px 26px; border-radius: 22px; }
       #end-tag { position: absolute; left: 0; right: 0; top: 1120px; text-align: center; font-size: 50px; font-weight: 600; color: #444; }
+      #sub { z-index: 10; background: radial-gradient(circle at 85% 80%, rgba(241, 105, 3, 0.22), rgba(241, 105, 3, 0) 45%), #f2efeb; color: var(--ink); }
+      #sub-av { position: absolute; left: 355px; top: 560px; width: 370px; height: 370px; border-radius: 50%; padding: 10px; background: var(--orange); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18); }
+      #sub-av img { width: 350px; height: 350px; border-radius: 50%; display: block; border: 8px solid #fff; }
+      #sub-name { position: absolute; left: 0; right: 0; top: 1000px; text-align: center; font-size: 78px; font-weight: 800; letter-spacing: -0.02em; }
+      #sub-handle { position: absolute; left: 0; right: 0; top: 1096px; text-align: center; font-size: 42px; font-weight: 500; color: #777; }
+      #sub-btn { position: absolute; left: 120px; right: 120px; top: 1210px; height: 150px; background: var(--orange); color: #fff; clip-path: polygon(0 0, 96% 0, 100% 16%, 100% 100%, 4% 100%, 0 84%); box-shadow: 0 30px 50px rgba(0, 0, 0, 0.15); }
+      #sub-btn span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 800; }
+      #sub-b { opacity: 0; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="97.4" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="105.2" data-width="1080" data-height="1920">
       <!-- ouverture -->
       <div id="op" class="scene clip wax" data-start="0" data-duration="2.8" data-track-index="1" data-track-kind="graphics">
         <div id="op-logo"><img src="assets/img/ocd-logo-ink.svg" alt="OCD" /></div>
@@ -92,42 +101,29 @@
       </div>
 
       <!-- nouveau design -->
-      <div id="d1" class="scene clip" data-start="2.6" data-duration="2.5" data-track-index="1" data-track-kind="graphics">
-        <div class="bar" id="bar1"><span>Orange<br />OCD</span></div>
-        <div class="bar" id="bar2"><span>Noir</span></div>
-        <div class="bar" id="bar3"><span>Blanc</span></div>
+      <div id="d1" class="scene clip" data-start="2.6" data-duration="2.1" data-track-index="1" data-track-kind="graphics">
+        <div class="bar" id="bar1"></div>
+        <div class="bar" id="bar2"></div>
+        <div class="bar" id="bar3"></div>
       </div>
-      <div id="d2" class="scene clip" data-start="5" data-duration="2.5" data-track-index="1" data-track-kind="graphics">
+      <div id="d2" class="scene clip" data-start="4.6" data-duration="2.1" data-track-index="1" data-track-kind="graphics">
         <div id="ft-word">MARCHÉ</div>
-        <div id="ft-sub">ARCHIVO · LARGE</div>
       </div>
-      <div id="d3" class="scene clip" data-start="7.4" data-duration="2.5" data-track-index="1" data-track-kind="graphics" style="background: var(--orange)">
+      <div id="d3" class="scene clip" data-start="6.6" data-duration="2.2" data-track-index="1" data-track-kind="graphics" style="background: var(--orange)">
         <div id="wx-zoom"></div>
         <div id="wx-logo"><img src="assets/img/ocd-logo-white.svg" alt="OCD" /></div>
       </div>
-      <div id="d4" class="scene clip" data-start="9.8" data-duration="2.7" data-track-index="1" data-track-kind="graphics">
-        <div class="cat" style="left: 90px; top: 480px"><img src="assets/cat/food.png" alt="Nourriture" /></div>
-        <div class="cat" style="left: 400px; top: 480px"><img src="assets/cat/mode.png" alt="Habits" /></div>
-        <div class="cat" style="left: 710px; top: 480px"><img src="assets/cat/wax.png" alt="Pagnes" /></div>
-        <div class="cat" style="left: 90px; top: 820px"><img src="assets/cat/beaute.png" alt="Beauté" /></div>
-        <div class="cat" style="left: 400px; top: 820px"><img src="assets/cat/cheveux.png" alt="Cheveux" /></div>
-        <div class="cat" style="left: 710px; top: 820px"><img src="assets/cat/tech.png" alt="Téléphones" /></div>
-      </div>
-      <div id="hd0" class="scene clip hd light" data-start="2.6" data-duration="9.7" data-track-index="2" data-track-kind="graphics">
-        <div class="tag">NOUVEAU DESIGN</div>
-        <div class="st" id="hd0a">Les couleurs <em>d'OCD.</em></div>
-        <div class="st" id="hd0b">Une écriture <em>large.</em></div>
-        <div class="st" id="hd0c" style="color: var(--ink)">Le motif <span style="color:#fff">wax.</span></div>
-        <div class="st" id="hd0d">Des <em>vraies</em> images.</div>
+      <div id="hd0" class="scene clip" data-start="2.6" data-duration="6.2" data-track-index="2" data-track-kind="graphics" style="z-index: 6">
+        <div id="dz-t"><span class="w">Nouveau</span> <span class="w">design.</span></div>
       </div>
 
       <!-- cartes -->
-      <div id="c1" class="scene clip wax card" data-start="30.2" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">Je</span> <span class="w">suis</span><br /><span class="w">en</span> <span class="w">live.</span></div></div>
-      <div id="c2" class="scene clip wax card" data-start="44.85" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">L'équipe</span><br /><span class="w">valide.</span></div></div>
-      <div id="c3" class="scene clip wax card" data-start="65.1" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">Au</span> <span class="w">studio.</span></div></div>
+      <div id="c1" class="scene clip wax card" data-start="33.1" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">Je</span> <span class="w">suis</span><br /><span class="w">en</span> <span class="w">live.</span></div></div>
+      <div id="c2" class="scene clip wax card" data-start="47.75" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">L'équipe</span><br /><span class="w">valide.</span></div></div>
+      <div id="c3" class="scene clip wax card" data-start="68" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">Au</span> <span class="w">studio.</span></div></div>
 
       <!-- en-têtes du parcours -->
-      <div id="hd1" class="scene clip hd" data-start="12.2" data-duration="18.15" data-track-index="2" data-track-kind="graphics">
+      <div id="hd1" class="scene clip hd" data-start="8.6" data-duration="18.15" data-track-index="2" data-track-kind="graphics">
         <div class="tag">L'ACCUEIL</div>
         <div class="st" id="hd1a">Les lives <em>défilent.</em></div>
         <div class="st" id="hd1b">Choisis <em>ton pays.</em></div>
@@ -135,59 +131,72 @@
         <div class="st" id="hd1d">Qui est en live, <em>maintenant.</em></div>
         <div class="st" id="hd1e">Trois façons de <em>vendre.</em></div>
       </div>
-      <div id="hd2" class="scene clip hd" data-start="31.6" data-duration="13.4" data-track-index="2" data-track-kind="graphics">
+      <div id="hd2" class="scene clip hd" data-start="34.5" data-duration="13.4" data-track-index="2" data-track-kind="graphics">
         <div class="tag">JE SUIS EN LIVE</div>
         <div class="st" id="hd2a">Ton pays, <em>ton rayon.</em></div>
         <div class="st" id="hd2b">La photo <em>du produit.</em></div>
         <div class="st" id="hd2c">Ton nom, <em>ton lien TikTok.</em></div>
         <div class="st" id="hd2d"><em>C'est envoyé !</em></div>
       </div>
-      <div id="hd3" class="scene clip hd" data-start="46.25" data-duration="15" data-track-index="2" data-track-kind="graphics">
+      <div id="hd3" class="scene clip hd" data-start="49.15" data-duration="15" data-track-index="2" data-track-kind="graphics">
         <div class="tag">VALIDATION</div>
         <div class="st" id="hd3a">Les lives <em>à valider.</em></div>
         <div class="st" id="hd3b">Un clic : <em>en ligne.</em></div>
         <div class="st" id="hd3c">Et la voilà <em>sur le site.</em></div>
       </div>
-      <div id="hd4" class="scene clip hd" data-start="61.25" data-duration="4" data-track-index="2" data-track-kind="graphics">
+      <div id="hd4" class="scene clip hd" data-start="64.15" data-duration="4" data-track-index="2" data-track-kind="graphics">
         <div class="tag">SHORTS OCD</div>
         <div class="st" id="hd4a">Les vidéos <em>OCD.</em></div>
       </div>
-      <div id="hd5" class="scene clip hd" data-start="66.5" data-duration="11.25" data-track-index="2" data-track-kind="graphics">
+      <div id="hd5" class="scene clip hd" data-start="69.4" data-duration="11.25" data-track-index="2" data-track-kind="graphics">
         <div class="tag">LIVE AU STUDIO</div>
         <div class="st" id="hd5a">Le jour, <em>l'heure.</em></div>
         <div class="st" id="hd5b">Le <em>pack.</em></div>
         <div class="st" id="hd5c">Ta <em>fiche.</em></div>
         <div class="st" id="hd5d">Ta <em>Carte OCD.</em></div>
       </div>
-      <div id="hd6" class="scene clip hd" data-start="77.73" data-duration="7.5" data-track-index="2" data-track-kind="graphics">
+      <div id="hd6" class="scene clip hd" data-start="80.63" data-duration="7.5" data-track-index="2" data-track-kind="graphics">
         <div class="tag">DEPUIS CHEZ TOI</div>
         <div class="st" id="hd6a">Ou depuis <em>chez toi.</em></div>
         <div class="st" id="hd6b">Tes heures, <em>ton pays.</em></div>
         <div class="st" id="hd6c">Ton <em>pack.</em></div>
       </div>
 
+      <div id="hd7" class="scene clip hd" data-start="26.6" data-duration="6.5" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">L'ACCUEIL</div>
+        <div class="st" id="hd7a">Et sur <em>ordinateur.</em></div>
+      </div>
+
       <!-- téléphone : vrais parcours filmés sur le site -->
       <div id="ph-in" data-layout-allow-overflow>
         <div id="ph-screen">
-          <video id="v-home" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/home.mp4" muted playsinline data-start="12.2" data-duration="18.13" data-track-index="4"></video>
-          <video id="v-golive" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/golive.mp4" muted playsinline data-start="31.6" data-duration="13.36" data-track-index="4"></video>
-          <video id="v-retour" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/retour.mp4" muted playsinline data-start="53.75" data-duration="7.5" data-track-index="4"></video>
-          <video id="v-shorts" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/shorts.mp4" muted playsinline data-start="61.25" data-duration="4" data-track-index="4"></video>
-          <video id="v-studio" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/studio.mp4" muted playsinline data-start="66.5" data-duration="11.23" data-track-index="4"></video>
-          <video id="v-maison" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/maison.mp4" muted playsinline data-start="77.73" data-duration="7.5" data-track-index="4"></video>
+          <video id="v-home" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/home.mp4" muted playsinline data-start="8.6" data-duration="18.13" data-track-index="4"></video>
+          <video id="v-golive" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/golive.mp4" muted playsinline data-start="34.5" data-duration="13.36" data-track-index="4"></video>
+          <video id="v-retour" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/retour.mp4" muted playsinline data-start="56.65" data-duration="7.5" data-track-index="4"></video>
+          <video id="v-shorts" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/shorts.mp4" muted playsinline data-start="64.15" data-duration="4" data-track-index="4"></video>
+          <video id="v-studio" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/studio.mp4" muted playsinline data-start="69.4" data-duration="11.23" data-track-index="4"></video>
+          <video id="v-maison" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/maison.mp4" muted playsinline data-start="80.63" data-duration="7.5" data-track-index="4"></video>
         </div>
       </div>
 
       <!-- régie -->
       <div id="rg" class="lap">
         <div class="bez"><div class="scr">
-          <video id="v-regie" class="clip" style="position:absolute;left:0;top:0;width:948px;height:594px;object-fit:cover" src="assets/rec/regie.mp4" muted playsinline data-start="46.25" data-duration="7.5" data-track-index="5"></video>
+          <video id="v-regie" class="clip" style="position:absolute;left:0;top:0;width:948px;height:594px;object-fit:cover" src="assets/rec/regie.mp4" muted playsinline data-start="49.15" data-duration="7.5" data-track-index="5"></video>
+        </div></div>
+        <div class="base"></div>
+      </div>
+
+      <!-- l'accueil sur ordinateur -->
+      <div id="dk" class="lap">
+        <div class="bez"><div class="scr">
+          <video id="v-desk" class="clip" style="position:absolute;left:0;top:0;width:948px;height:594px;object-fit:cover" src="assets/rec/desk.mp4" muted playsinline data-start="26.6" data-duration="6.5" data-track-index="5"></video>
         </div></div>
         <div class="base"></div>
       </div>
 
       <!-- tout le site -->
-      <div id="all" class="scene clip" data-start="85.1" data-duration="8.4" data-track-index="6" data-track-kind="graphics">
+      <div id="all" class="scene clip" data-start="88" data-duration="8.4" data-track-index="6" data-track-kind="graphics">
         <div id="all-t"><span class="w">Tout</span> <span class="w">OCD</span> <span class="w">Live,</span><br /><span class="w" style="color: var(--orange)">en</span> <span class="w" style="color: var(--orange)">un</span> <span class="w" style="color: var(--orange)">site.</span></div>
         <div class="mini" style="left: 54px; top: 480px"><img src="assets/still/home-14.5.jpg" alt="Le fil des lives" /></div>
         <div class="mini" style="left: 392px; top: 480px"><img src="assets/still/home-9.jpg" alt="Le choix du pays" /></div>
@@ -198,33 +207,42 @@
       </div>
 
       <!-- fin (sans lien) -->
-      <div id="end" class="scene clip" data-start="93.4" data-duration="4" data-track-index="7" data-track-kind="graphics">
+      <div id="end" class="scene clip" data-start="96.3" data-duration="4" data-track-index="7" data-track-kind="graphics">
         <div id="end-logo"><img id="end-mark" src="assets/img/ocd-logo.svg" alt="OCD" /></div>
         <div id="end-live">Live</div>
         <div id="end-v2">V2</div>
         <div id="end-tag">Les opportunités, c'est dehors.</div>
       </div>
 
+      <!-- abonne-toi -->
+      <div id="sub" class="scene clip" data-start="100.2" data-duration="5" data-track-index="8" data-track-kind="graphics">
+        <div id="sub-av"><img src="assets/img/avatar.png" alt="sarba abidine" /></div>
+        <div id="sub-name">sarba abidine</div>
+        <div id="sub-handle">@sarbaabidine</div>
+        <div id="sub-btn"><span id="sub-a">+&nbsp;&nbsp;Abonne-toi pour la suite</span><span id="sub-b">✓&nbsp;&nbsp;Abonné</span></div>
+      </div>
+
       <!-- son -->
-      <audio id="a-music" src="assets/audio/music-long.wav" data-start="0" data-duration="97.4" data-volume="0.55" data-fade-out="2"></audio>
+      <audio id="a-music" src="assets/audio/music-long.wav" data-start="0" data-duration="105.2" data-volume="0.55" data-fade-out="2"></audio>
       <audio id="a-i1" src="assets/audio/impact.wav" data-start="0.05" data-duration="2" data-volume="0.6"></audio>
       <audio id="a-d1" src="assets/audio/whoosh1.wav" data-start="2.45" data-duration="1.2" data-volume="0.5"></audio>
       <audio id="a-d2" src="assets/audio/whoosh2.wav" data-start="4.85" data-duration="1.2" data-volume="0.45"></audio>
       <audio id="a-d3" src="assets/audio/whoosh1.wav" data-start="7.25" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-d4" src="assets/audio/pop.wav" data-start="9.95" data-duration="0.8" data-volume="0.45"></audio>
       <audio id="a-ph" src="assets/audio/whoosh2.wav" data-start="12.05" data-duration="1.2" data-volume="0.5"></audio>
-      <audio id="a-c1" src="assets/audio/whoosh1.wav" data-start="30.1" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-ok" src="assets/audio/pop.wav" data-start="41.4" data-duration="0.8" data-volume="0.6"></audio>
-      <audio id="a-c2" src="assets/audio/whoosh2.wav" data-start="44.75" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-val" src="assets/audio/ping.wav" data-start="49.75" data-duration="0.72" data-volume="0.55"></audio>
-      <audio id="a-sw" src="assets/audio/whoosh1.wav" data-start="53.55" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-awa" src="assets/audio/pop.wav" data-start="57.9" data-duration="0.8" data-volume="0.6"></audio>
-      <audio id="a-sh" src="assets/audio/whoosh2.wav" data-start="61.1" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-c3" src="assets/audio/whoosh1.wav" data-start="65.0" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-card" src="assets/audio/pop.wav" data-start="75.25" data-duration="0.8" data-volume="0.6"></audio>
-      <audio id="a-ms" src="assets/audio/whoosh2.wav" data-start="77.6" data-duration="1.2" data-volume="0.45"></audio>
-      <audio id="a-all" src="assets/audio/whoosh1.wav" data-start="85.0" data-duration="1.2" data-volume="0.55"></audio>
-      <audio id="a-i2" src="assets/audio/impact.wav" data-start="93.45" data-duration="2" data-volume="0.6"></audio>
+      <audio id="a-c1" src="assets/audio/whoosh1.wav" data-start="26.5" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-ok" src="assets/audio/pop.wav" data-start="44.3" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-c2" src="assets/audio/whoosh2.wav" data-start="47.65" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-val" src="assets/audio/ping.wav" data-start="52.65" data-duration="0.72" data-volume="0.55"></audio>
+      <audio id="a-sw" src="assets/audio/whoosh1.wav" data-start="56.45" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-awa" src="assets/audio/pop.wav" data-start="60.8" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-sh" src="assets/audio/whoosh2.wav" data-start="64" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-c3" src="assets/audio/whoosh1.wav" data-start="67.9" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-card" src="assets/audio/pop.wav" data-start="78.15" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-ms" src="assets/audio/whoosh2.wav" data-start="80.5" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-all" src="assets/audio/whoosh1.wav" data-start="87.9" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-dk" src="assets/audio/whoosh2.wav" data-start="26.45" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-sub" src="assets/audio/pop.wav" data-start="102.6" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-i2" src="assets/audio/impact.wav" data-start="96.35" data-duration="2" data-volume="0.6"></audio>
     </div>
 
     <script>
@@ -254,74 +272,90 @@
       tl.to("#op-v2", { scale: 1.05, duration: 2.2, ease: "power1.inOut" }, 0);
       tl.to("#op-v2", { scale: 7, opacity: 0, transformOrigin: "50% 45%", duration: 0.45, ease: E.out }, 2.3);
 
-      /* nouveau design */
-      tagIn("#hd0", 2.75);
-      steps([["#hd0a", 2.8], ["#hd0b", 5.2], ["#hd0c", 7.6], ["#hd0d", 10.0]], 12.3);
+      /* nouveau design : seulement l'image, sans légende */
+      words("#dz-t", 2.75, 0.1);
       tl.fromTo(".bar", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.6, stagger: 0.12, ease: E.in }, 2.65);
-      tl.fromTo(".bar span", { opacity: 0 }, { opacity: 1, duration: 0.25, stagger: 0.12 }, 3.2);
-      tl.to(".bar", { y: -1500, duration: 0.4, stagger: 0.05, ease: E.out }, 4.6);
-      tl.fromTo("#ft-word", { fontVariationSettings: '"wdth" 62', opacity: 0 }, { fontVariationSettings: '"wdth" 125', opacity: 1, duration: 1.3, ease: "power3.inOut" }, 5.1);
-      tl.fromTo("#ft-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: E.in }, 5.9);
-      tl.fromTo("#wx-zoom", { scale: 3.2 }, { scale: 1, duration: 1.4, ease: "expo.out" }, 7.4);
-      tl.fromTo("#wx-logo", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: E.in }, 7.9);
-      tl.fromTo(".cat", { scale: 0.5, opacity: 0, y: 60 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, stagger: 0.09, ease: E.in }, 9.85);
-      tl.to(".cat", { scale: 0.85, opacity: 0, duration: 0.3, stagger: 0.03, ease: E.out }, 12.0);
+      tl.to(".bar", { y: -1500, duration: 0.4, stagger: 0.05, ease: E.out }, 4.25);
+      tl.fromTo("#ft-word", { fontVariationSettings: '"wdth" 62', opacity: 0 }, { fontVariationSettings: '"wdth" 125', opacity: 1, duration: 1.3, ease: "power3.inOut" }, 4.65);
+      tl.fromTo("#wx-zoom", { scale: 3.2 }, { scale: 1, duration: 1.4, ease: "expo.out" }, 6.6);
+      tl.fromTo("#wx-logo", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: E.in }, 7.0);
+      tl.to("#dz-t .w", { opacity: 0, duration: 0.2 }, 8.4);
 
       /* l'accueil */
-      tl.fromTo("#ph-in", { y: 360, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: E.in }, 12.2);
-      tagIn("#hd1", 12.35);
-      steps([["#hd1a", 12.4], ["#hd1b", 18.1], ["#hd1c", 21.8], ["#hd1d", 23.7], ["#hd1e", 28.5]], 30.35);
-      punch("#ph-in", 18.2, 20.6, 1.08, "50% 25%");
+      tl.fromTo("#ph-in", { y: 360, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: E.in }, 8.6);
+      tagIn("#hd1", 8.75);
+      steps([["#hd1a", 8.8], ["#hd1b", 14.5], ["#hd1c", 18.2], ["#hd1d", 20.1], ["#hd1e", 24.9]], 26.6);
+      punch("#ph-in", 14.6, 17, 1.08, "50% 25%");
+
+      /* l'accueil sur ordinateur */
+      tl.to("#ph-in", { x: -1000, duration: 0.45, ease: E.out }, 26.45);
+      tl.set("#dk", { opacity: 1, x: 1150 }, 26.5);
+      tl.to("#dk", { x: 0, duration: 0.6, ease: E.in }, 26.55);
+      tagIn("#hd7", 26.8);
+      steps([["#hd7a", 26.8]], 33.1);
+      tl.fromTo("#dk", { scale: 1 }, { scale: 1.06, transformOrigin: "50% 50%", duration: 5.5, ease: "power1.inOut", immediateRender: false }, 27.2);
+      tl.set("#dk", { opacity: 0 }, 33.7);
+      tl.set("#ph-in", { x: 0 }, 33.7);
 
       /* je suis en live */
-      card("#c1", 30.2);
-      tagIn("#hd2", 31.8);
-      steps([["#hd2a", 31.8], ["#hd2b", 35.0], ["#hd2c", 38.2], ["#hd2d", 41.4]], 45.0);
-      punch("#ph-in", 41.6, 44.2, 1.1, "50% 30%");
+      card("#c1", 33.1);
+      tagIn("#hd2", 34.7);
+      steps([["#hd2a", 34.7], ["#hd2b", 37.9], ["#hd2c", 41.1], ["#hd2d", 44.3]], 47.9);
+      punch("#ph-in", 44.5, 47.1, 1.1, "50% 30%");
 
       /* validation */
-      card("#c2", 44.85);
-      tl.set("#ph-in", { opacity: 0 }, 45.6);
-      tl.set("#rg", { opacity: 1 }, 45.6);
-      tagIn("#hd3", 46.45);
-      steps([["#hd3a", 46.45], ["#hd3b", 49.75], ["#hd3c", 53.95]], 61.25);
-      punch("#rg", 50.0, 53.0, 1.3, "55% 92%");
-      tl.to("#rg", { x: -1150, duration: 0.45, ease: E.out }, 53.55);
-      tl.set("#ph-in", { opacity: 1, x: 900 }, 53.6);
-      tl.to("#ph-in", { x: 0, duration: 0.6, ease: E.in }, 53.65);
-      tl.set("#rg", { opacity: 0 }, 54.1);
-      punch("#ph-in", 58.0, 60.3, 1.08, "50% 75%");
+      card("#c2", 47.75);
+      tl.set("#ph-in", { opacity: 0 }, 48.5);
+      tl.set("#rg", { opacity: 1 }, 48.5);
+      tagIn("#hd3", 49.35);
+      steps([["#hd3a", 49.35], ["#hd3b", 52.65], ["#hd3c", 56.85]], 64.15);
+      punch("#rg", 52.9, 55.9, 1.3, "55% 92%");
+      tl.to("#rg", { x: -1150, duration: 0.45, ease: E.out }, 56.45);
+      tl.set("#ph-in", { opacity: 1, x: 900 }, 56.5);
+      tl.to("#ph-in", { x: 0, duration: 0.6, ease: E.in }, 56.55);
+      tl.set("#rg", { opacity: 0 }, 57);
+      punch("#ph-in", 60.9, 63.2, 1.08, "50% 75%");
 
       /* shorts */
-      dip(61.25);
-      tagIn("#hd4", 61.45);
-      steps([["#hd4a", 61.45]], 65.25);
+      dip(64.15);
+      tagIn("#hd4", 64.35);
+      steps([["#hd4a", 64.35]], 68.15);
 
       /* studio */
-      card("#c3", 65.1);
-      tagIn("#hd5", 66.7);
-      steps([["#hd5a", 66.7], ["#hd5b", 70.6], ["#hd5c", 72.35], ["#hd5d", 75.25]], 77.73);
-      punch("#ph-in", 75.4, 76.8, 1.08, "50% 45%");
+      card("#c3", 68);
+      tagIn("#hd5", 69.6);
+      steps([["#hd5a", 69.6], ["#hd5b", 73.5], ["#hd5c", 75.25], ["#hd5d", 78.15]], 80.63);
+      punch("#ph-in", 78.3, 79.7, 1.08, "50% 45%");
 
       /* depuis chez toi */
-      dip(77.73);
-      tagIn("#hd6", 77.9);
-      steps([["#hd6a", 77.9], ["#hd6b", 79.4], ["#hd6c", 81.8]], 85.23);
+      dip(80.63);
+      tagIn("#hd6", 80.8);
+      steps([["#hd6a", 80.8], ["#hd6b", 82.3], ["#hd6c", 84.7]], 88.13);
 
       /* tout le site */
-      tl.to("#ph-in", { y: 1500, duration: 0.45, ease: E.out }, 84.85);
-      tl.set("#ph-in", { opacity: 0 }, 85.35);
-      tl.fromTo("#all", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(120% at 50% 50%)", duration: 0.6, ease: "power3.out" }, 85.1);
-      words("#all-t", 85.4, 0.09);
-      tl.fromTo(".mini", { y: 220, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.12, ease: E.in }, 85.9);
-      tl.to(".mini", { y: -16, duration: 5.4, ease: "none" }, 87.5);
-      tl.to("#all", { scale: 1.04, transformOrigin: "50% 70%", duration: 6.3, ease: "power1.inOut" }, 87.0);
+      tl.to("#ph-in", { y: 1500, duration: 0.45, ease: E.out }, 87.75);
+      tl.set("#ph-in", { opacity: 0 }, 88.25);
+      tl.fromTo("#all", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(120% at 50% 50%)", duration: 0.6, ease: "power3.out" }, 88);
+      words("#all-t", 88.3, 0.09);
+      tl.fromTo(".mini", { y: 220, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.12, ease: E.in }, 88.8);
+      tl.to(".mini", { y: -16, duration: 5.4, ease: "none" }, 90.4);
+      tl.to("#all", { scale: 1.04, transformOrigin: "50% 70%", duration: 6.3, ease: "power1.inOut" }, 89.9);
 
       /* fin, sans lien */
-      tl.fromTo("#end-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 93.45);
-      tl.fromTo("#end-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 94.05);
-      tl.fromTo("#end-v2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: E.in }, 94.45);
-      tl.fromTo("#end-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25 }, 94.9);
+      tl.fromTo("#end-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 96.35);
+      tl.fromTo("#end-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 96.95);
+      tl.fromTo("#end-v2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: E.in }, 97.35);
+      tl.fromTo("#end-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25 }, 97.8);
+
+      /* abonne-toi, comme dans l'épisode 1 */
+      tl.fromTo("#sub", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 100.2);
+      tl.fromTo("#sub-av", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: E.in }, 100.3);
+      tl.fromTo(["#sub-name", "#sub-handle"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.12, ease: E.in }, 100.6);
+      tl.fromTo("#sub-btn", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: E.in }, 101.0);
+      tl.to("#sub-btn", { scale: 0.95, duration: 0.1, ease: "power2.in" }, 102.5);
+      tl.to("#sub-btn", { scale: 1, background: "#111111", duration: 0.25, ease: E.in }, 102.6);
+      tl.set("#sub-a", { opacity: 0 }, 102.6);
+      tl.set("#sub-b", { opacity: 1 }, 102.6);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
