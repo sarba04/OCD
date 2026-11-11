@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Archivo";
+        src: url("assets/fonts/archivo-latin-wdth.woff2") format("woff2");
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+      }
+      :root {
+        --orange: #f16903;
+        --ink: #111111;
+        --paper: #fafafa;
+        --wax: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.2' stroke-width='3'%3E%3Ccircle cx='0' cy='0' r='20'/%3E%3Ccircle cx='0' cy='0' r='32'/%3E%3Ccircle cx='0' cy='0' r='44'/%3E%3Ccircle cx='96' cy='96' r='20'/%3E%3Ccircle cx='96' cy='96' r='32'/%3E%3Ccircle cx='96' cy='96' r='44'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='.12'%3E%3Ccircle cx='48' cy='48' r='9'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='.14'%3E%3Ccircle cx='48' cy='30' r='2.4'/%3E%3Ccircle cx='48' cy='66' r='2.4'/%3E%3Ccircle cx='30' cy='48' r='2.4'/%3E%3Ccircle cx='66' cy='48' r='2.4'/%3E%3Ccircle cx='35' cy='35' r='2.4'/%3E%3Ccircle cx='61' cy='61' r='2.4'/%3E%3Ccircle cx='61' cy='35' r='2.4'/%3E%3Ccircle cx='35' cy='61' r='2.4'/%3E%3C/g%3E%3C/svg%3E");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Archivo", sans-serif; color: #fff; background: var(--ink); }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .wax { background-color: var(--orange); background-image: var(--wax); background-size: 144px 144px; color: var(--ink); }
+      .w { display: inline-block; }
+      em { font-style: normal; color: var(--orange); }
+
+      /* ouverture */
+      #op-logo { position: absolute; left: 330px; top: 300px; width: 420px; height: 163px; }
+      #op-logo img { width: 420px; height: 163px; }
+      #op-v2 { position: absolute; left: 0; right: 0; top: 520px; text-align: center; font-weight: 800; font-stretch: 125%; font-size: 560px; line-height: 1; letter-spacing: -0.06em; color: var(--ink); }
+      #op-t { position: absolute; left: 90px; right: 90px; top: 1150px; text-align: center; font-size: 76px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.025em; }
+
+      /* nouveau design */
+      .bar { position: absolute; top: 470px; width: 280px; height: 860px; border-radius: 30px; }
+      #bar1 { left: 90px; background: var(--orange); }
+      #bar2 { left: 400px; background: #0a0a0a; box-shadow: inset 0 0 0 2px #3a3a3a; }
+      #bar3 { left: 710px; background: #fff; }
+      .bar span { position: absolute; left: 26px; bottom: 30px; font-size: 34px; font-weight: 700; line-height: 1.15; }
+      #bar1 span { color: var(--ink); } #bar2 span { color: #fff; } #bar3 span { color: var(--ink); }
+      #ft-word { position: absolute; left: 0; right: 0; top: 730px; text-align: center; font-size: 158px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variation-settings: "wdth" 62; }
+      #ft-sub { position: absolute; left: 0; right: 0; top: 960px; text-align: center; font-size: 40px; font-weight: 600; color: #9a9a9a; letter-spacing: 0.12em; }
+      #wx-zoom { position: absolute; left: -540px; top: -960px; width: 2160px; height: 3840px; background-image: var(--wax); background-size: 144px 144px; }
+      #wx-logo { position: absolute; left: 290px; top: 760px; width: 500px; height: 194px; }
+      #wx-logo img { width: 500px; height: 194px; }
+      .cat { position: absolute; width: 280px; height: 280px; border-radius: 40px; overflow: hidden; background: #f4efe9; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45); }
+      .cat img { width: 280px; height: 280px; display: block; }
+
+      /* cartes de chapitre */
+      .card { z-index: 8; }
+      .card .n { position: absolute; left: 80px; top: 560px; font-size: 300px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.06em; line-height: 1; }
+      .card .ti { position: absolute; left: 90px; right: 90px; top: 880px; font-size: 112px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; }
+
+      /* en-têtes */
+      .hd { z-index: 6; }
+      .hd .tag { position: absolute; left: 90px; top: 150px; display: inline-flex; align-items: center; background: var(--orange); color: var(--ink); font-size: 32px; font-weight: 800; letter-spacing: 0.04em; padding: 10px 22px; border-radius: 99px; }
+      .hd.light .tag { background: #fff; color: var(--ink); }
+      .hd .st { position: absolute; left: 90px; right: 90px; top: 220px; font-size: 76px; font-weight: 800; font-stretch: 112%; letter-spacing: -0.02em; line-height: 1; opacity: 0; }
+
+      /* téléphone */
+      #ph-in { position: absolute; left: 224px; top: 380px; width: 632px; height: 1054px; border-radius: 70px; background: #050505; padding: 16px; box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2c2c2c; opacity: 0; z-index: 3; }
+      #ph-screen { position: relative; width: 600px; height: 1022px; border-radius: 56px; overflow: hidden; background: #111; }
+
+      /* ordinateur (régie) */
+      .lap { position: absolute; left: 40px; top: 560px; width: 1000px; z-index: 3; opacity: 0; }
+      .lap .bez { position: relative; width: 1000px; height: 640px; border-radius: 30px 30px 0 0; background: #050505; padding: 26px 26px 20px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2a2a2a; }
+      .lap .scr { position: relative; width: 948px; height: 594px; overflow: hidden; background: #0e0e0e; }
+      .lap .base { width: 1080px; margin-left: -40px; height: 34px; border-radius: 0 0 26px 26px; background: linear-gradient(#cfcfcf, #8d8d8d); }
+
+      /* tout le site */
+      #all { z-index: 7; background: var(--ink); }
+      #all-t { position: absolute; left: 90px; right: 60px; top: 190px; font-size: 80px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; }
+      .mini { position: absolute; width: 296px; height: 493px; border-radius: 40px; background: #050505; padding: 8px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #2c2c2c; }
+      .mini img { width: 280px; height: 477px; border-radius: 32px; display: block; object-fit: cover; object-position: top; }
+
+      /* fin */
+      #end { background: var(--paper); color: var(--ink); z-index: 9; }
+      #end-logo { position: absolute; left: 190px; top: 600px; width: 700px; height: 271px; }
+      #end-logo img { width: 700px; height: 271px; }
+      #end-live { position: absolute; left: 440px; top: 882px; font-size: 118px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; }
+      #end-v2 { position: absolute; left: 770px; top: 898px; background: var(--orange); color: #fff; font-size: 64px; font-weight: 800; font-stretch: 125%; padding: 10px 26px; border-radius: 22px; }
+      #end-tag { position: absolute; left: 0; right: 0; top: 1120px; text-align: center; font-size: 50px; font-weight: 600; color: #444; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="97.4" data-width="1080" data-height="1920">
+      <!-- ouverture -->
+      <div id="op" class="scene clip wax" data-start="0" data-duration="2.8" data-track-index="1" data-track-kind="graphics">
+        <div id="op-logo"><img src="assets/img/ocd-logo-ink.svg" alt="OCD" /></div>
+        <div id="op-v2">V2</div>
+        <div id="op-t"><span class="w">Nouvelle</span> <span class="w">version.</span></div>
+      </div>
+
+      <!-- nouveau design -->
+      <div id="d1" class="scene clip" data-start="2.6" data-duration="2.5" data-track-index="1" data-track-kind="graphics">
+        <div class="bar" id="bar1"><span>Orange<br />OCD</span></div>
+        <div class="bar" id="bar2"><span>Noir</span></div>
+        <div class="bar" id="bar3"><span>Blanc</span></div>
+      </div>
+      <div id="d2" class="scene clip" data-start="5" data-duration="2.5" data-track-index="1" data-track-kind="graphics">
+        <div id="ft-word">MARCHÉ</div>
+        <div id="ft-sub">ARCHIVO · LARGE</div>
+      </div>
+      <div id="d3" class="scene clip" data-start="7.4" data-duration="2.5" data-track-index="1" data-track-kind="graphics" style="background: var(--orange)">
+        <div id="wx-zoom"></div>
+        <div id="wx-logo"><img src="assets/img/ocd-logo-white.svg" alt="OCD" /></div>
+      </div>
+      <div id="d4" class="scene clip" data-start="9.8" data-duration="2.7" data-track-index="1" data-track-kind="graphics">
+        <div class="cat" style="left: 90px; top: 480px"><img src="assets/cat/food.png" alt="Nourriture" /></div>
+        <div class="cat" style="left: 400px; top: 480px"><img src="assets/cat/mode.png" alt="Habits" /></div>
+        <div class="cat" style="left: 710px; top: 480px"><img src="assets/cat/wax.png" alt="Pagnes" /></div>
+        <div class="cat" style="left: 90px; top: 820px"><img src="assets/cat/beaute.png" alt="Beauté" /></div>
+        <div class="cat" style="left: 400px; top: 820px"><img src="assets/cat/cheveux.png" alt="Cheveux" /></div>
+        <div class="cat" style="left: 710px; top: 820px"><img src="assets/cat/tech.png" alt="Téléphones" /></div>
+      </div>
+      <div id="hd0" class="scene clip hd light" data-start="2.6" data-duration="9.7" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">NOUVEAU DESIGN</div>
+        <div class="st" id="hd0a">Les couleurs <em>d'OCD.</em></div>
+        <div class="st" id="hd0b">Une écriture <em>large.</em></div>
+        <div class="st" id="hd0c" style="color: var(--ink)">Le motif <span style="color:#fff">wax.</span></div>
+        <div class="st" id="hd0d">Des <em>vraies</em> images.</div>
+      </div>
+
+      <!-- cartes -->
+      <div id="c1" class="scene clip wax card" data-start="30.2" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">Je</span> <span class="w">suis</span><br /><span class="w">en</span> <span class="w">live.</span></div></div>
+      <div id="c2" class="scene clip wax card" data-start="44.85" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">L'équipe</span><br /><span class="w">valide.</span></div></div>
+      <div id="c3" class="scene clip wax card" data-start="65.1" data-duration="1.6" data-track-index="3" data-track-kind="graphics"><div class="ti"><span class="w">Au</span> <span class="w">studio.</span></div></div>
+
+      <!-- en-têtes du parcours -->
+      <div id="hd1" class="scene clip hd" data-start="12.2" data-duration="18.15" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">L'ACCUEIL</div>
+        <div class="st" id="hd1a">Les lives <em>défilent.</em></div>
+        <div class="st" id="hd1b">Choisis <em>ton pays.</em></div>
+        <div class="st" id="hd1c">Choisis <em>ton rayon.</em></div>
+        <div class="st" id="hd1d">Qui est en live, <em>maintenant.</em></div>
+        <div class="st" id="hd1e">Trois façons de <em>vendre.</em></div>
+      </div>
+      <div id="hd2" class="scene clip hd" data-start="31.6" data-duration="13.4" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">JE SUIS EN LIVE</div>
+        <div class="st" id="hd2a">Ton pays, <em>ton rayon.</em></div>
+        <div class="st" id="hd2b">La photo <em>du produit.</em></div>
+        <div class="st" id="hd2c">Ton nom, <em>ton lien TikTok.</em></div>
+        <div class="st" id="hd2d"><em>C'est envoyé !</em></div>
+      </div>
+      <div id="hd3" class="scene clip hd" data-start="46.25" data-duration="15" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">VALIDATION</div>
+        <div class="st" id="hd3a">Les lives <em>à valider.</em></div>
+        <div class="st" id="hd3b">Un clic : <em>en ligne.</em></div>
+        <div class="st" id="hd3c">Et la voilà <em>sur le site.</em></div>
+      </div>
+      <div id="hd4" class="scene clip hd" data-start="61.25" data-duration="4" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">SHORTS OCD</div>
+        <div class="st" id="hd4a">Les vidéos <em>OCD.</em></div>
+      </div>
+      <div id="hd5" class="scene clip hd" data-start="66.5" data-duration="11.25" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">LIVE AU STUDIO</div>
+        <div class="st" id="hd5a">Le jour, <em>l'heure.</em></div>
+        <div class="st" id="hd5b">Le <em>pack.</em></div>
+        <div class="st" id="hd5c">Ta <em>fiche.</em></div>
+        <div class="st" id="hd5d">Ta <em>Carte OCD.</em></div>
+      </div>
+      <div id="hd6" class="scene clip hd" data-start="77.73" data-duration="7.5" data-track-index="2" data-track-kind="graphics">
+        <div class="tag">DEPUIS CHEZ TOI</div>
+        <div class="st" id="hd6a">Ou depuis <em>chez toi.</em></div>
+        <div class="st" id="hd6b">Tes heures, <em>ton pays.</em></div>
+        <div class="st" id="hd6c">Ton <em>pack.</em></div>
+      </div>
+
+      <!-- téléphone : vrais parcours filmés sur le site -->
+      <div id="ph-in" data-layout-allow-overflow>
+        <div id="ph-screen">
+          <video id="v-home" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/home.mp4" muted playsinline data-start="12.2" data-duration="18.13" data-track-index="4"></video>
+          <video id="v-golive" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/golive.mp4" muted playsinline data-start="31.6" data-duration="13.36" data-track-index="4"></video>
+          <video id="v-retour" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/retour.mp4" muted playsinline data-start="53.75" data-duration="7.5" data-track-index="4"></video>
+          <video id="v-shorts" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/shorts.mp4" muted playsinline data-start="61.25" data-duration="4" data-track-index="4"></video>
+          <video id="v-studio" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/studio.mp4" muted playsinline data-start="66.5" data-duration="11.23" data-track-index="4"></video>
+          <video id="v-maison" class="clip" style="position:absolute;left:0;top:0;width:600px;height:1022px;object-fit:cover" src="assets/rec/maison.mp4" muted playsinline data-start="77.73" data-duration="7.5" data-track-index="4"></video>
+        </div>
+      </div>
+
+      <!-- régie -->
+      <div id="rg" class="lap">
+        <div class="bez"><div class="scr">
+          <video id="v-regie" class="clip" style="position:absolute;left:0;top:0;width:948px;height:594px;object-fit:cover" src="assets/rec/regie.mp4" muted playsinline data-start="46.25" data-duration="7.5" data-track-index="5"></video>
+        </div></div>
+        <div class="base"></div>
+      </div>
+
+      <!-- tout le site -->
+      <div id="all" class="scene clip" data-start="85.1" data-duration="8.4" data-track-index="6" data-track-kind="graphics">
+        <div id="all-t"><span class="w">Tout</span> <span class="w">OCD</span> <span class="w">Live,</span><br /><span class="w" style="color: var(--orange)">en</span> <span class="w" style="color: var(--orange)">un</span> <span class="w" style="color: var(--orange)">site.</span></div>
+        <div class="mini" style="left: 54px; top: 480px"><img src="assets/still/home-14.5.jpg" alt="Le fil des lives" /></div>
+        <div class="mini" style="left: 392px; top: 480px"><img src="assets/still/home-9.jpg" alt="Le choix du pays" /></div>
+        <div class="mini" style="left: 730px; top: 480px"><img src="assets/still/golive-17.jpg" alt="Lien envoyé" /></div>
+        <div class="mini" style="left: 54px; top: 1010px"><img src="assets/still/retour-12.jpg" alt="La boutique validée en ligne" /></div>
+        <div class="mini" style="left: 392px; top: 1010px"><img src="assets/still/studio-36.5.jpg" alt="La Carte OCD" /></div>
+        <div class="mini" style="left: 730px; top: 1010px"><img src="assets/still/maison-15.5.jpg" alt="Les packs depuis chez toi" /></div>
+      </div>
+
+      <!-- fin (sans lien) -->
+      <div id="end" class="scene clip" data-start="93.4" data-duration="4" data-track-index="7" data-track-kind="graphics">
+        <div id="end-logo"><img id="end-mark" src="assets/img/ocd-logo.svg" alt="OCD" /></div>
+        <div id="end-live">Live</div>
+        <div id="end-v2">V2</div>
+        <div id="end-tag">Les opportunités, c'est dehors.</div>
+      </div>
+
+      <!-- son -->
+      <audio id="a-music" src="assets/audio/music-long.wav" data-start="0" data-duration="97.4" data-volume="0.55" data-fade-out="2"></audio>
+      <audio id="a-i1" src="assets/audio/impact.wav" data-start="0.05" data-duration="2" data-volume="0.6"></audio>
+      <audio id="a-d1" src="assets/audio/whoosh1.wav" data-start="2.45" data-duration="1.2" data-volume="0.5"></audio>
+      <audio id="a-d2" src="assets/audio/whoosh2.wav" data-start="4.85" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-d3" src="assets/audio/whoosh1.wav" data-start="7.25" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-d4" src="assets/audio/pop.wav" data-start="9.95" data-duration="0.8" data-volume="0.45"></audio>
+      <audio id="a-ph" src="assets/audio/whoosh2.wav" data-start="12.05" data-duration="1.2" data-volume="0.5"></audio>
+      <audio id="a-c1" src="assets/audio/whoosh1.wav" data-start="30.1" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-ok" src="assets/audio/pop.wav" data-start="41.4" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-c2" src="assets/audio/whoosh2.wav" data-start="44.75" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-val" src="assets/audio/ping.wav" data-start="49.75" data-duration="0.72" data-volume="0.55"></audio>
+      <audio id="a-sw" src="assets/audio/whoosh1.wav" data-start="53.55" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-awa" src="assets/audio/pop.wav" data-start="57.9" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-sh" src="assets/audio/whoosh2.wav" data-start="61.1" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-c3" src="assets/audio/whoosh1.wav" data-start="65.0" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-card" src="assets/audio/pop.wav" data-start="75.25" data-duration="0.8" data-volume="0.6"></audio>
+      <audio id="a-ms" src="assets/audio/whoosh2.wav" data-start="77.6" data-duration="1.2" data-volume="0.45"></audio>
+      <audio id="a-all" src="assets/audio/whoosh1.wav" data-start="85.0" data-duration="1.2" data-volume="0.55"></audio>
+      <audio id="a-i2" src="assets/audio/impact.wav" data-start="93.45" data-duration="2" data-volume="0.6"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const E = { in: "expo.out", move: "power3.inOut", out: "power3.in" };
+      const words = (sel, t, gap = 0.07) =>
+        tl.fromTo(sel + " .w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, stagger: gap, ease: "power2.out" }, t);
+      const card = (id, t) => {
+        tl.fromTo(id, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: E.move }, t);
+        words(id + " .ti", t + 0.25, 0.08);
+        tl.to(id, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.35, ease: E.move }, t + 1.22);
+      };
+      const steps = (list, end) => list.forEach(([id, t], i) => {
+        tl.fromTo(id, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, ease: E.in }, t);
+        const next = i + 1 < list.length ? list[i + 1][1] : end;
+        tl.to(id, { opacity: 0, y: -18, duration: 0.2, ease: E.out }, next - 0.22);
+      });
+      const tagIn = (id, t) => tl.fromTo(id + " .tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: E.in }, t);
+      const punch = (el, a, b, s, o) => {
+        tl.to(el, { scale: s, transformOrigin: o, duration: 0.55, ease: E.move }, a);
+        tl.to(el, { scale: 1, duration: 0.55, ease: E.move }, b);
+      };
+      const dip = (t) => { tl.to("#ph-in", { scale: 0.93, duration: 0.14, ease: "power2.in" }, t - 0.14); tl.to("#ph-in", { scale: 1, duration: 0.3, ease: E.in }, t); };
+
+      /* ouverture : V2 déjà à l'écran */
+      words("#op-t", 0.25, 0.1);
+      tl.to("#op-v2", { scale: 1.05, duration: 2.2, ease: "power1.inOut" }, 0);
+      tl.to("#op-v2", { scale: 7, opacity: 0, transformOrigin: "50% 45%", duration: 0.45, ease: E.out }, 2.3);
+
+      /* nouveau design */
+      tagIn("#hd0", 2.75);
+      steps([["#hd0a", 2.8], ["#hd0b", 5.2], ["#hd0c", 7.6], ["#hd0d", 10.0]], 12.3);
+      tl.fromTo(".bar", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.6, stagger: 0.12, ease: E.in }, 2.65);
+      tl.fromTo(".bar span", { opacity: 0 }, { opacity: 1, duration: 0.25, stagger: 0.12 }, 3.2);
+      tl.to(".bar", { y: -1500, duration: 0.4, stagger: 0.05, ease: E.out }, 4.6);
+      tl.fromTo("#ft-word", { fontVariationSettings: '"wdth" 62', opacity: 0 }, { fontVariationSettings: '"wdth" 125', opacity: 1, duration: 1.3, ease: "power3.inOut" }, 5.1);
+      tl.fromTo("#ft-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: E.in }, 5.9);
+      tl.fromTo("#wx-zoom", { scale: 3.2 }, { scale: 1, duration: 1.4, ease: "expo.out" }, 7.4);
+      tl.fromTo("#wx-logo", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: E.in }, 7.9);
+      tl.fromTo(".cat", { scale: 0.5, opacity: 0, y: 60 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, stagger: 0.09, ease: E.in }, 9.85);
+      tl.to(".cat", { scale: 0.85, opacity: 0, duration: 0.3, stagger: 0.03, ease: E.out }, 12.0);
+
+      /* l'accueil */
+      tl.fromTo("#ph-in", { y: 360, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: E.in }, 12.2);
+      tagIn("#hd1", 12.35);
+      steps([["#hd1a", 12.4], ["#hd1b", 18.1], ["#hd1c", 21.8], ["#hd1d", 23.7], ["#hd1e", 28.5]], 30.35);
+      punch("#ph-in", 18.2, 20.6, 1.08, "50% 25%");
+
+      /* je suis en live */
+      card("#c1", 30.2);
+      tagIn("#hd2", 31.8);
+      steps([["#hd2a", 31.8], ["#hd2b", 35.0], ["#hd2c", 38.2], ["#hd2d", 41.4]], 45.0);
+      punch("#ph-in", 41.6, 44.2, 1.1, "50% 30%");
+
+      /* validation */
+      card("#c2", 44.85);
+      tl.set("#ph-in", { opacity: 0 }, 45.6);
+      tl.set("#rg", { opacity: 1 }, 45.6);
+      tagIn("#hd3", 46.45);
+      steps([["#hd3a", 46.45], ["#hd3b", 49.75], ["#hd3c", 53.95]], 61.25);
+      punch("#rg", 50.0, 53.0, 1.3, "55% 92%");
+      tl.to("#rg", { x: -1150, duration: 0.45, ease: E.out }, 53.55);
+      tl.set("#ph-in", { opacity: 1, x: 900 }, 53.6);
+      tl.to("#ph-in", { x: 0, duration: 0.6, ease: E.in }, 53.65);
+      tl.set("#rg", { opacity: 0 }, 54.1);
+      punch("#ph-in", 58.0, 60.3, 1.08, "50% 75%");
+
+      /* shorts */
+      dip(61.25);
+      tagIn("#hd4", 61.45);
+      steps([["#hd4a", 61.45]], 65.25);
+
+      /* studio */
+      card("#c3", 65.1);
+      tagIn("#hd5", 66.7);
+      steps([["#hd5a", 66.7], ["#hd5b", 70.6], ["#hd5c", 72.35], ["#hd5d", 75.25]], 77.73);
+      punch("#ph-in", 75.4, 76.8, 1.08, "50% 45%");
+
+      /* depuis chez toi */
+      dip(77.73);
+      tagIn("#hd6", 77.9);
+      steps([["#hd6a", 77.9], ["#hd6b", 79.4], ["#hd6c", 81.8]], 85.23);
+
+      /* tout le site */
+      tl.to("#ph-in", { y: 1500, duration: 0.45, ease: E.out }, 84.85);
+      tl.set("#ph-in", { opacity: 0 }, 85.35);
+      tl.fromTo("#all", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(120% at 50% 50%)", duration: 0.6, ease: "power3.out" }, 85.1);
+      words("#all-t", 85.4, 0.09);
+      tl.fromTo(".mini", { y: 220, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.12, ease: E.in }, 85.9);
+      tl.to(".mini", { y: -16, duration: 5.4, ease: "none" }, 87.5);
+      tl.to("#all", { scale: 1.04, transformOrigin: "50% 70%", duration: 6.3, ease: "power1.inOut" }, 87.0);
+
+      /* fin, sans lien */
+      tl.fromTo("#end-mark", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power3.out" }, 93.45);
+      tl.fromTo("#end-live", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power3.out" }, 94.05);
+      tl.fromTo("#end-v2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: E.in }, 94.45);
+      tl.fromTo("#end-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25 }, 94.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
